@@ -1,0 +1,25 @@
+tab_download <- tabItem(
+  tabName = "download",
+  align = "center",
+  
+  HTML('<hr style="border-color: #0088cc;">'),
+  h1("Download files"),
+  br(),
+  br(),
+  textInput("downloadname", "Input a name for the file", value = paste0("metabolic_predictors_", Sys.Date())),
+  br(),
+  downloadButton("downloadCSV", label = "Download predictors as CSV"),
+  downloadButton("downloadTSV", label = "Download predictors as TSV"),
+  br(),
+  br(),
+  HTML('<hr style="border-color: #0088cc;">'),
+  h2("Download R Markdown analysis"),
+  br(),
+  downloadButton("download_html", label = "Download Analysis Report"),
+  br(),
+  br(),
+  downloadButton("download_html_no_pheno", label = "Download Analysis Report without phenotypes"),
+  br(),
+  br(),
+  HTML('<hr style="border-color: #0088cc;">')
+)

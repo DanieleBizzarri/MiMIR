@@ -1,0 +1,106 @@
+/* dashboard--- */
+/*colors: https://www.w3schools.com/colors/colors_picker.asp*/
+/*header height = 90px*/
+
+/*toggle button position and height*/
+.main-header .sidebar-toggle {
+  font-size: 35px;
+  display: block;
+  line-height: 75px;
+  padding: 0px 20px 0px 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.main-header .logo {
+  font-size: 24px;
+  font-weight: bold;
+  vertical-align: middle;
+  padding: 10px 0px 0px 0px;
+}
+
+/*header text to the right*/
+.skin-blue .main-header .navbar .nav>li>a {
+  font-size: 16px;
+  color: white;
+  display: block;
+  height: 75px;
+  line-height: 75px;
+  
+}
+
+/*header text to the right hover*/
+.skin-blue .main-header .navbar .navbar-nav>li>a:hover {
+  color: white;
+  cursor: default;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.navbar-custom-menu .navbar-nav>li>a {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+
+/*side bar*/
+.main-sidebar {
+  font-size: 26px;
+}
+
+/*distance text to icon in sidebar*/
+.main-sidebar li a span{
+  margin: 0px 15px;
+}
+
+/*header height*/
+.main-header {max-height: 75px}
+.main-header .logo {height:75px;}
+.sidebar-toggle {height: 75px; padding-top: 1px !important;}
+.navbar {min-height: 75px !important}
+.left-side, .main-sidebar {padding-top: 75px}
+
+
+/*header color*/
+.skin-blue .main-header .navbar {
+  height: 75px;
+}
+
+
+/*lumc logo in navbar*/
+.skin-blue .sidebar-menu>img {
+  margin-left: auto;
+  position: absolute;
+  bottom: 20px;
+  right: 100%;
+  left: 100%;
+  opacity: 1;
+}
+
+/*current select in navbar*/
+.skin-blue .sidebar-menu>li>a {
+  border-left: 5px solid transparent;
+}
+
+.skin-blue .sidebar-menu>li.active>a, .skin-blue .sidebar-menu>li:hover>a {
+  color: #333333;
+  background: #f2f2f2;
+  border-left: 5px solid #66ccff;
+}
+
+/*navbar subitem hover*/
+.skin-blue .treeview-menu>li>a {
+  border-left: 5px solid transparent;
+}
+
+
+/*logo background hover*/
+.skin-blue .main-header .logo:hover {
+  background-color: #0088cc;
+  cursor: default;
+}
+
+/*toggle button*/
+.skin-blue .main-header .navbar .sidebar-toggle {
+    color: white;
+}
