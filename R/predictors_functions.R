@@ -1,20 +1,3 @@
-#####################
-### Libraries #######
-#####################
-require(shiny)
-require(shinydashboard)
-require(DT)
-require(shinycssloaders)
-require(glmnet)
-require(glmnet)
-require(pheatmap)
-require(foreach)
-require(RColorBrewer)
-require(pROC)
-require(plotly)
-require(heatmaply)
-require(matrixStats)
-require(plyr)
 ###################################
 ### DEFINITIONS / CONSTANTS #######
 ###################################
@@ -130,10 +113,14 @@ pheno_names<-c("sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "cu
 #PARAM_surrogates<-readRDS("data/PARAM_surrogates_2021_03_26.RData")
 
 #Set colors for the arrays of images
-n <- 21
-qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-colors = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
-c21=colors[c(1:22)[-4]]
+# n <- 21
+# qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
+# colors = unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals)))
+# c21=colors[c(1:22)[-4]]
+c21<-c("#7FC97F", "#BEAED4", "#FDC086", "#386CB0", "#F0027F", "#BF5B17", 
+       "#666666", "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E",
+       "#E6AB02", "#A6761D", "#666666", "#A6CEE3", "#1F78B4", "#B2DF8A",
+       "#33A02C", "#FB9A99", "#E31A1C")
 names(c21)<-c("mortScore", "MetaboAge", bin_surro)
 ###############################
 ## Mortality Score functions ##
