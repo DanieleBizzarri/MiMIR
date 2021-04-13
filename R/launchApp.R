@@ -4,23 +4,23 @@
 #' Start metaboRiSc application.
 
 startApp <- function(launch.browser = TRUE) {
-  appDir <- system.file("shinyApp", package = "metaboRiSc")
+  appDir <- system.file("shinyApp", package = "MetaboRiSc")
   
   if (appDir == "") {
-    stop("Could not find 'metaboRiSc'. Try re-installing 'metaboRiSc'.",
+    stop("Could not find 'MetaboRiSc'. Try re-installing 'MetaboRiSc'.",
          call. = FALSE)
   }
   
-  library("metaboRiSc")
+  library("MetaboRiSc")
   #options(shiny.maxRequestSize = 100 * 1024 ^ 2)
   #options(spinner.color = "#0088cc")
   options(warn = -1)
   
   message("Initializing metaboRiSc...")
-  suppressMessages(source(system.file("shinyApp/lib/libraries.R", package = "metaboRiSc")))
+  suppressMessages(source(system.file("shinyApp/lib/libraries.R", package = "MetaboRiSc")))
   
   # load("inst/shinyApp/data/PARAM__2018-06-18_02-16-17.457.RData")
-  # usethis::use_data(PARAM)
+  # usethis::use_data(PARAM, MetaboRiSc, overwrite=T)
   # PARAM_surrogates<-readRDS("inst/shinyApp/data/PARAM_surrogates_2021_03_26.RData")
   # usethis::use_data(PARAM_surrogates)
   
