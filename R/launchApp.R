@@ -21,7 +21,7 @@ startApp <- function(launch.browser = TRUE) {
   
   # load("inst/shinyApp/data/PARAM__2018-06-18_02-16-17.457.RData")
   # usethis::use_data(PARAM, MetaboRiSc, overwrite=T)
-  # PARAM_surrogates<-readRDS("inst/shinyApp/data/PARAM_surrogates_2021_03_26.RData")
+  # PARAM_surrogates<-readRDS("inst/shinyApp/data/PARAM_surrogates_2021_04_13.RData")
   # usethis::use_data(PARAM_surrogates)
   
   

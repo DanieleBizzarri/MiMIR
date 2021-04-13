@@ -1,5 +1,3 @@
-#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-#source("script/predictors_functions.R", local = TRUE)
 source("tabs/tab_upload/ui_upload.R", local = TRUE)
 source("tabs/tab_metabolites/ui_metabolites.R", local = TRUE)
 source("tabs/tab_phenotypes/ui_phenotypes.R", local = TRUE)

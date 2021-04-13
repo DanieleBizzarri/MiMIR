@@ -482,21 +482,24 @@ calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates, bin_names, 
     all(rownames(bin_pheno)==rownames(metabo_measures))
     
     surrogates<-foreach(i=bin_names, .combine="cbind") %do% {
-      pred<-predict(PARAM_surrogates$models_betas[[i]]$finalModel, newx=as.matrix(metabo_measures[,rownames(PARAM_surrogates$models_betas[[i]]$finalModel$beta)]), 
-                    s=PARAM_surrogates$models_betas[[i]]$best_tune$lambda, type= "response")
+      # pred<-predict(PARAM_surrogates$models_betas[[i]]$finalModel, newx=as.matrix(metabo_measures[,rownames(PARAM_surrogates$models_betas[[i]]$finalModel$beta)]), 
+      #               s=PARAM_surrogates$models_betas[[i]]$best_tune$lambda, type= "response")
+      pred<-apply.fit_surro(as.matrix(metabo_measures),PARAM_surrogates$models_betas[paste0("s_",i),])
     }
     ind<-sapply(bin_names, function(x) !all(is.na(bin_phenotypes[x])))
     par(mfrow=c(5,4))
     surro_images<-foreach(i=bin_names[ind], .combine="cbind") %do% {
       a<-data.frame(out=factor(bin_pheno[,i]), metabo_measures)
       colnames(a)[1]<-"out"
-      pred<-predictions_glmnet(PARAM_surrogates$models_betas[[i]], data=a,title_img=i)
+      #pred<-predictions_glmnet(PARAM_surrogates$models_betas[[i]], data=a,title_img=i)
+      pred<-predictions_surrogates(PARAM_surrogates$models_betas[paste0("s_",i),], data=a,title_img=i)
       return(pred$predictions_eval)
     }
   }else{
     surrogates<-foreach(i=bin_names, .combine="cbind") %do% {
-      pred<-predict(PARAM_surrogates$models_betas[[i]]$finalModel, newx=as.matrix(metabo_measures[,rownames(PARAM_surrogates$models_betas[[i]]$finalModel$beta)]), 
-                    s=PARAM_surrogates$models_betas[[i]]$best_tune$lambda, type= "response")
+      # pred<-predict(PARAM_surrogates$models_betas[[i]]$finalModel, newx=as.matrix(metabo_measures[,rownames(PARAM_surrogates$models_betas[[i]]$finalModel$beta)]), 
+      #               s=PARAM_surrogates$models_betas[[i]]$best_tune$lambda, type= "response")
+      pred<-apply.fit_surro(as.matrix(metabo_measures),PARAM_surrogates$models_betas[paste0("s_",i),])
     }
   }
   colnames(surrogates)<-bin_surro
@@ -529,31 +532,63 @@ report.dim<-function(x,header,trailing="0"){
 }
 
 
-predictions_glmnet<- function(en, data, folderIMG, log_file=NULL, img_name, title_img=FALSE, save=FALSE, peval=TRUE){
-  if (is.factor(data[,"out"])){
-    pred<-as.numeric(predict(en$finalModel, as.matrix(data[,rownames(en$finalModel$beta)]), s=en$best_tune$lambda, type="response"))
-  }else{
-    pred<-as.numeric(predict(en$finalModel, as.matrix(data[,rownames(en$finalModel$beta)]), s=en$best_tune$lambda))
-  }
+# predictions_glmnet<- function(en, data, folderIMG, log_file=NULL, img_name, title_img=FALSE, save=FALSE, peval=TRUE){
+#   if (is.factor(data[,"out"])){
+#     pred<-as.numeric(predict(en$finalModel, as.matrix(data[,rownames(en$finalModel$beta)]), s=en$best_tune$lambda, type="response"))
+#   }else{
+#     pred<-as.numeric(predict(en$finalModel, as.matrix(data[,rownames(en$finalModel$beta)]), s=en$best_tune$lambda))
+#   }
+#   all(rownames(pred) == rownames(data))
+#   if(peval){
+#     #Evaluation of the predictions
+#     if (is.factor(data[,"out"])){
+#       pred_eval<-eval_prediction_binary(data[,"out"], pred, log_file= log_file,
+#                                         title=title_img,
+#                                         img_name=paste0(img_name), save=save)
+#       pROC::auc(pred_eval)
+#     }else{
+#       pred_eval<-eval_prediction_continuous(data[,"out"], pred, 
+#                                             log_file= log_file, save=save)
+#       pred_eval
+#     }
+#     res<-list(predictions=pred, predictions_eval=pred_eval)
+#   }else{
+#     res<-list(predictions=pred)
+#   }
+#   return(res)
+# }
+
+#New way of predicting with the surrogates
+apply.fit_surro<-function(mat,FIT){
+  # Resort:
+  BETA <- FIT[colnames(mat)]
+  INTC <- FIT[1]
+  # Predict surrogate:
+  p<-as.numeric(1/(1+exp(-1 * (INTC+ rowSums(mat %*% BETA)))))
+  names(p)<-rownames(mat)
+  return(p)
+}
+
+predictions_surrogates<- function(FIT, data, folderIMG, img_name, title_img=FALSE, save=FALSE, peval=TRUE, plot=TRUE){
+  
+  pred<-apply.fit_surro(as.matrix(data[,-1]),FIT)
+  
   all(rownames(pred) == rownames(data))
+  
   if(peval){
     #Evaluation of the predictions
-    if (is.factor(data[,"out"])){
-      pred_eval<-eval_prediction_binary(data[,"out"], pred, log_file= log_file,
-                                        title=title_img,
-                                        img_name=paste0(img_name), save=save)
-      pROC::auc(pred_eval)
-    }else{
-      pred_eval<-eval_prediction_continuous(data[,"out"], pred, 
-                                            log_file= log_file, save=save)
-      pred_eval
-    }
+    pred_eval<-roc(data[,"out"], pred, plot=T, col="#377eb8", quiet = T,
+                   lwd=4, print.auc=TRUE, main = title_img, xaxs="i", yaxs="i", grid=TRUE, asp=NA) #AUC
+    
+    #pROC::auc(pred_eval)
     res<-list(predictions=pred, predictions_eval=pred_eval)
   }else{
     res<-list(predictions=pred)
   }
   return(res)
 }
+
+
 ####################
 ## Plot functions ##
 ####################
