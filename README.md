@@ -6,7 +6,7 @@ Please refer to our manuscripts when using these metabolic biomarkers in your wo
 - surrogate clinical variables: unpublished
 
 ## Intalling
-1. Install the "devtools" package (if not already done):\
+1. Install the "devtools" package (if not already done):
 ```
 install.packages("devtools")
 ```
