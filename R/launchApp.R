@@ -13,7 +13,6 @@ startApp <- function(launch.browser = TRUE) {
   
   library("MetaboRiSc")
   #options(shiny.maxRequestSize = 100 * 1024 ^ 2)
-  #options(spinner.color = "#0088cc")
   options(warn = -1)
   
   message("Initializing metaboRiSc...")

@@ -1,4 +1,4 @@
-## Welcome text
+## Description of our works and how to cite them
 output[["description"]] <- renderUI({
   tagList(
     div(

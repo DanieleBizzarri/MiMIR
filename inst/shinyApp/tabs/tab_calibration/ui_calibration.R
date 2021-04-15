@@ -3,11 +3,13 @@ tab_calibration <- tabItem(
   align = "center",
   
   tabsetPanel(
+    # Tab Panel for the calibration reliability and histogram
     tabPanel(
       title = "Metabolic surrogates calibration",
       HTML('<hr style="border-color: #0088cc;">'),
       sidebarLayout(
         position = "right",
+        #It allows the selection of the surrogates
         sidebarPanel(
           width = 3,
           radioButtons(
@@ -45,12 +47,13 @@ tab_calibration <- tabItem(
         ),
         mainPanel(
           width = 9,
-          #plotlyOutput("hist_predictors", height = "500px") %>% withSpinner()
           fluidPage(
             fluidRow(
+              #Reliability plot of the calibrations
               plotlyOutput("reliability_calib") %>% withSpinner()
               ),
             fluidRow(
+              #Histogram of the calibrations
               plotlyOutput("hist_calib") %>% withSpinner()
               )
             )
@@ -61,6 +64,7 @@ tab_calibration <- tabItem(
                You can change the number of bins with the slider."),
       HTML('<hr style="border-color: #0088cc;">'),
     ),
+    # Tab Panel for the correlation of the calibrated surrogates
       tabPanel(
         title = "Calibrated surrogates Correlations",
         HTML('<hr style="border-color: #0088cc;">'),
@@ -71,6 +75,7 @@ tab_calibration <- tabItem(
         helpText("The correlations of the calibrated surrogates"),
         HTML('<hr style="border-color: #0088cc;">'),
       ),
+    # Tab Panel for the missingness of the calibrated surrogates
       tabPanel(
         title = "Calibrated surrogates NAs",
         HTML('<hr style="border-color: #0088cc;">'),

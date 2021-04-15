@@ -1,6 +1,7 @@
+# Check if the metabolites are available
 observe({
   checkReload()
-  if (exists("predictors")) {
+  if (required()) {
     shinyjs::enable("downloadTSV")
     shinyjs::enable("downloadCSV")
   } else {
@@ -9,7 +10,7 @@ observe({
   }
 })
 
-## create filename and save data as CSV
+## output all the predictors and save data as CSV
 output$downloadCSV <- downloadHandler(
   filename = function() {
     paste0(input$downloadname, ".csv")
@@ -25,7 +26,7 @@ output$downloadCSV <- downloadHandler(
   }
 )
 
-## create filename and save data as TSV
+## output all the predictors and save data as TSV
 output$downloadTSV <- downloadHandler(
   filename = function() {
     paste0(input$downloadname, ".tsv")
@@ -41,13 +42,67 @@ output$downloadTSV <- downloadHandler(
   }
 )
 
+# Check if the metabolites are available
+observe({
+  checkReload()
+  if (required()) {
+    shinyjs::enable("downloadTSV_calib")
+    shinyjs::enable("downloadCSV_calib")
+  } else {
+    shinyjs::disable("downloadTSV_calib")
+    shinyjs::disable("downloadCSV_calib")
+  }
+})
 
+## Output the calibrated surrogates and save data as CSV
+output$downloadCSV_calib <- downloadHandler(
+  filename = function() {
+    paste0(input$downloadname_calib, ".csv")
+  },
+  content = function(file) {
+    write.table(
+      calibrations(),
+      file,
+      row.names = TRUE,
+      col.names = NA,
+      sep = ","
+    )
+  }
+)
+
+## create the calibrated surrogates and save data as TSV
+output$downloadTSV_calib <- downloadHandler(
+  filename = function() {
+    paste0(input$downloadname_calib, ".tsv")
+  },
+  content = function(file) {
+    write.table(
+      calibrations(),
+      file,
+      row.names = TRUE,
+      col.names = NA,
+      sep = "\t"
+    )
+  }
+)
+
+
+observe({
+  checkReload()
+  if (required() & !is.null(phenotypes())) {
+    shinyjs::enable("download_html")
+  } else {
+    shinyjs::disable("download_html")
+  }
+})
+
+# Outputs the histogram of the 
 output[["download_html"]] <- downloadHandler(
   # For PDF output, change this to "report.pdf"
   filename = function() {
     paste0("Metabolic_predictors_", gsub("-", "", Sys.Date()),".html")
   },
-  if(dim(phenotypes()[1])!=0){
+  #if(dim(phenotypes()[1])!=0){
   content = function(file) {
     shiny::withProgress(
       message = paste0("Preparing Analysis report"),
@@ -83,9 +138,18 @@ output[["download_html"]] <- downloadHandler(
           )
           shiny::incProgress(10/10)
       })
-  }
+  #}
 }
 )
+
+observe({
+  checkReload()
+  if (required()) {
+    shinyjs::enable("download_html_no_pheno")
+  } else {
+    shinyjs::disable("download_html_no_pheno")
+  }
+})
 
 output[["download_html_no_pheno"]] <- downloadHandler(
   # For PDF output, change this to "report.pdf"

@@ -1,35 +1,4 @@
-#######################################
-##Basic explanation of a new analysis##
-#######################################
-output[["welcome_text"]] <- renderUI({
-  tagList(
-    div(
-      br(),
-      span(
-        "Welcome to the webtool for calculating the metabolic predictors from raw Nightingale Health 1H-NMR metabolomics data
-        developed in the groups of MOLEPI and LCBC (Leiden):mortality score [1], metabolic age ('metaboAge') [2] and surrogate clinical variables [3].
-        ",
-        style = "text-align: justify; display: block; width: 90%"
-      ),
-      br(),
-      span(
-        "Please refer to our manuscripts when using these metabolic biomarkers in your works:",
-        style = "text-align: justify; display: block; width: 90%"
-      ),
-      span(
-        "[1] van den Akker Erik B. et al., ‘Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease’, Circ. Genomic Precis. Med., vol. 13, no. 5, pp. 541–547, Oct. 2020, doi: 10.1161/CIRCGEN.119.002610.",
-        tags$br(),
-        "[2] J. Deelen et al., ‘A metabolic profile of all-cause mortality risk identified in an observational study of 44,168 individuals’, Nat. Commun., vol. 10, no. 1, pp. 1–8, Aug. 2019, doi: 10.1038/s41467-019-11311-9",
-        tags$br(),
-        "[3] unpublished",
-        style = "text-align: justify; display: block; width: 90%"
-      ),
-      br(),
-      style = "background-color: #f5f5f5; border: 1px solid #e3e3e3; width: 90%"
-    )
-  )
-})
-
+#Basic explanation to start new analysis
 output[["get_started"]] <- renderUI({
   tagList(
     div(
@@ -79,37 +48,9 @@ output[["get_started"]] <- renderUI({
   )
 })
 
-output[["upload_files"]] <- renderUI({
-  tagList(
-    div(
-      span(
-        tags$br(),
-        "Please, insert the path to your dataset on your local device.",
-        tags$br(),
-        "Don't worry, your data will be transmitted to our server over an encrypted connection and none of it will be saved nor visualized by us!",
-        style = "text-align: justify; display: block; width: 90%"
-      ),
-      br(),
-      style = "background-color: #f5f5f5; border: 1px solid #e3e3e3; width: 90%"
-    )
-  )
-})
-
 ###################
 ##Example dataset##
 ###################
-#load example
-# example_met <- reactive({
-#   file1 <- "exampleData/syntetic_metabolic_dataset.csv"
-#   return(read.table(file=file1, header = FALSE, sep=","))
-# })
-# 
-# example_pheno <- reactive({
-#   file2 <- "exampleData/synthetic_phenotypic_dataset.csv"
-#   return(read.table(file=file2, header = FALSE, sep=","))
-# })
-
-
 output$downloadData <- downloadHandler(
   filename = function() {
     paste("metabolic_predictors_example_dataset", "zip", sep=".")
@@ -126,9 +67,9 @@ output$downloadData <- downloadHandler(
   contentType = "application/zip"
   )
 
-###################
-## Upload files ##
-###################
+####################
+## Uploaded files ##
+####################
 ## Read metabolites data file
 metabo_measures <- reactive({
   if (is.null(input$file_samples$datapath)) {
@@ -148,7 +89,7 @@ metabo_measures <- reactive({
     metabo_measures
     })
 
-#Create data objects
+#Read phenotypes data file
 phenotypes <- reactive({
   if (is.null(input$file_phenotypes$datapath)) {
     return(NULL)
@@ -167,20 +108,24 @@ phenotypes <- reactive({
   phenotypes
 })
 
-bin_phenotypes <- reactive({
-  phenotypes<-BMI_LDL_eGFR(phenotypes = phenotypes(),metabo_measures = metabo_measures())
-  bin_phenotypes<-binarize_all_pheno(phenotypes())
-})
-
+# Variable storing the selected phenotypes found in the uploaded file
 pheno_available <- reactive({
   phen_names<-pheno_names[which(pheno_names %in% colnames(phenotypes()))]
   colnames(phenotypes()[,phen_names])[which(colSums(is.na(phenotypes()[,phen_names]))<nrow(phenotypes()[,phen_names]))]
 })
 
+#Create the binarize phenotypes table
+bin_phenotypes <- reactive({
+  phenotypes<-BMI_LDL_eGFR(phenotypes = phenotypes(),metabo_measures = metabo_measures())
+  bin_phenotypes<-binarize_all_pheno(phenotypes())
+})
+
+# Variable storing the selected phenotypes found in the binarized phenotypes table
 bin_pheno_available <- reactive({
   names(bin_phenotypes())[which(colSums(is.na(bin_phenotypes()))<nrow(bin_phenotypes()))]
 })
 
+# Variable TRUE/FALSE if all the metabolites names were found
 required<-reactive({
   length(which(MET57 %in% colnames(metabo_measures())))==57
 })
@@ -190,7 +135,8 @@ output$required_met <- renderText({
   req(required())
   "All required metabolites were found!"
 })
-#Metabolites
+
+#Table with the metabolites names found in the uploaded file
 output[["found_met"]] <- DT::renderDataTable({
   tryCatch({
     req(input$file_samples$datapath)
@@ -207,7 +153,7 @@ output[["found_met"]] <- DT::renderDataTable({
   })
 })
 
-#Phenotypes
+#Table with phenotypes names found in the uploaded file
 output[["found_phen"]] <- DT::renderDataTable({
   tryCatch({
     req(input$file_phenotypes$datapath)
@@ -224,8 +170,8 @@ output[["found_phen"]] <- DT::renderDataTable({
   })
 })
 
-# Show analyses files
-## Render metabo_measures data to ui
+# Show uploaded files
+# Render metabo_measures data to ui
 output[["metabo_table"]] <- DT::renderDataTable({
   tryCatch({
     req(input$file_samples$datapath)
@@ -237,7 +183,7 @@ output[["metabo_table"]] <- DT::renderDataTable({
   })
 })
 
-## Render count data to ui
+# Render pheno_table data to ui
 output[["pheno_table"]] <- DT::renderDataTable({
   tryCatch({
     req(input$file_phenotypes$datapath)
@@ -249,6 +195,7 @@ output[["pheno_table"]] <- DT::renderDataTable({
   })
 })
 
+# Render bin_pheno_table data to ui
 output[["bin_pheno_table"]] <- DT::renderDataTable({
   tryCatch({
     req(input$file_phenotypes$datapath)

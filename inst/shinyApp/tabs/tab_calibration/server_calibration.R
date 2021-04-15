@@ -1,3 +1,4 @@
+# Creates bot the calibration plots if the phenotype is available
 calibration_plot<-reactive({
   sur<-as.character(input$surrogates)
   ind<-which(bin_surro == sur)
@@ -8,6 +9,7 @@ calibration_plot<-reactive({
   }
 })
 
+# Ouptuts reliability plot if the phenotype is available
 output$reliability_calib <- renderPlotly({
   if(required()){
     tryCatch({
@@ -25,6 +27,7 @@ output$reliability_calib <- renderPlotly({
   }
 })
 
+# Ouptuts histogram of the calibrations if the phenotype is available
 output$hist_calib <- renderPlotly({
   if(required()){
     tryCatch({
@@ -42,6 +45,7 @@ output$hist_calib <- renderPlotly({
   }
 })
 
+# Ouptuts the heatmap for the correlations of the calibrated surrogates
 output$heat_calib <- renderPlotly({
   if(required()){
     tryCatch({
@@ -59,7 +63,7 @@ output$heat_calib <- renderPlotly({
   }
 })
 
-
+# Ouptuts the missingness heatmap for the calibrated surrogates
 output$heat_na_calib <- renderPlot({
   if(required()){
     tryCatch({

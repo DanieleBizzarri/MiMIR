@@ -3,6 +3,7 @@ tab_distributions <- tabItem(
   align = "center",
   
   tabsetPanel(
+    # Tab Panel for the correlation of the predicted values
     tabPanel(
       title = "Predictor's correlations",
       HTML('<hr style="border-color: #0088cc;">'),
@@ -11,6 +12,7 @@ tab_distributions <- tabItem(
         plotlyOutput("heat_predictors", height = "600px") %>% withSpinner()
       )
     ),
+    # Tab Panel for the missingness in the predicted values
     tabPanel(
       title = "Predictors' missingness",
       HTML('<hr style="border-color: #0088cc;">'),
@@ -21,11 +23,13 @@ tab_distributions <- tabItem(
       helpText("The missingness in the predicted values"),
       HTML('<hr style="border-color: #0088cc;">')
     ),
+    # Tab Panel for the histograms of the predicted values
     tabPanel(
       title = "Predictors' histograms",
       HTML('<hr style="border-color: #0088cc;">'),
       sidebarLayout(
         position = "right",
+        # Selection of which predictor to visualize
         sidebarPanel(
           width = 3,
           checkboxGroupInput(
@@ -55,6 +59,7 @@ tab_distributions <- tabItem(
               ),
             selected = "mortScore",
           ),
+          # Radio button to deciide if scale or not the scores
           radioButtons(
             inputId = "scaling",
             label="Do you want to see the scores scaled?",

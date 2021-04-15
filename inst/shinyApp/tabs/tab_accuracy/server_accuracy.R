@@ -1,3 +1,4 @@
+# Creates the ROC curves for the selected surrogates
 output$ROCs <- renderPlotly({
   if(required()){
     tryCatch({
@@ -12,6 +13,7 @@ output$ROCs <- renderPlotly({
   }
 })
 
+# Show the t-tests for the surrogates in the dataset
 output$ttest <- renderPlotly({
   if(required()){
     tryCatch({
@@ -25,7 +27,7 @@ output$ttest <- renderPlotly({
   }
 })
 
-
+# Creates a scatterplot comparing MetaboAge and age
 output$scatter_metaboage <- renderPlotly({
   if(required()){
     tryCatch({
@@ -48,7 +50,7 @@ output$scatter_metaboage <- renderPlotly({
   }
 })
 
-
+#Creates an histogram of the mortality score divided for the different ages
 output$hist_mort <- renderPlotly({
   if(required()){
       if(dim(phenotypes())[1]!=0){

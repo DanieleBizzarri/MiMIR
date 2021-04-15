@@ -3,6 +3,7 @@ tab_accuracy <- tabItem(
   align = "center",
   
   tabsetPanel(
+    #Tab panel with the ROC curves of the surrogates
     tabPanel(
       title = "Surrogates ROC curves",
       HTML('<hr style="border-color: #0088cc;">'),
@@ -10,6 +11,7 @@ tab_accuracy <- tabItem(
         position = "right",
         sidebarPanel(
           width = 3,
+          #Selection of the surrogates
           checkboxGroupInput(
             inputId = "surroc",
             label="Surrogates ROC curves:",
@@ -46,6 +48,7 @@ tab_accuracy <- tabItem(
                On the side you can find the AUC. You can chose which surrogates ROC to visualize."),
       HTML('<hr style="border-color: #0088cc;">')
     ),
+    #Tab panel with the t-test made with the surrogates
     tabPanel(
       title = "Surrogates t-tests",
       HTML('<hr style="border-color: #0088cc;">'),
@@ -56,6 +59,7 @@ tab_accuracy <- tabItem(
       helpText("In this plot we split the surrogates based on their original values and
                we calculate a t-test to see if they are well splitted")
     ),
+    #Tab panel comparing MetaboAge and the age of the individuals
     tabPanel(
       title = "MetaboAge/age Scatterplot",
       HTML('<hr style="border-color: #0088cc;">'),
@@ -64,8 +68,8 @@ tab_accuracy <- tabItem(
         plotlyOutput("scatter_metaboage", height = "600px") %>% withSpinner()
       ),
       helpText("Scatterplot to see how accurate MetaboAge is on your dataset. On the x axis the real age, on the y axis the predicted age.")
-    )
-    ,
+    ),
+    #Histogram of the mortality score divided for 3 age ranges
     tabPanel(
       title = "Mortality score histogram per age range",
       HTML('<hr style="border-color: #0088cc;">'),

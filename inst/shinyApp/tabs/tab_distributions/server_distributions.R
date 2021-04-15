@@ -1,3 +1,4 @@
+# Outputs the histograms of the predictors chosen (scaled or not)
 output$hist_predictors <- renderPlotly({
   tryCatch({
     req(required())
@@ -8,6 +9,7 @@ output$hist_predictors <- renderPlotly({
   })
 })
 
+# Outputs the correlation heatmap of the predictors
 output$heat_predictors <- renderPlotly({
   tryCatch({
     res<-cor.assoc(predictors(),predictors(), colnames(predictors())[-1],colnames(predictors())[-1])
@@ -18,6 +20,7 @@ output$heat_predictors <- renderPlotly({
   })
 })
 
+# Outputs the heatmap of the missingness in the predictors
 output$heat_na_pred <- renderPlot({
   if(required()){
       plot.na.heatmap(t(predictors()))

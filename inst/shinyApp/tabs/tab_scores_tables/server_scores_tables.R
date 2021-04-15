@@ -1,5 +1,5 @@
 # Show results
-## Render mort_score data to ui
+## Render mortality score to ui
 output[["mortScore_table"]] <- DT::renderDataTable({
   tryCatch({
     DT::datatable(mort_score(), options = list(pageLength = 5, scrollX = TRUE))
@@ -10,7 +10,7 @@ output[["mortScore_table"]] <- DT::renderDataTable({
   })
 })
 
-## Render MetaboAge data to ui
+## Render MetaboAge to ui
 output[["MetaboAge_table"]] <- DT::renderDataTable({
   tryCatch({
     DT::datatable(MetaboAge(), options = list(pageLength = 5, scrollX = TRUE))
@@ -22,7 +22,7 @@ output[["MetaboAge_table"]] <- DT::renderDataTable({
 })
 
 
-## Render mort_score data to ui
+## Render surrogates to ui
 output[["surrogates_table"]] <- DT::renderDataTable({
   tryCatch({
     DT::datatable(surrogates(), options = list(pageLength = 5, scrollX = TRUE))
@@ -33,10 +33,7 @@ output[["surrogates_table"]] <- DT::renderDataTable({
   })
 })
 
-# calibrations_data.frame<-reactive({
-#   cal<-calib_data_frame(calibrations(), metabo_measures(), bin_pheno_available())
-# })
-
+## Render calibrated surrogates to ui
 output[["calibrated_surro_table"]] <- DT::renderDataTable({
   cal<-calib_data_frame(calibrations(), metabo_measures(), bin_pheno_available())
   tryCatch({

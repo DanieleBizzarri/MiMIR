@@ -3,6 +3,7 @@ tab_phenotypes <- tabItem(
   align = "center",
   
   tabsetPanel(
+    # Tab Panel for the correlation of the phenotypes uploaded
     tabPanel(
       title = "Phenotypes Correlations",
       HTML('<hr style="border-color: #0088cc;">'),
@@ -13,6 +14,7 @@ tab_phenotypes <- tabItem(
       helpText("The correlations of the phenotypes used in our prediction models"),
       HTML('<hr style="border-color: #0088cc;">'),
     ),
+    # Tab Panel for the missingness of the phenotypes uploaded
   tabPanel(
     title = "Phenotypes NAs",
     HTML('<hr style="border-color: #0088cc;">'),

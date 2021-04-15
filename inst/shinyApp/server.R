@@ -3,6 +3,7 @@ options(warn = -1)
 server <- function(input, output) {
   options(shiny.maxRequestSize=30*1024^2)
   
+  #Check the reload of the files
   checkReload <- function() {
     
     is.null(input$file_samples)
@@ -105,6 +106,7 @@ server <- function(input, output) {
     )
   })
     
+  #Load all the server tabs
   source("tabs/tab_upload/server_upload.R", local = TRUE)
   source("tabs/tab_metabolites/server_metabolites.R", local = TRUE)
   source("tabs/tab_phenotypes/server_phenotypes.R", local = TRUE)

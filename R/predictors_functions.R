@@ -340,13 +340,13 @@ binarize_all_pheno<-function(data){
                                     "low_eGFR","obesity", "low_wbc","low_hgb")
   #hscrp
   if(c("hscrp") %in% colnames(data)){
-    binarized_phenotypes[which(data$hscrp<2),"high_hscrp"]<-0
-    binarized_phenotypes[which(data$hscrp>=2),"high_hscrp"]<-1
+    binarized_phenotypes[which(data$hscrp<3),"high_hscrp"]<-0
+    binarized_phenotypes[which(data$hscrp>=3),"high_hscrp"]<-1
     binarized_phenotypes$high_hscrp<-as.factor(binarized_phenotypes$high_hscrp)
   }else if(c("ln_hscrp") %in% colnames(data)){
     hscrp<-exp(data[,"ln_hscrp"])
-    binarized_phenotypes[which(hscrp<2),"high_hscrp"]<-0
-    binarized_phenotypes[which(hscrp>=2),"high_hscrp"]<-1
+    binarized_phenotypes[which(hscrp<3),"high_hscrp"]<-0
+    binarized_phenotypes[which(hscrp>=3),"high_hscrp"]<-1
     binarized_phenotypes$high_hscrp<-as.factor(binarized_phenotypes$high_hscrp)
   }
   
@@ -791,7 +791,7 @@ roc_surro<-function(surrogates, bin_phenotypes, x_name){
 ttest_surrogates<-function(surrogates,bin_phenotypes){
   available<-colnames(bin_phenotypes)[!colSums(is.na(bin_phenotypes))==nrow(bin_phenotypes)]
   
-  Surrogates<-foreach(i=available, .combine="rbind") %do% {
+  Surrogates<-foreach(i=colnames(bin_phenotypes), .combine="rbind") %do% {
     surro<-paste0("s_",i)
     comp<-data.frame(ID=rownames(surrogates), 
                      value=bin_phenotypes[rownames(surrogates),i],
@@ -815,16 +815,20 @@ ttest_surrogates<-function(surrogates,bin_phenotypes){
   }
   
   rownames(tt_values)<-available
+  
   for (i in available){
     Surrogates[which(Surrogates$variable==i),"variable"]<-paste0(i,", ",tt_values[i,])
   }
-
+  Surrogates$value<-as.numeric(Surrogates$value)-1
+  Surrogates[which(is.na(Surrogates),arr.ind=T)]<-NaN
+  Surrogates$value<-factor(Surrogates$value)
   pl_surro<-plot_ly(Surrogates,
               x = ~variable,
               y = ~surrogate,
               color = ~value,
               type = "box",
-              colors = c("#377EB8","#E41A1C")) %>% 
+              colors = c("#377EB8","#E41A1C", "grey")
+              ) %>% 
     layout(boxmode = "group",
            title = list(text="<b>Surrogates' distributions split for their original values<b>",y = 0.98),
            xaxis = list(title = "<b>Clinical Variables<b>",

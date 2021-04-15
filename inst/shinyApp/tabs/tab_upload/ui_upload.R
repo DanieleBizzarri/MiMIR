@@ -2,14 +2,12 @@ tab_upload <- tabItem(
   tabName = "upload",
   align = "center",
   
-  # h1("Welcome"),
-  # uiOutput("welcome_text"),
-  
   #Upload files
   h1("Upload your files"),
   
   fluidPage(
     br(),
+    #Upload metabolites
     column(
       width = 3,
       div(
@@ -33,6 +31,7 @@ tab_upload <- tabItem(
           )
         )
       ),
+      #Upload phenotypes
       div(
         id = "upload_phenotypes",
         br(),
@@ -55,10 +54,12 @@ tab_upload <- tabItem(
         )
       ),
       br(),
+      #Example Synthetic Dataset
       h5(strong("Example dataset:")),
       downloadButton('downloadData', 'Download example'),
       br(),
     ),
+    # Explanation
     column(
       width = 9,
       uiOutput("get_started"),
@@ -67,6 +68,7 @@ tab_upload <- tabItem(
     style = "position: center; border-radius: 20px; border: 2px solid #0088cc;'width:100px;'",
   ),
   HTML('<hr style="border-color: #0088cc;">'),
+  #Tables with the column names found in the files
   fluidPage(
     h3(strong("Column names found")),
     textOutput("required_met"),
@@ -86,14 +88,17 @@ tab_upload <- tabItem(
     ),
   helpText("Red= are required to continue; Orange=  not found but optional; Green= found"),
   br(),
+  #Table with the uploaded files
   div(id = "data tabs",
       tabsetPanel(
+        #Metabolic measurements table
         tabPanel(
           "Metabolic measurements",
           HTML('<hr style="border-color: #0088cc;">'),
           DT::dataTableOutput("metabo_table") %>% withSpinner(),
           HTML('<hr style="border-color: #0088cc;">')
         ),
+        #Phenotypes table
         tabPanel(
           "Phenotypic variables",
           HTML('<hr style="border-color: #0088cc;">'),
@@ -101,6 +106,7 @@ tab_upload <- tabItem(
           helpText("All the phenotypic variables available in your dataset"),
           HTML('<hr style="border-color: #0088cc;">')
         ),
+        #Phenotypes binarized with our thresholds table
         tabPanel(
           "Binarized phenotypic variables",
           HTML('<hr style="border-color: #0088cc;">'),

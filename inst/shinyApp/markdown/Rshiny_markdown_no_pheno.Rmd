@@ -48,8 +48,7 @@ Nmax_zero_surrogates<-params$Nmax_miss_metaboAge
 # Dataset Characteristics
 ### Dimensions of the files
 ```{r showVariables, echo=FALSE}
-cat(paste0("Metabolites file dimensions: \nRows= ", dim(metabo_measures)[1], ", Columns= ", dim(metabo_measures)[2]),"\nAll the necessary metabolites were found available!",
-    "\n\nPhenotypes file dimensions: \nRows= ", dim(phenotypes)[1], ", Columns= ", dim(phenotypes)[2])
+cat(paste0("Metabolites file dimensions: \nRows= ", dim(metabo_measures)[1], ", Columns= ", dim(metabo_measures)[2]),"\nAll the necessary metabolites were found available!")
 ```
 
 ## Metabolites
@@ -67,7 +66,6 @@ plot.na.heatmap(t(metabo_measures[,MET57]))
 
 ### Histogram metabolites
 ```{r histograms metabolites, echo=FALSE, out.width="150%", out.height="600%"}
-#metabo_barplots(metabo_measures = metabo_measures[,MET57], color="red")
 one_hist(metabo_measures[,MET57])
 ```
 

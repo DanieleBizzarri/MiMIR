@@ -1,3 +1,4 @@
+#Load all the ui of the tabs
 source("tabs/tab_upload/ui_upload.R", local = TRUE)
 source("tabs/tab_metabolites/ui_metabolites.R", local = TRUE)
 source("tabs/tab_phenotypes/ui_phenotypes.R", local = TRUE)
@@ -13,14 +14,15 @@ source("tabs/tab_about/ui_about.R", local = TRUE)
 ui <- dashboardPage(
   skin = "blue",
   title = "MetaboRiSc",
-  #title = div(img(src="lumc-logo.jpg", width = "10px"), "MetaboRiSc"),
   
   dashboardHeader(
-    #title = div("MetaboRiSc"),
     title = span(tagList(icon("laptop-medical"), "MetaboRiSc-App")),
     titleWidth = 350,
+    
     dropdownMenuOutput("messageMenu"),
+    # text with the current tab
     tags$li(class = "dropdown", tags$a(textOutput("current_page"))),
+    #Links to our sites
     tags$li(a(href = 'https://www.lumc.nl/',
               tags$img(src = 'lumc-logo.jpg', height="60", width="60",
                        title = "LUMC"),
@@ -46,14 +48,13 @@ ui <- dashboardPage(
   dashboardSidebar(
     collapsed = FALSE,
     width = 350,
-    
+    #Sidebar menu with tabs
     sidebarMenu(sidebarMenuOutput("sidebar_tabs"),
                 style = "font-size: 15px;")
   ),
   dashboardBody(
-    #useShinyjs(),
+    useShinyjs(),
     includeCSS("css/styles.css", local = TRUE),
-    #tags$head(tags$link(rel = "shortcut icon", href = "lumcFavicon.png")),
     
     tabItems(
       tab_upload,

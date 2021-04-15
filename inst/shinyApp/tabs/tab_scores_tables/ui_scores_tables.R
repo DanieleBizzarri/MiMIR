@@ -2,71 +2,13 @@ tab_scores_tables <- tabItem(
   tabName = "scores_tables",
   align = "center",
   
-  #New analysis instructions
+  # Metabolic scores tables
   h1("Metabolic Scores"),
   HTML('<hr style="border-color: #0088cc;">'),
-  # fluidRow(
-  #   column(
-  #     width = 6,
-  #     tabsetPanel(
-  #       tabPanel(
-  #         "Metabolic mortality score",
-  #         HTML('<hr style="border-color: #0088cc;">'),
-  #         DT::dataTableOutput("mortScore_table") %>% withSpinner(),
-  #         HTML('<hr style="border-color: #0088cc;">'),
-  #         style = "position: center; "
-  #         )
-  #       )
-  #     ),
-  #   column(
-  #     width = 6,
-  #     tabsetPanel(
-  #       tabPanel(
-  #         "MetaboAge",
-  #         HTML('<hr style="border-color: #0088cc;">'),
-  #         DT::dataTableOutput("MetaboAge_table") %>% withSpinner(),
-  #         HTML('<hr style="border-color: #0088cc;">'),
-  #         style = "position: center"
-  #       )
-  #     )
-  #   )
-  #   # ,
-  #   # column(
-  #   #   width = 4,
-  #   #   tabsetPanel(
-  #   #     tabPanel(
-  #   #       "Surrogates",
-  #   #       HTML('<hr style="border-color: #0088cc;">'),
-  #   #       DT::dataTableOutput("surrogates_table") %>% withSpinner(),
-  #   #       HTML('<hr style="border-color: #0088cc;">')
-  #   #     )
-  #   #   )
-  #   # ),
-  # ),
-  # div(id="surro_table",
-  #     tabsetPanel(
-  #       tabPanel(
-  #         "Surrogates",
-  #         HTML('<hr style="border-color: #0088cc;">'),
-  #         DT::dataTableOutput("surrogates_table") %>% withSpinner(),
-  #         HTML('<hr style="border-color: #0088cc;">')
-  #       )
-  #     )
-  # ),
-  # div(id="calib_table",
-  #     tabsetPanel(
-  #       tabPanel(
-  #         "Calibrated Surrogates",
-  #         HTML('<hr style="border-color: #0088cc;">'),
-  #         DT::dataTableOutput("calibrated_surro_table") %>% withSpinner(),
-  #         HTML('<hr style="border-color: #0088cc;">')
-  #       )
-  #     )
-  # )
-  
   br(),
   div(id = "data tabs",
       tabsetPanel(
+        #Mortality score tab
         tabPanel(
           "Metabolic mortality score",
           HTML('<hr style="border-color: #0088cc;">'),
@@ -74,6 +16,7 @@ tab_scores_tables <- tabItem(
           HTML('<hr style="border-color: #0088cc;">'),
           style = "position: center;"
           ),
+        # MetaboAge tab
         tabPanel(
           "MetaboAge",
           HTML('<hr style="border-color: #0088cc;">'),
@@ -81,12 +24,14 @@ tab_scores_tables <- tabItem(
           HTML('<hr style="border-color: #0088cc;">'),
           style = "position: center"
           ),
+        # Surrogates tab
         tabPanel(
           "Surrogates",
           HTML('<hr style="border-color: #0088cc;">'),
           DT::dataTableOutput("surrogates_table") %>% withSpinner(),
           HTML('<hr style="border-color: #0088cc;">')
           ),
+        # Calibrated surrogates tab
         tabPanel(
           "Calibrated Surrogates",
           HTML('<hr style="border-color: #0088cc;">'),

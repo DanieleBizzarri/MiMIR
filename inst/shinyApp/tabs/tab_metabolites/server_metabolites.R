@@ -1,3 +1,4 @@
+#Creates the plotly heatmap with the metabolites' correlations
 output$heat_met <- renderPlotly({
   tryCatch({
     req(required())
@@ -15,6 +16,7 @@ output$heat_met <- renderPlotly({
   })
 })
 
+#Creates the figure with the metabolites' missingness
 output$heat_na_metabo <- renderPlot({
   tryCatch({
     req(required())
@@ -29,6 +31,7 @@ output$heat_na_metabo <- renderPlot({
   })
 })
 
+#Creates the plotly histogram of the selected metabolites
 output$hist_metabolites <- renderPlotly({
   tryCatch({
     req(required())

@@ -3,6 +3,7 @@ tab_metabolites <- tabItem(
   align = "center",
   
   tabsetPanel(
+    # Tab Panel for the correlation of the metabolite concentrations uploaded
     tabPanel(
       title = "Metabolites Correlations",
       HTML('<hr style="border-color: #0088cc;">'),
@@ -10,6 +11,7 @@ tab_metabolites <- tabItem(
         position = "right",
         sidebarPanel(
           width = 3,
+          # Metabolites selection of MetaboAge and the surrogates or the one of the Mortality score
           radioButtons(
             "MET56_14_cor",
             "Metabolites selections:",
@@ -25,6 +27,7 @@ tab_metabolites <- tabItem(
       helpText("The correlations of the metabolites used in our prediction models, you can chose the set of the mortality score or the one of MetaboAge/Surrogates"),
       HTML('<hr style="border-color: #0088cc;">'),
     ),
+    # Tab Panel for the missingness of the metabolite concentrations uploaded
     tabPanel(
       title = "Metabolites NAs",
       HTML('<hr style="border-color: #0088cc;">'),
@@ -32,6 +35,7 @@ tab_metabolites <- tabItem(
         position = "right",
         sidebarPanel(
           width = 3,
+          # Metabolites selection of MetaboAge and the surrogates or the one of the Mortality score
           radioButtons(
             "MET56_14_nas",
             "Metabolites selections:",
@@ -47,6 +51,7 @@ tab_metabolites <- tabItem(
       helpText("The missingness of the metabolites used in our prediction models, you can chose the set of the mortality score or the one of MetaboAge/Surrogates"),
       HTML('<hr style="border-color: #0088cc;">')
     ),
+    # Tab Panel for the histograms of the metabolite concentrations uploaded
   tabPanel(
     title = "Metabolites histograms",
     HTML('<hr style="border-color: #0088cc;">'),
@@ -54,9 +59,19 @@ tab_metabolites <- tabItem(
       position = "right",
       sidebarPanel(
         width = 3,
+        #Radio button if you want to scale them or not
+        radioButtons(
+          inputId = "scale_met",
+          label="Do you want to see the scores scaled?",
+          choices=c("Not scaled" = FALSE,
+                    "Scaled" = TRUE
+          ),
+          selected = FALSE,
+        ),
+        #Selection of which metabolites to print
         checkboxGroupInput(
           inputId = "metabolites",
-          label="Metabolites' histogramss:",
+          label="Metabolites' histograms:",
           choices=c("Total lipids in medium VLDL" = "m_vldl_l",
                     "Total lipids in small VLDL" = "s_vldl_l",
                     "Total lipids in very small VLDL" = "xs_vldl_l",
@@ -117,15 +132,6 @@ tab_metabolites <- tabItem(
                     ),
           selected = "m_vldl_l",
           ),
-        radioButtons(
-          inputId = "scale_met",
-          label="Do you want to see the scores scaled?",
-          choices=c("Not scaled" = FALSE,
-                    "Scaled" = TRUE
-          ),
-          selected = FALSE,
-        ),
-        
         style = "text-align: left;"
       ),
       mainPanel(

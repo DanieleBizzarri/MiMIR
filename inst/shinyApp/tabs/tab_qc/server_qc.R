@@ -1,4 +1,4 @@
-## QC introduction test
+## QC introduction 
 output[["qc_intro"]] <- renderUI({
   tagList(
     div(
@@ -35,11 +35,7 @@ output[["qc_intro"]] <- renderUI({
   )
 })
 
-
-# source("script/predictors_functions.R", local = TRUE)
-# load("data/PARAM__2018-06-18_02-16-17.457.RData")
-# load("data/PARAM_surrogates_2021_02_23.RData")
-
+# Output MetaboAge settings
 output$MetaboAge_settings <- renderUI({
   str1 <- "You have selected the current values:"
   str2 <- paste0("N max zeros= ", input$Nmax_zero_metaboAge,";")
@@ -48,6 +44,7 @@ output$MetaboAge_settings <- renderUI({
   HTML(paste(str1, str2, str3, sep = '<br/>'))
 })
 
+# Output Surrogates settings
 output$Surrogates_settings <- renderUI({
   str1 <- "You have selected the current values:"
   str2 <- paste0("N max zeros= ", input$Nmax_zero_surrogates,";")
@@ -56,22 +53,23 @@ output$Surrogates_settings <- renderUI({
   HTML(paste(str1, str2, str3, sep = '<br/>'))
 })
 
-
+# Output MetaboAge resulting dataset info
 output$QC_metaboAge_text <- renderPrint(result <- QCprep(as.matrix(metabo_measures()[,MET63]),
                                                          PARAM,quiet=FALSE,
                                                          Nmax_miss=input$Nmax_miss_metaboAge,
                                                          Nmax_zero=input$Nmax_zero_metaboAge))
-
+# Output Surrogates resulting dataset info
 output$QC_surrogates_text <- renderPrint(result <- QCprep_metabotypes(as.matrix(metabo_measures()[,MET63]),
                                                                       PARAM_surrogates,quiet=FALSE,
                                                                       Nmax_miss=input$Nmax_miss_surrogates,
                                                                       Nmax_zero=input$Nmax_zero_surrogates))
 
-
+# Calculate the mortality score
 mort_score <- reactive({
   return(comp.mort_score(metabo_measures(),quiet=TRUE))
 })
 
+# Calculate the MetaboAge
 MetaboAge <- reactive({
   metabo_metaboage<-QCprep(as.matrix(metabo_measures()[,MET63]),
                            PARAM,quiet=TRUE,
@@ -81,6 +79,7 @@ MetaboAge <- reactive({
   return(apply.fit(metabo_metaboage,FIT=PARAM$FIT_COEF))
 })
 
+# Calculate the surrogates
 surrogates <- reactive({
   surro<-calculate_surrogate_scores(met=metabo_measures(), PARAM_surrogates = PARAM_surrogates,
                                     Nmax_miss=input$Nmax_miss_surrogates,
@@ -90,46 +89,19 @@ surrogates <- reactive({
   return(surro$surrogates)
 })
 
-
+# Compose the predictors table with mortality score, metaboage and surrogates
 predictors<-reactive({
   mortality<-data.frame(ID=row.names(mort_score()),mort_score())
   metaboage<-data.frame(ID=rownames(MetaboAge()),MetaboAge())
   surro<-data.frame(ID=rownames(surrogates()),surrogates())
   
-  a<-merge(mortality,metaboage, by.x= 'ID',by.y="ID", all=TRUE)
-  predictors<-merge(a,surro, by.x= 'ID',by.y="ID", all=TRUE)
+  mort_age<-merge(mortality,metaboage, by.x= 'ID',by.y="ID", all=TRUE)
+  predictors<-merge(mort_age,surro, by.x= 'ID',by.y="ID", all=TRUE)
   return(predictors)
 })
 
+# Calibrated surrogates
 calibrations<-reactive({
-  # calib<-lapply(1:length(bin_surro), function(i){
-  #   orig<-as.numeric(bin_phenotypes()[,bin_names[i]])-1
-  #   pred<-as.numeric(surrogates()[,bin_surro[i]])
-  #   ind<-which(!is.na(orig))
-  #   if(length(ind)!=0){
-  #     calibration<-plattCalibration(orig[ind],pred[ind], 10)
-  #     return(calibration)
-  #   }
-  # })
   calib<-calibration_surro(bin_phenotypes(), surrogates(), bin_names, bin_surro, bin_pheno_available())
 })
-
-# ## Start an analysis
-# observeEvent(input$run_button, {
-#   
-#   mort_score <- reactive({
-#     comp.mort_score(metabo_measures())
-#   })
-#   
-#  MetaboAge <- reactive({
-#    metabo_metaboage<-QCprep(as.matrix(metabo_measures()[,MET63]),
-#           PARAM,quiet=TRUE,
-#           Nmax_miss=input$Nmax_miss_metaboAge,
-#           Nmax_zero=input$Nmax_zero_metaboAge)
-#    
-#    return(apply.fit(metabo_metaboage,FIT=PARAM$FIT_COEF))
-#   })
-#   
-#   
-# })
 
