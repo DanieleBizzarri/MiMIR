@@ -1,7 +1,9 @@
 # MetaboRiSc
 
 Package containing an Rshiny webtool developed to allow the calculation of the metabolic predictors developed by the groups of MOLEPI and LCBC (LUMC), from raw Nightingale Health 1H-NMR metabolomics data.
+
 Version: 1.0
+
 Author and Maintainer: Daniele Bizzarri
 
 Please refer to our manuscripts when using these metabolic biomarkers in your works:
