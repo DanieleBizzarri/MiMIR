@@ -11,7 +11,7 @@ Please refer to our manuscripts when using these metabolic biomarkers in your wo
 - MetaboAge: van den Akker Erik B. et al., ‘Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease’, Circ. Genomic Precis. Med., vol. 13, no. 5, pp. 541–547, Oct. 2020, doi: 10.1161/CIRCGEN.119.002610.
 - surrogate clinical variables: unpublished
 
-## Intalling
+## Installing
 1. Install the "devtools" package (if not already done):
 ```
 install.packages("devtools")
