@@ -59,7 +59,7 @@ output$QC_metaboAge_text <- renderPrint(result <- QCprep(as.matrix(metabo_measur
                                                          Nmax_miss=input$Nmax_miss_metaboAge,
                                                          Nmax_zero=input$Nmax_zero_metaboAge))
 # Output Surrogates resulting dataset info
-output$QC_surrogates_text <- renderPrint(result <- QCprep_metabotypes(as.matrix(metabo_measures()[,MET63]),
+output$QC_surrogates_text <- renderPrint(result <- QCprep_surrogates(as.matrix(metabo_measures()[,MET63]),
                                                                       PARAM_surrogates,quiet=FALSE,
                                                                       Nmax_miss=input$Nmax_miss_surrogates,
                                                                       Nmax_zero=input$Nmax_zero_surrogates))

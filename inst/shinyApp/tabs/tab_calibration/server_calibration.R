@@ -15,15 +15,15 @@ output$reliability_calib <- renderPlotly({
     tryCatch({
       req(phenotypes())
       if(is.null(calibration_plot())){
-        pheno_NA()
+        plotly_NA_message(main="This phenotype is not available")
       }else{
         calibration_plot()$cal.Plot
       }
       }, error = function(err) {
-        return(phenos_NA())
+        return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
       })
   }else{
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
 
@@ -33,15 +33,15 @@ output$hist_calib <- renderPlotly({
     tryCatch({
       req(phenotypes())
     if(is.null(calibration_plot())){
-      pheno_NA()
+      plotly_NA_message(main="This phenotype is not available")
     }else{
       calibration_plot()$prob.hist
     }
     }, error = function(err) {
-      return(phenos_NA())
+      return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
   }else{
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
 
@@ -51,15 +51,15 @@ output$heat_calib <- renderPlotly({
     tryCatch({
       req(calibrations())
       cal<-calib_data_frame(calibrations(), metabo_measures(), bin_pheno_available())
-      res<-cor.assoc(cal,cal, colnames(cal), colnames(cal))
-      heat<-plot.corply(res, main="Calibrated surrogates Correlations", reorder.x=TRUE, abs=F, 
+      res<-cor_assoc(cal,cal, colnames(cal), colnames(cal))
+      heat<-plot_corply(res, main="Calibrated surrogates Correlations", reorder.x=TRUE, abs=F, 
                         resort_on_p= TRUE,reorder_dend=F)
       
     }, error = function(err) {
-      return(pheno_NA_image())
+      return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
   }else{
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
 
@@ -69,11 +69,11 @@ output$heat_na_calib <- renderPlot({
     tryCatch({
       req(calibrations())
       cal<-calib_data_frame(calibrations(), metabo_measures(), bin_pheno_available())
-      plot.na.heatmap(t(cal))
+      plot_na_heatmap(t(cal))
     }, error = function(err) {
-      return(pheno_NA_image())
+      return(NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
   }else{
-    return(met_NA())
+    return(NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })

@@ -6,6 +6,12 @@
 \usage{
 startApp(launch.browser = TRUE)
 }
+\arguments{
+\item{launch.browser}{TRUE/FALSE}
+}
+\value{
+Opens application. If \code{launch.browser}=TRUE in default web browser
+}
 \description{
 Start metaboRiSc application.
 }

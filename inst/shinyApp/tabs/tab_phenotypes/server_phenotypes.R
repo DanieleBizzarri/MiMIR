@@ -3,15 +3,15 @@ output$heat_pheno <- renderPlotly({
   if(required()){
     tryCatch({
       req(phenotypes())
-      res<-cor.assoc(data.matrix(bin_phenotypes()[,bin_pheno_available()]),data.matrix(bin_phenotypes()[,bin_pheno_available()]), bin_pheno_available(), bin_pheno_available())
-      heat<-plot.corply(res, main="Binary Phenotypes' Correlations", reorder.x=TRUE, abs=F, 
+      res<-cor_assoc(data.matrix(bin_phenotypes()[,bin_pheno_available()]),data.matrix(bin_phenotypes()[,bin_pheno_available()]), bin_pheno_available(), bin_pheno_available())
+      heat<-plot_corply(res, main="Binary Phenotypes' Correlations", reorder.x=TRUE, abs=F, 
                         resort_on_p= TRUE,reorder_dend=F)
       
     }, error = function(err) {
-      return(pheno_NA_image())
+      return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
   }else{
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
 
@@ -20,12 +20,12 @@ output$heat_na_pheno <- renderPlot({
   if(required()){
     tryCatch({
       req(phenotypes())
-      plot.na.heatmap(t(bin_phenotypes()))
+      plot_na_heatmap(t(bin_phenotypes()))
     }, error = function(err) {
-      return(pheno_NA_image())
+      return(NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
   }else{
-    return(met_NA())
+    return(NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
 

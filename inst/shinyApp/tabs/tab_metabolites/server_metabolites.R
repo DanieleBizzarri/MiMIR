@@ -7,12 +7,12 @@ output$heat_met <- renderPlotly({
     } else {
       met = MET14
     }
-    res<-cor.assoc(metabo_measures(),metabo_measures(), met,met)
-    heat<-plot.corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
+    res<-cor_assoc(metabo_measures(),metabo_measures(), met,met)
+    heat<-plot_corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
                       resort_on_p= TRUE,reorder_dend=F)
     return(heat)
   }, error = function(err) {
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   })
 })
 
@@ -25,9 +25,9 @@ output$heat_na_metabo <- renderPlot({
     } else {
       met = MET14
     }
-    plot.na.heatmap(t(metabo_measures()[,met]))
+    plot_na_heatmap(t(metabo_measures()[,met]))
   }, error = function(err) {
-    return(met_NA_image())
+    return(NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   })
 })
 
@@ -38,6 +38,6 @@ output$hist_metabolites <- renderPlotly({
     met<-as.character(input$metabolites)
     hist_plots(metabo_measures(),x_name=met, scaled=input$scale_met, main="Metabolites' Distributions")
   }, error = function(err) {
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   })
 })

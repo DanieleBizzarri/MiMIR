@@ -11,6 +11,7 @@ if (!require("foreach")) install.packages("foreach")
 if (!require("glmnet")) install.packages("glmnet")
 if (!require("matrixStats")) install.packages("matrixStats")
 if (!require("plyr")) install.packages("plyr")
+if (!require("stats")) install.packages("stats")
 
 #Imaging libraries
 if (!require("pheatmap")) install.packages("pheatmap")

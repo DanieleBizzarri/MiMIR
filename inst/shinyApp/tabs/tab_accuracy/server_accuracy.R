@@ -6,10 +6,10 @@ output$ROCs <- renderPlotly({
       surrog<-as.character(input$surroc)
       roc_surro(surrogates(),bin_phenotypes(),x_name=surrog)
     }, error = function(err) {
-      return(phenos_NA())
+      return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
     }else{
-      return(met_NA())
+      return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
 
@@ -20,10 +20,10 @@ output$ttest <- renderPlotly({
       req(phenotypes())
       ttest_surrogates(surrogates = surrogates(), bin_phenotypes = bin_phenotypes())
     }, error = function(err) {
-      return(phenos_NA())
+      return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
   }else{
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
 
@@ -33,7 +33,7 @@ output$scatter_metaboage <- renderPlotly({
     tryCatch({
       req(phenotypes())
       if(length(which(colnames(phenotypes())=="age"))==0){
-        pheno_NA()
+        plotly_NA_message(main="Age is not available")
       }else{
         x<-data.frame(phenotypes()[,"age"])
         rownames(x)<-rownames(phenotypes())
@@ -43,10 +43,10 @@ output$scatter_metaboage <- renderPlotly({
                                 yname="MetaboAge")
         }
       }, error = function(err) {
-      return(phenos_NA())
+      return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
   }else{
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
 
@@ -55,14 +55,14 @@ output$hist_mort <- renderPlotly({
   if(required()){
       if(dim(phenotypes())[1]!=0){
         if(length(which(colnames(phenotypes())=="age"))==0){
-          pheno_NA()
+          plotly_NA_message(main="age is not available")
         }else{
           hist_plots_mortality(mort_score(),phenotypes())
         }
       }else{
-      return(phenos_NA())
+      return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     }
   }else{
-    return(met_NA())
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })

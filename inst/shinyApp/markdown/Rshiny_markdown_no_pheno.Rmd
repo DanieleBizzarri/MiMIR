@@ -54,19 +54,19 @@ cat(paste0("Metabolites file dimensions: \nRows= ", dim(metabo_measures)[1], ", 
 ## Metabolites
 ### Missingness of the metabolites
 ```{r missing metabolites, echo=FALSE}
-plot.na.heatmap(t(metabo_measures[,MET57]))
+plot_na_heatmap(t(metabo_measures[,MET57]))
 ```
 
 ### Correlation of the metabolites 
 ```{r corr metabolites, echo=FALSE}
-  res<-cor.assoc(metabo_measures,metabo_measures, MET57,MET57)
-  plot.corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
+  res<-cor_assoc(metabo_measures,metabo_measures, MET57,MET57)
+  plot_corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
                       resort_on_p= TRUE,reorder_dend=F)
 ```
 
 ### Histogram metabolites
 ```{r histograms metabolites, echo=FALSE, out.width="150%", out.height="600%"}
-one_hist(metabo_measures[,MET57])
+multi_hist(metabo_measures[,MET57])
 ```
 
 # Predicted variables
@@ -79,7 +79,7 @@ a<-QCprep(as.matrix(metabo_measures[,MET63]),
        Nmax_zero=Nmax_zero_metaboAge)
 
 cat("The quality control settings chosen for the Surrogates are:\n")
-b<- QCprep_metabotypes(as.matrix(metabo_measures[,MET63]),
+b<- QCprep_surrogates(as.matrix(metabo_measures[,MET63]),
                        PARAM_surrogates,quiet=FALSE,
                        Nmax_miss=Nmax_miss_surrogates,
                        Nmax_zero=Nmax_zero_surrogates)
@@ -88,17 +88,17 @@ b<- QCprep_metabotypes(as.matrix(metabo_measures[,MET63]),
 
 ### Missingness of the binarized phenotypes
 ```{r missing predicted values, echo=FALSE}
-  plot.na.heatmap(t(predictors[,-1]))
+  plot_na_heatmap(t(predictors[,-1]))
 ```
 
 ### Histogram predictors
 ```{r histograms predicted scores, echo=FALSE, out.width="130%", out.height="400%"}
-  one_hist(predictors[,-1])
+  multi_hist(predictors[,-1])
 ```
 
 ## Correlations of the predictors
 ```{r corr predictors, echo=FALSE}
-res<-cor.assoc(predictors, predictors, colnames(predictors)[-1],colnames(predictors)[-1])
-plot.corply(res, main="Correlations of the Metabolic scores", reorder.x=TRUE, abs=F,
+res<-cor_assoc(predictors, predictors, colnames(predictors)[-1],colnames(predictors)[-1])
+plot_corply(res, main="Correlations of the Metabolic scores", reorder.x=TRUE, abs=F,
                     resort_on_p= TRUE,reorder_dend=F)
 ```

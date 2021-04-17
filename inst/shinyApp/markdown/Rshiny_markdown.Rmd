@@ -64,32 +64,31 @@ cat(paste0("Metabolites file dimensions: \nRows= ", dim(metabo_measures)[1], ", 
 ## Metabolites
 ### Missingness of the metabolites
 ```{r missing metabolites, echo=FALSE}
-plot.na.heatmap(t(metabo_measures[,MET57]))
+plot_na_heatmap(t(metabo_measures[,MET57]))
 ```
 
 ### Correlation of the metabolites 
 ```{r corr metabolites, echo=FALSE}
-  res<-cor.assoc(metabo_measures,metabo_measures, MET57,MET57)
-  plot.corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
+  res<-cor_assoc(metabo_measures,metabo_measures, MET57,MET57)
+  plot_corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
                       resort_on_p= TRUE,reorder_dend=F)
 ```
 
 ### Histogram metabolites
 ```{r histograms metabolites, echo=FALSE, out.width="150%", out.height="600%"}
-#metabo_barplots(metabo_measures = metabo_measures[,MET57], color="red")
-one_hist(metabo_measures[,MET57])
+multi_hist(metabo_measures[,MET57])
 ```
 
 ## Binary Phenotypes
 ### Missingness of the binarized phenotypes
 ```{r missing binarized phenotypes, echo=FALSE}
-  plot.na.heatmap(t(bin_phenotypes))
+  plot_na_heatmap(t(bin_phenotypes))
 ```
 
 ### Correlation of the binarized phenotypes
 ```{r corr pheno, echo=FALSE}
-  res<-cor.assoc(data.matrix(bin_phenotypes),data.matrix(bin_phenotypes), bin_pheno_available, bin_pheno_available)
-  plot.corply(res, main="Binarized phenotypes correlations", reorder.x=TRUE, abs=F, 
+  res<-cor_assoc(data.matrix(bin_phenotypes),data.matrix(bin_phenotypes), bin_pheno_available, bin_pheno_available)
+  plot_corply(res, main="Binarized phenotypes correlations", reorder.x=TRUE, abs=F, 
                       resort_on_p= TRUE,reorder_dend=F)
 ```
 
@@ -103,7 +102,7 @@ a<-QCprep(as.matrix(metabo_measures[,MET63]),
        Nmax_zero=Nmax_zero_metaboAge)
 
 cat("The quality control settings chosen for the Surrogates are:\n")
-b<- QCprep_metabotypes(as.matrix(metabo_measures[,MET63]),
+b<- QCprep_surrogates(as.matrix(metabo_measures[,MET63]),
                        PARAM_surrogates,quiet=FALSE,
                        Nmax_miss=Nmax_miss_surrogates,
                        Nmax_zero=Nmax_zero_surrogates)
@@ -112,19 +111,18 @@ b<- QCprep_metabotypes(as.matrix(metabo_measures[,MET63]),
 
 ### Missingness of the predicted values
 ```{r missing predicted values, echo=FALSE}
-  plot.na.heatmap(t(predictors[,-1]))
+  plot_na_heatmap(t(predictors[,-1]))
 ```
 
 ### Histogram predictors
 ```{r histograms predicted scores, echo=FALSE, out.width="130%", out.height="400%"}
-  one_hist(predictors[,-1])
-
+ multi_hist(predictors[,-1])
 ```
 
 ## Correlations of the predictors
 ```{r corr predictors, echo=FALSE}
 res<-cor.assoc(predictors, predictors, colnames(predictors)[-1],colnames(predictors)[-1])
-plot.corply(res, main="Correlations of the Metabolic scores", reorder.x=TRUE, abs=F,
+plot_corply(res, main="Correlations of the Metabolic scores", reorder.x=TRUE, abs=F,
                     resort_on_p= TRUE,reorder_dend=F)
 ```
 
@@ -173,8 +171,8 @@ htmltools::tagList(lapply(bin_pheno_available, function(i){
 ```{r calibrations corr, echo=FALSE}
   calib<-calib_data_frame(calibrations, metabo_measures, bin_pheno_available)
   colnames(calib)<-paste0("s_",colnames(calib))
-  res<-cor.assoc(calib,calib, colnames(calib),colnames(calib))
-  plot.corply(res, main="Calibrated surrogates' correlations", reorder.x=TRUE, abs=F,
+  res<-cor_assoc(calib,calib, colnames(calib),colnames(calib))
+  plot_corply(res, main="Calibrated surrogates' correlations", reorder.x=TRUE, abs=F,
                       resort_on_p= TRUE,reorder_dend=F)
 ```
 
@@ -182,7 +180,7 @@ htmltools::tagList(lapply(bin_pheno_available, function(i){
 ### Missingness of the calibrated surrogates
 ```{r missing calibrated, echo=FALSE}
   calib<-calib_data_frame(calibrations, metabo_measures, bin_pheno_available)
-  plot.na.heatmap(t(calib))
+  plot_na_heatmap(t(calib))
 ```
 
 ### Sessino Info
