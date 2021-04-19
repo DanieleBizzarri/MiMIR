@@ -1,5 +1,8 @@
 # MetaboRiSc
 
+[![R-CMD-check](https://github.com/DanieleBizzarri/MetaboRiSc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DanieleBizzarri/MetaboRiSc/actions/workflows/R-CMD-check.yaml)
+
+
 Package containing an Rshiny webtool developed to allow the calculation of the metabolic predictors developed by the groups of MOLEPI and LCBC (LUMC), from raw Nightingale Health 1H-NMR metabolomics data.
 
 Version: 1.0
