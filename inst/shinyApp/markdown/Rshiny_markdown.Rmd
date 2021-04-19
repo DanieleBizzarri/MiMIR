@@ -1,6 +1,5 @@
 ---
 title: "MetaboRiSc"
-author: "Daniele Bizzarri"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   html_document:

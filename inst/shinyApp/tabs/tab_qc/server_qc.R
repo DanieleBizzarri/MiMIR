@@ -102,6 +102,7 @@ predictors<-reactive({
 
 # Calibrated surrogates
 calibrations<-reactive({
-  calib<-calibration_surro(bin_phenotypes(), surrogates(), bin_names, bin_surro, bin_pheno_available())
+  calib<-calibration_surro(bin_phenotypes=bin_phenotypes(), surrogates=surrogates(), 
+                           bin_names=bin_names, bin_pheno_available=bin_pheno_available(), pl=FALSE)
 })
 

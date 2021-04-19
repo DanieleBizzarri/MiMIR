@@ -8,8 +8,7 @@ Authors@R:
            email = "d.bizzarri@lumc.nl",
            comment = c(ORCID = "0000-0002-6881-273X"))
 Description: This R-shiny webtool  was made to calculate the metabolic predictors from raw Nightingale Health 1H-NMR metabolomics data, developed by the groups of Molecular Epidemiology and LCBC (LUMC).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

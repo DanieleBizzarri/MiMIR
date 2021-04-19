@@ -9,7 +9,7 @@ calibration_surro(
   surrogates,
   bin_names,
   bin_pheno_available,
-  plot = F,
+  pl = FALSE,
   nbins = 10
 )
 }
@@ -22,7 +22,7 @@ calibration_surro(
 
 \item{bin_pheno_available}{string with the names of the binarize clinical variables available in the dataset}
 
-\item{plot}{TRUE/FALSE. If TRUE creates the calibration plots}
+\item{pl}{TRUE/FALSE. If TRUE creates the calibration plots}
 
 \item{nbins}{number of bins for the plots}
 }

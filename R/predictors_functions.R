@@ -350,7 +350,7 @@ impute.miss<-function(x){
 #' @return The matrix z-scaled using the means and sds given
 #' @export
 #'
-apply.scale <- function(dat,MEAN,SD,quiet=FALSE){
+apply.scale <- function(dat,MEAN,SD,quiet=TRUE){
   if(!quiet){
     cat("| Apply scaling ... ")
   }
@@ -1221,7 +1221,7 @@ hist_plots_mortality<-function(mort_score,phenotypes){
 #' @return correlations of the selected variables in the 2 martrices
 #' @export
 #'
-cor.assoc <- function(dat1,dat2,feat1,feat2,method="pearson",quiet=FALSE){
+cor_assoc <- function(dat1,dat2,feat1,feat2,method="pearson",quiet=FALSE){
   res <- lapply(feat1, function(F1){
     t(sapply(feat2,function(F2){
       unlist(stats::cor.test(x=dat1[,F1],y=dat2[,F2],method=method)[c("estimate","p.value","statistic")])
@@ -1493,15 +1493,15 @@ is.sym <- function(res){
 #' @param r.calib binary calibration data response
 #' @param p.calib numeric calibration predicted probabilities
 #' @param nbins number of bins to create the plots
-#' @param plot TRUE/FALSE. If TRUE it will plot the Reliability diagram and histogram of the calibrations
+#' @param pl TRUE/FALSE. If TRUE it will plot the Reliability diagram and histogram of the calibrations
 #' @return list with samples, responses, calibrations, ECE, MCE and calibration plots if save==T
 #' @export
 #'
-plattCalibration<- function (r.calib, p.calib, nbins = 10, plot=FALSE) {
+plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
 
-    pred <- p.calib
-    resp <- r.calib
-    sample <- "calibration"
+  pred <- p.calib
+  resp <- r.calib
+  sample <- "calibration"
   
   pred[pred == 0] <- 1e-08
   pred[pred == 1] <- 1 - 1e-08
@@ -1531,7 +1531,7 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, plot=FALSE) {
   mce_calib <- getMCE(resp, calibrated, nbins)
   MCE<-data.frame(mce_orig, mce_calib)
   
-  if(plot){
+  if(pl){
     ## Plots ##
     #Layouts
     axis_font <- list(
@@ -1687,12 +1687,12 @@ plattCalib_plot<-function(calibration, name, nbins = 10, annot_x=c(1.27,1.27),an
 #' @param surrogates data.frame with surrogates resulting from calculate_surrogate_scores
 #' @param bin_names string with the names of the binarize clinical variables
 #' @param bin_pheno_available string with the names of the binarize clinical variables available in the dataset
-#' @param plot TRUE/FALSE. If TRUE creates the calibration plots
+#' @param pl TRUE/FALSE. If TRUE creates the calibration plots
 #' @param nbins number of bins for the plots
 #' @return list with the calibrated surrogates
 #' @export
 #'
-calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_available, plot=F, nbins=10){
+calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_available, pl=FALSE, nbins=10){
   bin_surro<-paste0("s_",bin_names)
   calib<-lapply(1:length(bin_surro), function(i){
     orig<-as.numeric(bin_phenotypes[,bin_names[i]])-1
@@ -1701,7 +1701,7 @@ calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_ava
     names(pred)<-rownames(surrogates)
     ind<-which(!is.na(orig))
     if(length(ind)!=0){
-      calibration<-plattCalibration(orig[ind],pred[ind], nbins = nbins, plot=plot)
+      calibration<-plattCalibration(orig[ind],pred[ind], nbins = nbins, pl=pl)
       return(calibration)
     }
   })

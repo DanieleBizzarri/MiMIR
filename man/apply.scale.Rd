@@ -4,7 +4,7 @@
 \alias{apply.scale}
 \title{Function created to scale the NH-metabolomics matrix samples}
 \usage{
-apply.scale(dat, MEAN, SD, quiet = FALSE)
+apply.scale(dat, MEAN, SD, quiet = TRUE)
 }
 \arguments{
 \item{dat}{The matrix}

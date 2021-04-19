@@ -4,7 +4,7 @@
 \alias{plattCalibration}
 \title{Function that calculates the Platt Calibrations}
 \usage{
-plattCalibration(r.calib, p.calib, nbins = 10, plot = FALSE)
+plattCalibration(r.calib, p.calib, nbins = 10, pl = FALSE)
 }
 \arguments{
 \item{r.calib}{binary calibration data response}
@@ -13,7 +13,7 @@ plattCalibration(r.calib, p.calib, nbins = 10, plot = FALSE)
 
 \item{nbins}{number of bins to create the plots}
 
-\item{plot}{TRUE/FALSE. If TRUE it will plot the Reliability diagram and histogram of the calibrations}
+\item{pl}{TRUE/FALSE. If TRUE it will plot the Reliability diagram and histogram of the calibrations}
 }
 \value{
 list with samples, responses, calibrations, ECE, MCE and calibration plots if save==T

@@ -7,7 +7,7 @@ output$heat_met <- renderPlotly({
     } else {
       met = MET14
     }
-    res<-cor_assoc(metabo_measures(),metabo_measures(), met,met)
+    res<-cor_assoc(metabo_measures(),metabo_measures(), met, met)
     heat<-plot_corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
                       resort_on_p= TRUE,reorder_dend=F)
     return(heat)
