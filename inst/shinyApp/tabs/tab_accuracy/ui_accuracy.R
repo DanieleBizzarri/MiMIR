@@ -59,6 +59,16 @@ tab_accuracy <- tabItem(
       helpText("In this plot we split the surrogates based on their original values and
                we calculate a t-test to see if they are well splitted")
     ),
+    #Tab panel comparing accuracies of the surrogates in the uploaded datast to the accuracies in the LOBOV
+    tabPanel(
+      title = "Surrogates LOBOV comparison",
+      HTML('<hr style="border-color: #0088cc;">'),
+      mainPanel(
+        width = 9,
+        plotlyOutput("LOBOV_surro", height = "600px") %>% withSpinner()
+      ),
+      helpText(" Boxplots comparing accuracies of the surrogates in the uploaded datast to the accuracies in the LOBOV")
+    ),
     #Tab panel comparing MetaboAge and the age of the individuals
     tabPanel(
       title = "MetaboAge/age Scatterplot",

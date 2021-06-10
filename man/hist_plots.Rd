@@ -9,6 +9,7 @@ hist_plots(
   x_name,
   color = c21,
   scaled = FALSE,
+  datatype = "metabolic score",
   main = "Predictors Distributions"
 )
 }
@@ -20,6 +21,8 @@ hist_plots(
 \item{color}{colors selected for all the variables}
 
 \item{scaled}{TRUE/FALSE. If TRUE the variables will be z-scaled before plotting them}
+
+\item{datatype}{a character vector indicating what data type is beeing plotted}
 
 \item{main}{title of the plot}
 }

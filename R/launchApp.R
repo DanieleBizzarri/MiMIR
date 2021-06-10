@@ -8,24 +8,19 @@
 #' @export
 
 startApp <- function(launch.browser = TRUE) {
-  appDir <- system.file("shinyApp", package = "MetaboRiSc")
+  appDir <- system.file("shinyApp", package = "MiMIR")
   
   if (appDir == "") {
-    stop("Could not find 'MetaboRiSc'. Try re-installing 'MetaboRiSc'.",
+    stop("Could not find 'MiMIR'. Try re-installing 'MiMIR'.",
          call. = FALSE)
   }
   
-  library("MetaboRiSc")
+  library("MiMIR")
   options(shiny.maxRequestSize=30*1024^2)
   options(warn = -1)
   
-  message("Initializing metaboRiSc...")
-  suppressMessages(source(system.file("shinyApp/lib/libraries.R", package = "MetaboRiSc")))
-  
-  # load("inst/shinyApp/data/PARAM__2018-06-18_02-16-17.457.RData")
-  # usethis::use_data(PARAM, overwrite=T)
-  # PARAM_surrogates<-readRDS("inst/shinyApp/data/PARAM_surrogates_2021_04_13.RData")
-  # usethis::use_data(PARAM_surrogates)
+  message("Initializing MiMIR...")
+  suppressMessages(source(system.file("shinyApp/lib/libraries.R", package = "MiMIR")))
   
   if(launch.browser){
     shiny::runApp(

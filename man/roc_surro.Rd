@@ -2,16 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{roc_surro}
 \alias{roc_surro}
-\title{#' Function for plotting a heatmap missing values
-#'
-#' @param dat The matrix or data.frame
-#' @return Plot with an heatmap indicating the missing values
-#' @export
-#'
-plot.vis.mis <- function(dat){
-vis_miss(dat)
-}
-Function that creates a plotly image of the selected surrogates}
+\title{Function that creates a plotly image of the selected surrogates}
 \usage{
 roc_surro(surrogates, bin_phenotypes, x_name)
 }
@@ -26,14 +17,5 @@ roc_surro(surrogates, bin_phenotypes, x_name)
 plotly image with the ROC curves for the selected variables
 }
 \description{
-#' Function for plotting a heatmap missing values
-#'
-#' @param dat The matrix or data.frame
-#' @return Plot with an heatmap indicating the missing values
-#' @export
-#'
-plot.vis.mis <- function(dat){
-vis_miss(dat)
-}
 Function that creates a plotly image of the selected surrogates
 }
