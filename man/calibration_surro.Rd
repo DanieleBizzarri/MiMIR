@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{calibration_surro}
 \alias{calibration_surro}
-\title{helper function that calculates the Platt Calibrations}
+\title{helper function that calculates the Platt Calibrations  for all the surrogates}
 \usage{
 calibration_surro(
   bin_phenotypes,
@@ -30,5 +30,5 @@ calibration_surro(
 list with the calibrated surrogates
 }
 \description{
-helper function that calculates the Platt Calibrations
+helper function that calculates the Platt Calibrations  for all the surrogates
 }

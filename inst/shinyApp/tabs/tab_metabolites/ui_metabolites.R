@@ -29,7 +29,7 @@ tab_metabolites <- tabItem(
     ),
     # Tab Panel for the missingness of the metabolite concentrations uploaded
     tabPanel(
-      title = "Metabolites NAs",
+      title = "Metabolites missing  values",
       HTML('<hr style="border-color: #0088cc;">'),
       sidebarLayout(
         position = "right",
@@ -53,7 +53,7 @@ tab_metabolites <- tabItem(
     ),
     # Tab Panel for the histograms of the metabolite concentrations uploaded
   tabPanel(
-    title = "Metabolites histograms",
+    title = "Metabolites Distributions",
     HTML('<hr style="border-color: #0088cc;">'),
     sidebarLayout(
       position = "right",
@@ -64,7 +64,7 @@ tab_metabolites <- tabItem(
           inputId = "scale_met",
           label="Do you want to see the scores scaled?",
           choices=c("Not scaled" = FALSE,
-                    "Scaled" = TRUE
+                    "scaled" = TRUE
           ),
           selected = FALSE,
         ),
@@ -103,11 +103,10 @@ tab_metabolites <- tabItem(
                     "linoleic acid" = "la",
                     "Omega-3 fatty acids" = "faw3",
                     "Omega-6 fatty acids" = "faw6",
-                    "Polyunsaturated fatty acids" = "ufa",
+                    "Polyunsaturated fatty acids" = "pufa",
                     "Monounsaturated fatty acids" = "mufa",
                     "Saturated fatty acids" = "sfa",
-                    "Ratio of omega-3 fatty acids to total fatty acids" = "faw3fa",
-                    "Apolipoprotein B" = "faw6_fa",
+                    "Ratio of omega-3 fatty acids to total fatty acids" = "faw3_fa",
                     "Ratio of omega-6 fatty acids to total fatty acids" = "totfa",
                     "Ratio of polyunsaturated fatty acids to total fatty acids" = "pufa_fa",
                     "Ratio of monounsaturated fatty acids to total fatty acids" = "mufa_fa",
@@ -127,9 +126,9 @@ tab_metabolites <- tabItem(
                     "Acetoacetate" = "acace",
                     "Creatinine" = "crea",
                     "Albumin" = "alb",
-                    "gp" = "Glycoprotein acetyls",
+                    "Glycoprotein acetyls" = "gp",
                     "Total lipids in chylomicrons and extremely large VLDL" = "xxl_vldl_l"
-                    ),
+          ),
           selected = "m_vldl_l",
           ),
         style = "text-align: left;"
@@ -142,6 +141,98 @@ tab_metabolites <- tabItem(
     helpText("Histograms to show the distributions of the metabolites uploaded. 
                You can also look at each variables together. 
                If you will look at them together you might want to look at them scaled, so they will have a similar range."),
+    HTML('<hr style="border-color: #0088cc;">'),
+  ),
+  # Tab Panel for the histograms of the metabolite distributions compared to BBMRI-nl
+  tabPanel(
+    title = "Metabolites compared to BBMRI-nl",
+    HTML('<hr style="border-color: #0088cc;">'),
+    sidebarLayout(
+      position = "right",
+      sidebarPanel(
+        width = 3,
+        #Radio button if you want to scale them or not
+        radioButtons(
+          inputId = "scale_met_BBMRI",
+          label="Do you want to see the scores scaled?",
+          choices=c("Not scaled" = FALSE,
+                    "scaled" = TRUE
+          ),
+          selected = FALSE,
+        ),
+        #Selection of which metabolites to print
+        radioButtons(
+          inputId = "metabo_BBMRI",
+          label="Metabolites distributions:",
+          choices=c("Total lipids in medium VLDL" = "m_vldl_l",
+                    "Total lipids in small VLDL" = "s_vldl_l",
+                    "Total lipids in very small VLDL" = "xs_vldl_l",
+                    "Total lipids in IDL" = "idl_l",
+                    "Total cholesterol in IDL" = "idl_c",
+                    "Total lipids in large LDL" = "l_ldl_l",
+                    "Total lipids in medium LDL" = "m_ldl_l",
+                    "Total lipids in medium HDL" = "m_hdl_l",
+                    "Total lipids in small HDL" = "s_hdl_l",
+                    "Total lipids in small LDL" = "s_ldl_l",
+                    "Mean diameter for VLDL particles" = "vldl_d",
+                    "Mean diameter for LDL particles" = "ldl_d",
+                    "Mean diameter for HDL particles" = "hdl_d",
+                    "Serum total cholesterol" = "serum_c",
+                    "Total cholesterol in VLDL" = "vldl_c",
+                    "Total cholesterol in LDL" = "ldl_c",
+                    "Total cholesterol in HDL" = "hdl_c",
+                    "Total cholesterol in HDL2" = "hdl2_c",
+                    "Total cholesterol in HDL3" = "hdl3_c",
+                    "Total phosphoglycerides" = "totpg",
+                    "Phosphatidylcholine and other cholines" = "pc",
+                    "Sphingomyelins" = "sm",
+                    "Total cholines" = "totcho",
+                    "Apolipoprotein A-I" = "apoa1",
+                    "Apolipoprotein B" = "apob",
+                    "Total fatty acids" = "totfa",
+                    "Estimated degree of unsaturation" = "unsatdeg",
+                    "docosahexaenoic acid" = "dha",
+                    "linoleic acid" = "la",
+                    "Omega-3 fatty acids" = "faw3",
+                    "Omega-6 fatty acids" = "faw6",
+                    "Polyunsaturated fatty acids" = "pufa",
+                    "Monounsaturated fatty acids" = "mufa",
+                    "Saturated fatty acids" = "sfa",
+                    "Ratio of omega-3 fatty acids to total fatty acids" = "faw3_fa",
+                    "Ratio of omega-6 fatty acids to total fatty acids" = "totfa",
+                    "Ratio of polyunsaturated fatty acids to total fatty acids" = "pufa_fa",
+                    "Ratio of monounsaturated fatty acids to total fatty acids" = "mufa_fa",
+                    "Ratio of saturated fatty acids to total fatty acids" = "sfa_fa",
+                    "Glucose" = "glc",
+                    "Lactate" = "lac",
+                    "Citrate" = "cit",
+                    "Alanine" = "ala",
+                    "Glutamine" = "gln",
+                    "Histidine" = "his",
+                    "Isoleucine" = "ile",
+                    "Leucine" = "leu",
+                    "Valine" = "val",
+                    "Phenylalanine" = "phe",
+                    "Tyrosine" = "tyr",
+                    "Acetate" = "ace",
+                    "Acetoacetate" = "acace",
+                    "Creatinine" = "crea",
+                    "Albumin" = "alb",
+                    "Glycoprotein acetyls" = "gp",
+                    "Total lipids in chylomicrons and extremely large VLDL" = "xxl_vldl_l"
+          ),
+          selected = "m_vldl_l",
+        ),
+        style = "text-align: left;"
+      ),
+      mainPanel(
+        width = 9,
+        plotlyOutput("hist_BBMRI", height = "500px") %>% withSpinner()
+      )
+    ),
+    helpText("Histograms to show the distributions of the metabolites uploaded compared to its distribution in BBMRI-nl.
+             You can chose only one metabolite at a time. 
+             You might want to look them scaled together in this comparison."),
     HTML('<hr style="border-color: #0088cc;">'),
   )
 )

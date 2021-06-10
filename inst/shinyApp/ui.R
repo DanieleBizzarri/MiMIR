@@ -13,10 +13,10 @@ source("tabs/tab_about/ui_about.R", local = TRUE)
 #UI for the main menu
 ui <- dashboardPage(
   skin = "blue",
-  title = "MetaboRiSc",
+  title = "MiMIR",
   
   dashboardHeader(
-    title = span(tagList(icon("laptop-medical"), "MetaboRiSc-App")),
+    title = span(tagList(icon("laptop-medical"), "MiMIR")),
     titleWidth = 350,
     
     dropdownMenuOutput("messageMenu"),

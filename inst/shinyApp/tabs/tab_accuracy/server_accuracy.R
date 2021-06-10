@@ -27,6 +27,23 @@ output$ttest <- renderPlotly({
   }
 })
 
+# Show the t-tests for the surrogates in the dataset
+output$LOBOV_surro <- renderPlotly({
+  if(required()){
+    tryCatch({
+      req(phenotypes())
+      LOBOV_accuracies(surrogates= surrogates(), bin_phenotypes= bin_phenotypes(), bin_pheno_available = bin_pheno_available(), acc_LOBOV=acc_LOBOV)
+    }, error = function(err) {
+      return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
+    })
+  }else{
+    return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
+  }
+})
+
+
+
+
 # Creates a scatterplot comparing MetaboAge and age
 output$scatter_metaboage <- renderPlotly({
   if(required()){

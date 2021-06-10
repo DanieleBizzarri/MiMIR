@@ -1,11 +1,17 @@
 # Creates bot the calibration plots if the phenotype is available
 calibration_plot<-reactive({
-  sur<-as.character(input$surrogates)
+  bin<-as.character(input$surrogates)
+  sur<-paste0("s_",bin)
   ind<-which(bin_surro == sur)
   if(is.null(calibrations()[[ind]])){
     return(NULL)
   }else{
-    return(plattCalib_plot(calibrations()[[ind]],name=sur, nbins = input$Nbins))
+    return(
+      #plattCalib_plot(calibrations()[[ind]],name=sur, nbins = input$Nbins)
+      plattCalib_evaluation(r=bin_phenotypes()[,bin], p=surrogates()[,sur], 
+                            name=sur, nbins = input$Nbins)
+      
+      )
   }
 })
 
