@@ -1,5 +1,7 @@
 # MiMIR
 
+[![R-CMD-check](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml)
+
 This package contains an Rshiny webtool developed to allow the
 calculation of the metabolic predictorsdeveloped by the groups of MOLEPI
 and LCBC (LUMC), from raw Nightingale Health 1H-NMR metabolomics data.
