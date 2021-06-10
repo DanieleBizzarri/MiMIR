@@ -1,7 +1,4 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# MetaboRiSc
+# MiMIR
 
 This package contains an Rshiny webtool developed to allow the
 calculation of the metabolic predictorsdeveloped by the groups of MOLEPI
@@ -24,18 +21,18 @@ surrogate clinical variables: unpublished
 
     install.packages("devtools")
 
-2.  Install the “MetaboRiSc” package:
+2.  Install the “MiMIR” package:
 
 <!-- end list -->
 
     library("devtools")
-    devtools::install_github("DanieleBizzarri/MetaboRiSc")
+    devtools::install_github("DanieleBizzarri/MiMIR")
 
 3.  Launch the application:
 
 <!-- end list -->
 
-    library("MetaboRiSc")
+    library("MiMIR")
     MetaboRiSc::launchApp()
 
 ## Quick Start
