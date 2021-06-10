@@ -52,7 +52,7 @@ server <- function(input, output) {
           icon = icon("chart-bar")
         ),
         menuItem(
-          "Phenotypes",
+          "Binary Phenotypes",
           tabName = "phenotypes",
           icon = icon("chart-bar")
         )

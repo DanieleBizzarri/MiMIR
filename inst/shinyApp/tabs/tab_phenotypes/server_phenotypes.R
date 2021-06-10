@@ -4,7 +4,7 @@ output$heat_pheno <- renderPlotly({
     tryCatch({
       req(phenotypes())
       res<-cor_assoc(data.matrix(bin_phenotypes()[,bin_pheno_available()]),data.matrix(bin_phenotypes()[,bin_pheno_available()]), bin_pheno_available(), bin_pheno_available())
-      heat<-plot_corply(res, main="Binary Phenotypes Correlations", reorder.x=TRUE, abs=F, 
+      heat<-plot_corply(res, main="Binary Phenotypes' Correlations", reorder.x=TRUE, abs=F, 
                         resort_on_p= TRUE,reorder_dend=F)
       
     }, error = function(err) {
@@ -28,23 +28,4 @@ output$heat_na_pheno <- renderPlot({
     return(NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   }
 })
-
-output$summ_pheno <-  DT::renderDataTable({
-  tryCatch({
-    req(phenotypes())
-    summary(phenotypes())
-  }, error = function(err) {
-    return(NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
-  })
-})
-
-output$bin_phen_barplot <- renderPlotly({
-  tryCatch({
-    req(phenotypes())
-    pheno_barplots(bin_phenotypes())
-  }, error = function(err) {
-    return(NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
-  })
-})
-
 

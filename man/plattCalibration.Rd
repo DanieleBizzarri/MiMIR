@@ -7,9 +7,9 @@
 plattCalibration(r.calib, p.calib, nbins = 10, pl = FALSE)
 }
 \arguments{
-\item{r.calib}{binary real data}
+\item{r.calib}{binary calibration data response}
 
-\item{p.calib}{predicted probabilities}
+\item{p.calib}{numeric calibration predicted probabilities}
 
 \item{nbins}{number of bins to create the plots}
 

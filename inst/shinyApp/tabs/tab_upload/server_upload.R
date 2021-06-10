@@ -105,11 +105,6 @@ phenotypes <- reactive({
       header = TRUE,row.names = 1
     )
   }
-  
-  if(!is.null(metabo_measures())){
-    phenotypes<-phenotypes[rownames(metabo_measures()),]
-  }
-  
   phenotypes
 })
 

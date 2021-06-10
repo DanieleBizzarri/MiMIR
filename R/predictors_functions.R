@@ -70,8 +70,7 @@ MET14<-c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl_l","alb","phe","acace","ile","
 
 # Mortality score betas
 mort_betas <- data.frame(
-  Abbreviation=c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl_l",
-                 "alb","phe","acace","ile","vldl_d",
+  Abbreviation=c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl_l","alb","phe","acace","ile","vldl_d",
                  "leu","val","his","lac"),
   Metabolite=c("Ratio of polyunsaturated fatty acids to total fatty acids (%)",
                "Glycoprotein acetyls",
@@ -92,31 +91,15 @@ mort_betas <- data.frame(
                -0.069223326,0.062262328),
   stringsAsFactors = FALSE)
 
-
-# covid_betas <- data.frame(
-#   Abbreviation=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
-#                  "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
-#                  "alb","faw3","ldl_c","serum_tg"),
-#   Metabolite=c("Glycoprotein acetyls", "docosahexaenoic acid", "creatinine","Monounsaturated fatty acids",
-#                "Apolipoprotein B/ Apolipoprotein A1","Tyrosine","Isoleucine","Ratio of saturated fatty acids to total fatty acids",
-#                "Glucose","Lactate","Ratio of omega-6 fatty acids to omega 3 fatty acids","Phenylanine", "Total cholesterol",
-#                "Ratio of omega-6 fatty acids to total fatty acids","Alanine","Polyunsaturated fatty acids",
-#                "Glycine","Histidine","Ratio of polyunsaturated fatty acids to total fatty acids",
-#                "Valine","Leucine","Albumin","Omega-3 fatty acids","Total cholesterol in LDL","Serum total triglycerides"),
-#   Beta_value=c(0.3713,0.2533, 0.2170, 0.1693, 0.1388, 0.1375, 0.1091, 0.0965, 0.0928,
-#                0.0772, 0.0642, 0.0289, -0.0116, -0.0493, -0.0498, -0.0578, -0.0648,
-#                -0.0987, -0.1404, -0.1812, -0.1844, -0.1914, -0.2208, -0.2466, -0.2652),
-#   stringsAsFactors = FALSE)
-
 #Phenotypic variables names
 pheno_names<-c("sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking",
                "metabolic_syndrome", "alcohol_consumption",
-               "age","BMI", "hscrp","waist_circumference","weight","height",
+               "age","BMI", "ln_hscrp","waist_circumference","weight","height",
                "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb")
 
 #Variables names related to each surrogate
 out_list<-c("sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking","metabolic_syndrome", "alcohol_consumption",
-            "age", "age","age","BMI", "hscrp",
+            "age", "age","age","BMI", "ln_hscrp",
             "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb")
 out_surro<-paste0("s_",out_list)
 
@@ -134,15 +117,12 @@ c21<-c("#7FC97F", "#BEAED4", "#FDC086", "#386CB0", "#F0027F", "#BF5B17",
 names(c21)<-c("mortScore", "MetaboAge", bin_surro)
 
 #Global variables
-utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore", 
-                         "surro","AUC","outcome", "Uploaded", "biobank",
-                         "BBMRI_hist_scaled","BBMRI_hist"))
+utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore"))
 
 #Import packages
 #' @import foreach
 #' @import dplyr
 #' @import shiny
-#' @import caret
 NULL
 
 ###############################
@@ -185,7 +165,6 @@ prep.mort_data <- function(dat,featID=c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl
   return(dat)
 }
 
-
 #' Function to compute Deelen et al. mortality score on metabolite data.
 #'
 #' @param dat The NH-metabolomics matrix 
@@ -213,58 +192,6 @@ comp.mort_score <- function(dat,betas=mort_betas,quiet=FALSE){
   }
   return(mortScore)
 }
-
-# prep_covid_data <- function(dat, featID=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
-#                                          "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
-#                                          "alb","faw3","ldl_c","serum_tg"), quiet=FALSE){
-#   if(!quiet){
-#     cat("|| Preparing data ... \n")
-#   }
-#   dat[,"faw6_faw3"]<-dat[,"faw6"] / dat[,"faw3"]
-#   ## 1. Check for zeroes:
-#   to_fix <- names(which(colSums(dat[,featID]==0,na.rm=TRUE)>0))
-#   if(length(to_fix)>0){
-#     if(!quiet){
-#       cat(paste0("| Adding 1.0 to metabolites featuring zero's: '",paste(to_fix,collapse="', '"),"'\n"))
-#     }
-#     dat[,to_fix] <- dat[,to_fix] + 1
-#   } else {
-#     if(!quiet){
-#       cat(paste0("| No metabolites found featuring zero's \n"))
-#     }
-#   }
-#   ## 2. Scale:
-#   dat[,featID] <- scale(dat[,featID],center=TRUE,scale=TRUE)
-#   if(!quiet){
-#     cat("| Perform log transform & scaling to zero mean and unity sd .. ")
-#   }
-#   
-#   if(!quiet){
-#     cat("Done!\n")
-#   }
-#   return(dat)
-# }
-
-# comp_covid_score <- function(dat,betas=mort_betas,quiet=FALSE){
-#   ## 1. Prepare data:
-#   if(!quiet){
-#     cat("=== Computing mortality score === \n")
-#   }
-#   prepped_dat <- prep_covid_data(dat,featID=betas$Abbreviation,quiet=quiet)
-#   ## 2. Compute:
-#   if(!quiet){
-#     cat("| Computing score .. \n")
-#   }
-#   
-#   covidScore<-as.numeric(1/(1+exp(-1 * (rowSums(prepped_dat[,betas$Abbreviation] %*% betas$Beta_value)))))
-#   colnames(mortScore)<-"mortScore"
-#   rownames(mortScore)<-rownames(prepped_dat)
-#   
-#   if(!quiet){
-#     cat("Done!\n\n")
-#   }
-#   return(covidScore)
-# }
 
 #########################
 ## MetaboAge functions ##
@@ -516,68 +443,6 @@ binarize_all_pheno<-function(data){
   colnames(binarized_phenotypes)<-c(available_pheno,
                                     "high_age", "middle_age","low_age","high_hscrp", "high_triglycerides","low_hdlchol","high_ldl_chol","high_totchol",
                                     "low_eGFR","obesity", "low_wbc","low_hgb")
-  #gender
-  if(c("sex") %in% colnames(data)){
-    if(!is.null(which(data$sex=="male"))){
-      binarized_phenotypes[which(binarized_phenotypes$sex=="male"),"sex"]<-1
-      binarized_phenotypes[which(binarized_phenotypes$sex=="female"),"sex"]<-0
-    }
-    binarized_phenotypes$sex<-as.factor(binarized_phenotypes$sex)
-  }
-  #diabetes
-  if(c("diabetes") %in% colnames(data)){
-    if(!is.null(which(data$diabetes=="TRUE"))){
-      binarized_phenotypes[which(binarized_phenotypes$diabetes=="TRUE"),"diabetes"]<-1
-      binarized_phenotypes[which(binarized_phenotypes$diabetes=="FALSE"),"diabetes"]<-0
-    }
-    binarized_phenotypes$diabetes<-as.factor(binarized_phenotypes$diabetes)
-  }
-  #lipidmed
-  if(c("lipidmed") %in% colnames(data)){
-    if(!is.null(which(data$lipidmed=="statins"))){
-      binarized_phenotypes[which(binarized_phenotypes$lipidmed=="statins"),"lipidmed"]<-1
-      binarized_phenotypes[!which(binarized_phenotypes$lipidmed=="statins"),"lipidmed"]<-0
-      binarized_phenotypes[which(is.na(data$lipidmed)),"lipidmed"]<-NA
-    }
-    
-    if(length(levels(factor(data$lipidmed)))>2){
-      binarized_phenotypes[which(binarized_phenotypes$lipidmed==2),"lipidmed"]<-NA
-    }
-    binarized_phenotypes$lipidmed<-as.factor(binarized_phenotypes$lipidmed)
-  }
-  #current smoking
-  if(c("current_smoking") %in% colnames(data)){
-    if(!is.null(which(data$current_smoking=="TRUE"))){
-      binarized_phenotypes[which(binarized_phenotypes$current_smoking=="TRUE"),"current_smoking"]<-1
-      binarized_phenotypes[which(binarized_phenotypes$current_smoking=="FALSE"),"current_smoking"]<-0
-    }
-    binarized_phenotypes$current_smoking<-as.factor(binarized_phenotypes$current_smoking)
-  }
-  #blood_pressure_lowering_med
-  if(c("blood_pressure_lowering_med") %in% colnames(data)){
-    if(!is.null(which(data$blood_pressure_lowering_med=="TRUE"))){
-      binarized_phenotypes[which(binarized_phenotypes$blood_pressure_lowering_med=="TRUE"),"blood_pressure_lowering_med"]<-1
-      binarized_phenotypes[which(binarized_phenotypes$blood_pressure_lowering_med=="FALSE"),"blood_pressure_lowering_med"]<-0
-    }
-    binarized_phenotypes$blood_pressure_lowering_med<-as.factor(binarized_phenotypes$blood_pressure_lowering_med)
-  }
-  #alcohol_consumption
-  if(c("alcohol_consumption") %in% colnames(data)){
-    if(!is.null(which(data$alcohol_consumption=="TRUE"))){
-      binarized_phenotypes[which(binarized_phenotypes$alcohol_consumption=="TRUE"),"alcohol_consumption"]<-1
-      binarized_phenotypes[which(binarized_phenotypes$alcohol_consumption=="FALSE"),"alcohol_consumption"]<-0
-    }
-    binarized_phenotypes$alcohol_consumption<-as.factor(binarized_phenotypes$alcohol_consumption)
-  }
-  #metabolic_syndrome
-  if(c("metabolic_syndrome") %in% colnames(data)){
-    if(!is.null(which(data$metabolic_syndrome=="TRUE"))){
-      binarized_phenotypes[which(binarized_phenotypes$metabolic_syndrome=="TRUE"),"metabolic_syndrome"]<-1
-      binarized_phenotypes[which(binarized_phenotypes$metabolic_syndrome=="FALSE"),"metabolic_syndrome"]<-0
-    }
-    binarized_phenotypes$metabolic_syndrome<-as.factor(binarized_phenotypes$metabolic_syndrome)
-  }
-  
   #hscrp
   if(c("hscrp") %in% colnames(data)){
     binarized_phenotypes[which(data$hscrp<3),"high_hscrp"]<-0
@@ -664,37 +529,15 @@ binarize_all_pheno<-function(data){
   }
   #factorize all variables
   binarized_phenotypes <- data.frame(sapply(binarized_phenotypes[,colnames(binarized_phenotypes)] , factor))
+  #lipidmed
+  if(length(levels(binarized_phenotypes$lipidmed))>1){
+    binarized_phenotypes[which(binarized_phenotypes$lipidmed==2),"lipidmed"]<-NaN
+    binarized_phenotypes$lipidmed<-factor(binarized_phenotypes$lipidmed)
+  }
   
   rownames(binarized_phenotypes)<-rownames(data)
   return(binarized_phenotypes)
 }
-
-
-#' Function created to visualize the binarized variables in a barplot following the 
-#' rules described in Bizzarri et al.
-#'
-#' @param bin_phenotypes the binarized variables
-#' @return A plot with a barplot of the binarized variables
-#' @export
-#'
-pheno_barplots<-function(bin_phenotypes){
-  bin_phenotypes<-data.frame(ID=rownames(bin_phenotypes), bin_phenotypes)
-  molten_pheno <- reshape2::melt(bin_phenotypes, id.vars= "ID", value.name="Value", variable.name="Variable", na.rm=F)
-  tab<-as.data.frame(stats::xtabs( ~ Variable + Value, molten_pheno))
-  tab1<-data.frame(Variable=tab[which(tab$Value==1),"Variable"],
-                   true=tab[which(tab$Value==1),"Freq"],
-                   false=tab[which(tab$Value==0),"Freq"])
-  
-  fig <- plotly::plot_ly(tab1, x = ~Variable, y = ~true, type = 'bar', name="1", marker = list(color = 'rgb(49,130,189)'))
-  fig <- fig %>% plotly::add_trace(y = ~false, name = '0', marker = list(color = 'rgb(204,204,204)'))
-  fig <- fig %>% plotly::layout(xaxis = list(title = "", tickangle = -45),
-                        yaxis = list(title = ""),
-                        margin = list(b = 100),
-                        barmode = 'group')
-  fig
-}
-
-
 
 #' Function to prepare the metabolomics dataset to compute the surrogates by Bizzarri et al.
 #'
@@ -776,9 +619,7 @@ calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates, bin_names, 
       pred<-apply.fit_surro(as.matrix(metabo_measures),PARAM_surrogates$models_betas[paste0("s_",i),])
     }
     #ROC curves of the available clinical variables
-    ind<-sapply(bin_names, function(x) 
-      !all(is.na(bin_pheno[,x])) && length(levels(bin_pheno[,x]))==2
-    )
+    ind<-sapply(bin_names, function(x) !all(is.na(bin_phenotypes[x])))
     graphics::par(mfrow=c(5,4))
     surro_images<-foreach::foreach(i=bin_names[ind], .combine="cbind") %do% {
       a<-data.frame(out=factor(bin_pheno[,i]), metabo_measures)
@@ -918,6 +759,16 @@ plot_na_heatmap  <- function(dat){
   graphics::barplot(rev(YPERC),horiz=TRUE,axes=TRUE,col="lightblue",border="lightblue",cex.axis=1,font.axis=2)
 }
 
+#' #' Function for plotting a heatmap missing values
+#' #'
+#' #' @param dat The matrix or data.frame
+#' #' @return Plot with an heatmap indicating the missing values
+#' #' @export
+#' #'
+#' plot.vis.mis <- function(dat){
+#'   vis_miss(dat)
+#' }
+
 #' Function that creates a plotly image of the selected surrogates
 #'
 #' @param surrogates The data.frame containing the surrogate values by Bizzarri et al.
@@ -964,7 +815,7 @@ roc_surro<-function(surrogates, bin_phenotypes, x_name){
     surro_images<-foreach::foreach(i=2:length(selected), .combine="cbind") %do% {
       surro<-paste0("s_",selected[i])
   
-      ROC_curve<-pROC::roc(bin_phenotypes[,selected[i]], as.numeric(surrogates[,paste0("s_",selected[i])]), plot=F, col=c21[surro], quiet = TRUE,
+      ROC_curve<-pROC::roc(bin_phenotypes[,selected[i]], as.numeric(surrogates[,paste0("s_",selected[I])]), plot=F, col=c21[surro], quiet = TRUE,
                      lwd=4, print.auc=TRUE, main = i, xaxs="i", yaxs="i", grid=TRUE, asp=NA) #AUC
       roc_df<-data.frame(Specificity=ROC_curve$specificities, Sensitivity=ROC_curve$sensitivities)
       
@@ -1129,59 +980,6 @@ ttest_surrogates<-function(surrogates,bin_phenotypes){
   return(pl_surro)
 }
 
-#' Function created to visualize the accuracies in the current dataset compared to the
-#' accuracies in the Leave One Biobank Out Validation in Bizzarri et al.
-#'
-#' @param surrogates matrix with the surrogate variables calculated in Bizzarri et all.
-#' @param bin_phenotypes magtrix with the binarized variables
-#' @param bin_pheno_available character vector with the phenotypes availables
-#' @param acc_LOBOV accuracy of LOBOV calculated in Bizzarri et al.
-#' @return Boxplot with the accuracies of the LOBOV
-#' @export
-#'
-LOBOV_accuracies<-function(surrogates, bin_phenotypes, bin_pheno_available, acc_LOBOV){
-  AUCs<-foreach(i=1:length(bin_pheno_available), .combine="rbind") %do%{
-    ROC_curve<-pROC::roc(bin_phenotypes[,bin_pheno_available[i]], as.numeric(surrogates[,paste0("s_",bin_pheno_available[i])]), plot=F, 
-                         col=c21[surro], quiet = TRUE,
-                         lwd=4, print.auc=TRUE, main = i, xaxs="i", yaxs="i", grid=TRUE, asp=NA) #AUC
-    pROC::auc(ROC_curve)
-  }
-  
-  rownames(AUCs)<-bin_pheno_available
-  colnames(AUCs)<-"AUC"
-  
-  acc_bin<-foreach::foreach(i= 1:length(bin_pheno_available), .combine = "rbind") %do%{
-    a<-acc_LOBOV[[bin_pheno_available[i]]][-c(dim(acc_LOBOV[[bin_pheno_available[i]]])[1],dim(acc_LOBOV[[bin_pheno_available[i]]])[1]-1),]
-    a<-cbind(a,Uploaded="BBMRI-nl biobanks")
-    a<-rbind(a,uploaded_data=data.frame(AUC=AUCs[bin_pheno_available[i],], Percentages=NaN, N=NaN, Uploaded="uploaded dataset"))
-    a$Uploaded<-as.factor(a$Uploaded)
-    
-    acc<-data.frame(biobank=rownames(a),a,outcome=rep(bin_pheno_available[i], length=dim(a)[1]))
-  }
-  acc_bin$biobank<-as.factor(acc_bin$biobank)
-  
-  p <- ggplot2::ggplot(data= acc_bin, ggplot2::aes(x=outcome, y=AUC, color = Uploaded)) +
-    #ggplot2::geom_jitter(ggplot2::aes(text=paste("Biobank: ", biobank)), width=0.25, alpha=1) +
-    ggplot2::geom_jitter(width=0.25, alpha=1) +
-    ggplot2::geom_boxplot(outlier.size = 0,outlier.shape = NA) +
-    ggplot2::theme(plot.title = ggplot2::element_text(size=15, face= "bold"),
-          axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, size = 12))+
-    ggplot2::labs(title="AUC of the current dataset compared to the LOBOV",x="Clinical variables", y="AUC")
-  p
-  
-  # Need to modify the plotly object and make outlier points have opacity equal to 0
-  fig <- plotly::ggplotly(p)
-  
-  fig$x$data <- lapply(fig$x$data, FUN = function(x){
-    
-    if (x$type == "box") {
-      x$marker = list(opacity = 0)
-    }
-    return(x)
-  })
-  return(fig)
-}
-
 #' Function that creates a scatterplot with the real values and predicted values
 #'
 #' @param x numeric vector with the real values
@@ -1307,12 +1105,11 @@ multi_hist<-function(dat, color=c21, scaled=FALSE){
 #' @param x_name string with the names of the selected variables in dat
 #' @param color colors selected for all the variables
 #' @param scaled TRUE/FALSE. If TRUE the variables will be z-scaled before plotting them
-#' @param datatype a character vector indicating what data type is beeing plotted
 #' @param main title of the plot
 #' @return plotly image with the histograms of the selected variables
 #' @export
 #'
-hist_plots<-function(dat, x_name, color=c21, scaled=FALSE, datatype="metabolic score", main="Predictors Distributions"){
+hist_plots<-function(dat, x_name, color=c21, scaled=FALSE, main="Predictors Distributions"){
   dat<-as.matrix(dat[,x_name])
   colnames(dat)<-x_name
   if(scaled){
@@ -1334,86 +1131,28 @@ hist_plots<-function(dat, x_name, color=c21, scaled=FALSE, datatype="metabolic s
     size = 20,
     margin = 10
   )
-  plot<-plotly::plot_ly(x = ~dat[,x_name[1]],opacity = 0.45, type = "histogram", histnorm = "probability", marker = list(color = color[x_name[1]]), name = x_name[1])
-  x_title<-datatype
+  plot<-plotly::plot_ly(x = ~dat[,x_name[1]],opacity = 0.45, type = "histogram", marker = list(color = color[x_name[1]]), name = x_name[1])
+  x_title<-"score"
    if(length(x_name)>1){
     for(i in c(2:length(x_name))){
       plot <- plot %>% 
-        plotly::add_histogram(x = dat[,x_name[i]],  histnorm = "probability", marker = list(color = color[x_name[i]]), name = x_name[i])
+        plotly::add_histogram(x = dat[,x_name[i]], marker = list(color = color[x_name[i]]), name = x_name[i])
     }
-     x_title<-datatype
+     x_title<-"scores"
   }
-  if(scaled){
-    x_title<-paste(datatype,"scaled")
-  }
+  
   plot<-plot %>% 
     plotly::layout( title =list(text=paste("<b>",main,"<b>"),font=title_font,y = 0.98),
                          xaxis = list(
                            title = paste("<b>",x_title,"<b>"),
                            titlefont = axis_font), 
                          yaxis = list(
-                           title = "<b>Frequency<b>",
+                           title = "<b>Counts<b>",
                            titlefont = axis_font),
                          barmode = "overlay")
   print(plot)
 }
   
-#' Function to plot the 57 selected metabolites to their distributions in BBMRI-nl
-#'
-#' @param dat data.frame or matrix with the metabolites
-#' @param x_name string with the name of the selected variable
-#' @param color colors selected for all the variables
-#' @param scaled TRUE/FALSE. If TRUE the variables will be z-scaled before plotting them
-#' @param datatype a character vector indicating what data type is beeing plotted
-#' @param main title of the plot
-#' @return plotly image with the histogram of the selected variable compared to the distributions in BBMRI-nl
-#' @export
-#'
-BBMRI_hist_plot<-function(dat, x_name, color=c21, scaled=FALSE, datatype="metabolite", main="Comparison with the metabolites measures in BBMRI"){
-  dat<-as.matrix(dat[,x_name])
-  colnames(dat)<-x_name
-  if(scaled){
-    dat <-as.matrix((dat-mean(dat,na.rm=T))/stats::sd(dat,na.rm=T))
-    colnames(dat)<-x_name
-    BBMRI<-BBMRI_hist_scaled[[x_name]]
-  }else{
-    BBMRI<-BBMRI_hist[[x_name]]
-  }
-  axis_font <- list(
-    family = "Arial",
-    size = 18
-  )
-  title_font <- list(
-    family = "Arial",
-    size = 20,
-    margin = 10
-  )
-  
-  res<-graphics::hist(stats::na.omit(dat[,x_name[1]]), breaks = BBMRI$breaks, plot = F)
-  
-  plot<-plotly::plot_ly(x = res$breaks[-1], y=res$density, opacity = 0.60, type = 'bar', 
-                        marker = list(color = color[x_name[1]]), name = x_name[1])
-  plot <- plot %>% 
-    plotly:: add_trace(y = ~BBMRI$density,opacity = 0.50, type = 'bar', 
-                       marker = list(color = "grey"), name = paste("BBMRI",x_name[1]))
-  
-  x_title<-datatype
-  if(scaled){
-    x_title<-paste(datatype,"scaled")
-  }
-  plot<-plot %>% 
-    plotly::layout( title =list(text=paste("<b>",main,"<b>"),font=title_font,y = 0.98),
-                    xaxis = list(
-                      title = paste("<b>",x_title,"<b>"),
-                      titlefont = axis_font), 
-                    yaxis = list(
-                      title = "<b>Frequency<b>",
-                      titlefont = axis_font),
-                    barmode = "overlay")
-  print(plot)
-}
-
-
 
 #' Function to plot the histogram of the mortality score separated for different age ranges
 #'
@@ -1617,9 +1356,9 @@ plot_corply <- function(res,main=NULL,zlim=NULL,reorder.x=FALSE,reorder.y=reorde
   # Plot:
   if(cor.abs){s<-abs(s)}
   if(reorder_dend){
-    heatmaply::heatmaply_cor(s,main=paste("<b>",main,"<b>"), margins=c(0,0,40,0))
+    heatmaply::heatmaply_cor(s,main=main, margins=c(0,0,40,0))
   }else{
-    heatmaply::heatmaply_cor(s,Rowv=F, Colv=F, main=paste("<b>",main,"<b>"),margins=c(0,0,40,0))
+    heatmaply::heatmaply_cor(s,Rowv=F, Colv=F, main=main,margins=c(0,0,40,0))
   }
   
 }
@@ -1751,8 +1490,8 @@ is.sym <- function(res){
 
 #' Function that calculates the Platt Calibrations
 #'
-#' @param r.calib binary real data
-#' @param p.calib predicted probabilities
+#' @param r.calib binary calibration data response
+#' @param p.calib numeric calibration predicted probabilities
 #' @param nbins number of bins to create the plots
 #' @param pl TRUE/FALSE. If TRUE it will plot the Reliability diagram and histogram of the calibrations
 #' @return list with samples, responses, calibrations, ECE, MCE and calibration plots if save==T
@@ -1770,7 +1509,6 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
                 family = "binomial")
   calibrated <- stats::predict(cmodel, data.frame(y = resp, x = pred), 
                         type = "response")
-  
   raw.bins <- cut(pred, nbins, include.lowest = TRUE)
   raw.xval <- tapply(pred, raw.bins, mean)
   raw.yval <- tapply(resp, raw.bins, mean)
@@ -1855,55 +1593,33 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
 
 #' Function that plots the Platt Calibrations using plotly
 #'
-#' @param r binary real data
-#' @param p predicted probabilities
-#' @param name character string indicating the name of the calibrated variable
+#' @param calibration result of the plattCalibration function
+#' @param name string with the name of the variable to be plotted
 #' @param nbins number of bins to create the plots
 #' @param annot_x integer indicating the x axis points in which the ECE and MCE values will be plotted
 #' @param annot_y integer indicating the y axis points in which the ECE and MCE values will be plotted
 #' @return list with Reliability diagram and histogram with calibrations and original predictions
 #' @export
 #'
-plattCalib_evaluation<-function(r, p, name, nbins = 10, annot_x=c(1,1),annot_y=c(0.1,0.3)){
-  
-  i<-which(is.na(r))
-  if(length(i!=0)){
-    r<-r[-i]
-    p<-p[-i]
-  }
-  
-  set.seed(222)
-  train_ind<- caret::createDataPartition(r, p=0.8, list=FALSE)
-  r.calib<-as.numeric(r[train_ind])-1
-  p.calib<-p[train_ind]
-  resp<-as.numeric(r[-train_ind])-1
-  pred<-p[-train_ind]
-  
-  # add/subtract epsilon to predictions at (0,1) to avoid infinite log-loss
-  
-  pred[pred == 0] <- 1e-8
-  pred[pred == 1] <- 1 - 1e-8
-  
-  # fit the calibration model and calculate calibrated probabilities
-  
-  cmodel <- stats::glm(y ~ x, data.frame(y = r.calib, x = p.calib), family = 'binomial')
-  calibrated <- stats::predict(cmodel, data.frame(y = resp, x = pred), type = 'response')
-  
-  # calculate visualization/return measures for original probabilities (on either calibration or validation data) 
+plattCalib_plot<-function(calibration, name, nbins = 10, annot_x=c(1.27,1.27),annot_y=c(0.6,0.4)){
+  resp<-calibration$responses
+  pred<-calibration$raw.probs
+  calibrated<-calibration$cal.probs
+  cmodel<-calibration$cal.model
   
   raw.bins <- cut(pred, nbins, include.lowest = TRUE)
   raw.xval <- tapply(pred, raw.bins, mean)
-  raw.yval <- tapply(resp, raw.bins, mean) 
-  raw.cali <- data.frame(method = rep('Original', nbins), x = raw.xval, y = raw.yval)
-  raw.logl <- (-1/length(resp)) * sum(resp*log(pred) + (1-resp)*(log(1-pred)), na.rm = TRUE)
-  
-  # calculate needed measures using transformed probabilities
-  
+  raw.yval <- tapply(resp, raw.bins, mean)
+  raw.cali <- data.frame(method = rep("Original", nbins), 
+                         x = raw.xval, y = raw.yval)
+  raw.logl <- (-1/length(resp)) * sum(resp * log(pred) + (1 - 
+                                                            resp) * (log(1 - pred)), na.rm = TRUE)
   cal.bins <- cut(calibrated, nbins, include.lowest = TRUE)
   cal.xval <- tapply(calibrated, cal.bins, mean)
   cal.yval <- tapply(resp, cal.bins, mean)
-  cal.cali <- data.frame(method = rep('Calibrated', nbins), x = cal.xval, y = cal.yval)
-  cal.logl <- (-1/length(resp)) * sum(resp*log(calibrated) + (1-resp)*(log(1-calibrated)), na.rm = TRUE)
+  cal.cali <- data.frame(method = rep("Calibrated", nbins), 
+                         x = cal.xval, y = cal.yval)
+  cal.logl <- (-1/length(resp)) * sum(resp * log(calibrated) + (1 - resp) * (log(1 - calibrated)), na.rm = TRUE)
   
   ## Calibration Errors ##
   ece_orig <- getECE(resp, pred, nbins)
@@ -1938,12 +1654,10 @@ plattCalib_evaluation<-function(r, p, name, nbins = 10, annot_x=c(1,1),annot_y=c
            yaxis = list (title = '<b>Fraction of positives<b>',titlefont = axis_font),
            margin = list(l = 50, r = 140, b = 30, t = 30, pad = 4),
            annotations = list(
-             text = list(paste("ECE Orig=",round(ece_orig, digits = 3),
-                               "\nMCE Orig=",round(mce_orig, digits = 3),
-                               "\nLogLoss Orig=",round(raw.logl, digits = 3)),
-                         paste("ECE Calib=",round(ece_calib, digits = 3),
-                               "\nMCE Calib=",round(mce_calib, digits = 3),
-                               "\nLogLoss Calib=",round(cal.logl, digits = 3))),
+             text = list(paste("ECE Original=",round(ece_orig, digits = 3),
+                               "\nMCE Original=",round(mce_orig, digits = 3)),
+                         paste("ECE Calibrated=",round(ece_calib, digits = 3),
+                               "\nMCE Calibrated=",round(mce_calib, digits = 3))),
              xref='paper',
              yref='paper',
              x =annot_x, y = annot_y,
@@ -1964,12 +1678,10 @@ plattCalib_evaluation<-function(r, p, name, nbins = 10, annot_x=c(1,1),annot_y=c
               title = "<b> Counts <b>",
               titlefont = axis_font),barmode = "overlay")
 
-  return(list(train_ind= train_ind, responses = resp, raw.probs = pred, cal.probs = calibrated, 
-              raw.logloss = raw.logl, cal.logloss = cal.logl, 
-              cal.model = cmodel, cal.Plot = cPlot, prob.hist = hPlot))
+  return(list(cal.Plot = cPlot, prob.hist = hPlot))
 }
 
-#' helper function that calculates the Platt Calibrations  for all the surrogates
+#' helper function that calculates the Platt Calibrations
 #'
 #' @param bin_phenotypes data.frame with binary phenotypes resulting form binarize_all_pheno
 #' @param surrogates data.frame with surrogates resulting from calculate_surrogate_scores
@@ -1989,16 +1701,15 @@ calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_ava
     names(pred)<-rownames(surrogates)
     ind<-which(!is.na(orig))
     if(length(ind)!=0){
-      calibration<-plattCalibration(orig,pred, nbins = nbins, pl=pl)
+      calibration<-plattCalibration(orig[ind],pred[ind], nbins = nbins, pl=pl)
       return(calibration)
     }
   })
-  names(calib)<-bin_names
+  
   calib_df<-calib_data_frame(calib, bin_phenotypes, bin_pheno_available)
 
   calib<-append(calib,list(calib_df))
-  names(calib)<-c(bin_names,"calib_df")
-  
+  names(calib)<-bin_names
   return(calib)
 }
 
@@ -2013,9 +1724,8 @@ calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_ava
 calib_data_frame<-function(calibrations, bin_phenotypes, bin_pheno_available){
     cal<-matrix(NA, nrow = dim(bin_phenotypes)[1], ncol = length(bin_pheno_available))
     rownames(cal)<-rownames(bin_phenotypes)
-    colnames(cal)<-bin_pheno_available
+    colnames(cal)<-bin_surro[bin_pheno_available]
     for(i in 1:length(bin_pheno_available)){
-      #cal[,i]<-calibrations[[bin_pheno_available[i]]]$cal.probs
       cal[names(calibrations[[bin_pheno_available[i]]]$cal.probs),i]<-calibrations[[bin_pheno_available[i]]]$cal.probs
     }
     colnames(cal)<-bin_pheno_available
@@ -2057,15 +1767,15 @@ getECE<-function (actual, predicted, n_bins = 10)
                                    2])
     }
     n_ <- length(group_pred)
-    expected <- mean(group_pred, na.rm=TRUE)
-    observed <- mean(group_actual, na.rm=TRUE)
+    expected <- mean(group_pred)
+    observed <- mean(group_actual)
     S[i] <- abs(observed - expected)
     W[i] <- n_/N
     groups[[i]] <- group_pred
   }
-  mean_prediction <- lapply(groups, mean, na.rm=TRUE)
-  min_group <- lapply(groups, min, na.rm=TRUE)
-  max_group <- lapply(groups, max, na.rm=TRUE)
+  mean_prediction <- lapply(groups, mean)
+  min_group <- lapply(groups, min)
+  max_group <- lapply(groups, max)
   res <- t(S) %*% W
   return(as.numeric(res))
 }
@@ -2104,8 +1814,8 @@ getMCE<-function (actual, predicted, n_bins = 10)
                                    2])
     }
     n <- length(group_pred)
-    expected <- mean(group_pred, na.rm=TRUE)
-    observed <- mean(group_actual, na.rm=TRUE)
+    expected <- mean(group_pred)
+    observed <- mean(group_actual)
     S[i] <- abs(observed - expected)
     W[i] <- n/N
   }

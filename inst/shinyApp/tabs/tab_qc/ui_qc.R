@@ -46,7 +46,7 @@ tab_qc <- tabItem(
       sliderInput("Nmax_zero_surrogates",
                   label = "Set the number of missing values allowed per sample (default=Nmiss=1)",
                   value = 1,
-                  min = 0,
+                  min = 1,
                   max = 55,
                   step = 1
       ),
@@ -54,7 +54,7 @@ tab_qc <- tabItem(
       sliderInput("Nmax_miss_surrogates",
                   label = "Set the number of zeros allowed per sample (default=Nmiss=1)",
                   value = 1,
-                  min = 0,
+                  min = 1,
                   max = 55,
                   step = 1
       ),

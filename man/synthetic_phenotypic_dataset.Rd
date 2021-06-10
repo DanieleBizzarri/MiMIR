@@ -9,7 +9,7 @@ Synthetic example dataset made with synthpop
 }
 \usage{data("synthetic_phenotypic_dataset")}
 \format{
-  A data frame with 500 observations on the following 20 variables.
+  A data frame with 5000 observations on the following 20 variables.
   \describe{
     \item{\code{sex}}{a numeric vector}
     \item{\code{diabetes}}{a numeric vector}
@@ -20,7 +20,7 @@ Synthetic example dataset made with synthpop
     \item{\code{alcohol_consumption}}{a numeric vector}
     \item{\code{age}}{a numeric vector}
     \item{\code{BMI}}{a numeric vector}
-    \item{\code{hscrp}}{a numeric vector}
+    \item{\code{ln_hscrp}}{a numeric vector}
     \item{\code{waist_circumference}}{a logical vector}
     \item{\code{weight}}{a numeric vector}
     \item{\code{height}}{a numeric vector}

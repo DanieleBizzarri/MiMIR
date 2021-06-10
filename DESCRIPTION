@@ -1,4 +1,4 @@
-Package: MiMIR
+Package: MetaboRiSc
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
@@ -32,11 +32,4 @@ Imports:
     pROC,
     plotly,
     heatmaply,
-    dplyr,
-    ggplot2,
-    reshape2,
-    caret
-Suggests: 
-    rmarkdown,
-    knitr
-VignetteBuilder: knitr
+    dplyr
