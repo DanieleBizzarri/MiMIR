@@ -5,7 +5,7 @@ tab_distributions <- tabItem(
   tabsetPanel(
     # Tab Panel for the correlation of the predicted values
     tabPanel(
-      title = "Predictor's correlations",
+      title = "Predictors correlations",
       HTML('<hr style="border-color: #0088cc;">'),
       mainPanel(
         width = 9,
@@ -14,7 +14,7 @@ tab_distributions <- tabItem(
     ),
     # Tab Panel for the missingness in the predicted values
     tabPanel(
-      title = "Predictors' missingness",
+      title = "Predictors missingness",
       HTML('<hr style="border-color: #0088cc;">'),
       mainPanel(
         width = 9,
@@ -25,7 +25,7 @@ tab_distributions <- tabItem(
     ),
     # Tab Panel for the histograms of the predicted values
     tabPanel(
-      title = "Predictors' histograms",
+      title = "Predictors histograms",
       HTML('<hr style="border-color: #0088cc;">'),
       sidebarLayout(
         position = "right",
