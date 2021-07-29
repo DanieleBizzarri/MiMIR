@@ -70,7 +70,7 @@ installing these packages manually:
     if (!require("shinycssloaders")) install.packages("shinycssloaders")
     if (!require("shinyjs")) install.packages("shinyjs")
 
-    ##Statistics libraries
+    #Statistics libraries
     if (!require("DT")) install.packages("DT")
     if (!require("foreach")) install.packages("foreach")
     if (!require("glmnet")) install.packages("glmnet")
@@ -80,7 +80,7 @@ installing these packages manually:
     if (!require("reshape2")) install.packages("reshape2")
     if (!require("caret")) install.packages("caret")
 
-    ##Imaging libraries
+    #Imaging libraries
     if (!require("pheatmap")) install.packages("pheatmap")
     if (!require("RColorBrewer")) install.packages("RColorBrewer")
     if (!require("pROC")) install.packages("pROC")
