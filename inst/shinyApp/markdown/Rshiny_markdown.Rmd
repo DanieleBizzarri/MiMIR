@@ -120,7 +120,7 @@ b<- QCprep_surrogates(as.matrix(metabo_measures[,MET63]),
 
 ## Correlations of the predictors
 ```{r corr predictors, echo=FALSE}
-res<-cor.assoc(predictors, predictors, colnames(predictors)[-1],colnames(predictors)[-1])
+res<-cor_assoc(predictors, predictors, colnames(predictors)[-1],colnames(predictors)[-1])
 plot_corply(res, main="Correlations of the Metabolic scores", reorder.x=TRUE, abs=F,
                     resort_on_p= TRUE,reorder_dend=F)
 ```
@@ -159,7 +159,16 @@ htmltools::tagList(lapply(bin_pheno_available, function(i){
     if(is.null(calibrations[[i]])){
     return(NULL)
   }else{
-    c1<-plattCalib_plot(calibrations[[i]],name=paste0("s_",i), nbins = Nbins, annot_x=c(1.22,1.22), annot_y=c(-0.9,-0.6))
+    surro<-calculate_surrogate_scores(met=metabo_measures, PARAM_surrogates = PARAM_surrogates,
+                                    Nmax_miss=Nmax_miss_surrogates,
+                                    Nmax_zero=Nmax_zero_surrogates,
+                                    bin_names = bin_names,
+                                    roc=F, quiet=T, post=F)
+  surro<-surro$surrogates
+    c1<-plattCalib_evaluation(r=bin_phenotypes[,i], p=surro[,paste0("s_",i)],
+                          p.orig=surrogates[,paste0("s_",i)],name=paste0("s_",i), nbins = Nbins,
+                          annot_x=c(1.22,1.22), annot_y=c(-0.9,-0.6))
+    c1<-c1[c("cal.Plot","prob.hist")]
     subplot(c1, nrows = 2, shareX = F,shareY = F, titleX = F, titleY = F, which_layout = 1)
   }
  }))

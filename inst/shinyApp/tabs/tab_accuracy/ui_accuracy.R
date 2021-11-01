@@ -68,26 +68,6 @@ tab_accuracy <- tabItem(
         plotlyOutput("LOBOV_surro", height = "600px") %>% withSpinner()
       ),
       helpText(" Boxplots comparing accuracies of the surrogates in the uploaded datast to the accuracies in the LOBOV")
-    ),
-    #Tab panel comparing MetaboAge and the age of the individuals
-    tabPanel(
-      title = "MetaboAge/age Scatterplot",
-      HTML('<hr style="border-color: #0088cc;">'),
-      mainPanel(
-        width = 9,
-        plotlyOutput("scatter_metaboage", height = "600px") %>% withSpinner()
-      ),
-      helpText("Scatterplot to see how accurate MetaboAge is on your dataset. On the x axis the real age, on the y axis the predicted age.")
-    ),
-    #Histogram of the mortality score divided for 3 age ranges
-    tabPanel(
-      title = "Mortality score histogram per age range",
-      HTML('<hr style="border-color: #0088cc;">'),
-      mainPanel(
-        width = 9,
-        plotlyOutput("hist_mort", height = "600px") %>% withSpinner()
-      ),
-      helpText("The distribution of the mortality score divided in age ranges: age<45, 45>age<65 and age>65")
     )
   )
 )

@@ -5,39 +5,46 @@ tab_distributions <- tabItem(
   tabsetPanel(
     # Tab Panel for the correlation of the predicted values
     tabPanel(
-      title = "Predictors correlations",
+      title = "Surrogates correlations",
       HTML('<hr style="border-color: #0088cc;">'),
       mainPanel(
         width = 9,
-        plotlyOutput("heat_predictors", height = "600px") %>% withSpinner()
+        plotlyOutput("heat_surrogates", height = "600px") %>% withSpinner()
       )
     ),
     # Tab Panel for the missingness in the predicted values
     tabPanel(
-      title = "Predictors missingness",
+      title = "Surrogates missingness",
       HTML('<hr style="border-color: #0088cc;">'),
       mainPanel(
         width = 9,
-        plotOutput("heat_na_pred", height = "600px") %>% withSpinner()
+        plotOutput("heat_na_surro", height = "600px") %>% withSpinner()
       ),
       helpText("The missingness in the predicted values"),
       HTML('<hr style="border-color: #0088cc;">')
     ),
     # Tab Panel for the histograms of the predicted values
     tabPanel(
-      title = "Predictors histograms",
+      title = "Surrogates histograms",
       HTML('<hr style="border-color: #0088cc;">'),
       sidebarLayout(
         position = "right",
         # Selection of which predictor to visualize
         sidebarPanel(
           width = 3,
+          # Radio button to deciide if scale or not the scores
+          radioButtons(
+            inputId = "scaling_surro",
+            label="Do you want to see the scores scaled?",
+            choices=c("Not scaled" = FALSE,
+                      "Scaled" = TRUE
+            ),
+            selected = FALSE,
+          ),
           checkboxGroupInput(
-            inputId = "predictors",
-            label="Metabolic predictors' histograms:",
-            choices=c("Mortality score" = "mortScore",
-              "MetaboAge" = "MetaboAge",
-              "Surrogate sex" = "s_sex",
+            inputId = "surrogates",
+            label="Metabolic surrogates' histograms:",
+            choices=c("Surrogate sex" = "s_sex",
               "Surrogate diabetes" = "s_diabetes",
               "Surrogate lipidmed" = "s_lipidmed",
               "Surrogate blood_pressure_lowering_med" = "s_blood_pressure_lowering_med",
@@ -57,23 +64,13 @@ tab_distributions <- tabItem(
               "Surrogate low_wbc" = "s_low_wbc",
               "Surrogate low_hgb" = "s_low_hgb"
               ),
-            selected = "mortScore",
+            selected = "s_sex",
           ),
-          # Radio button to deciide if scale or not the scores
-          radioButtons(
-            inputId = "scaling",
-            label="Do you want to see the scores scaled?",
-            choices=c("Not scaled" = FALSE,
-                      "Scaled" = TRUE
-            ),
-            selected = FALSE,
-          ),
-          
           style = "text-align: left;"
         ),
         mainPanel(
           width = 9,
-          plotlyOutput("hist_predictors", height = "500px") %>% withSpinner()
+          plotlyOutput("hist_surrogates", height = "500px") %>% withSpinner()
         )
       ),
       helpText("Histograms to show the distributions of the predicted values. 

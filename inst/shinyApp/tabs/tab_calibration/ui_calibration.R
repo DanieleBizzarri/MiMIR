@@ -12,9 +12,9 @@ tab_calibration <- tabItem(
         #It allows the selection of the surrogates
         sidebarPanel(
           width = 3,
-          radioButtons(
-            inputId = "surrogates",
-            label="Metabolic surrogates' calibration:",
+          selectInput(
+            inputId = "surro_cal",
+            label="Metabolic surrogates calibration:",
             choices=c("Surrogate sex" = "sex",
                       "Surrogate diabetes" = "diabetes",
                       "Surrogate lipidmed" = "lipidmed",
@@ -36,12 +36,9 @@ tab_calibration <- tabItem(
                       "Surrogate low_hgb" = "low_hgb"
             )
             ),
-          sliderInput("Nbins",
+          numericInput("Nbins",
                       label = "Select the bins to for the probabilities",
-                      value = 10,
-                      min = 5,
-                      max = 100,
-                      step = 1
+                      value = 10
           ),
           style = "text-align: left;"
         ),

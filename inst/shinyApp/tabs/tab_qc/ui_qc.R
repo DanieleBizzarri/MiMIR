@@ -13,20 +13,14 @@ tab_qc <- tabItem(
       h4("Quality Control for MetaboAge and the surrogates"),
       #QC of MetaboAge
       #Chose the threshold of zeros allowed
-      sliderInput("Nmax_zero_metaboAge",
-        label = "Set the number of missing values allowed per sample (default=Nmiss=1)",
-        value = 1,
-        min = 0,
-        max = 55,
-        step = 1
+      numericInput("Nmax_zero_metaboAge",
+        label = "Max missing values allowed per sample (default=Nmiss=1)",
+        value = 1
       ),
       #Chose the threshold of missing values allowed
-      sliderInput("Nmax_miss_metaboAge",
-        label = "Set the number of zeros allowed per sample (default=Nmiss=1)",
-        value = 1,
-        min = 0,
-        max = 55,
-        step = 1
+      numericInput("Nmax_miss_metaboAge",
+        label = "Max zeros allowed per sample (default=Nmiss=1)",
+        value = 1
       ),
       div(br(),
           htmlOutput("MetaboAge_settings"),
@@ -43,21 +37,16 @@ tab_qc <- tabItem(
       h4("Quality Control for the Surrogates"),
       #QC of the surrogates
       #Chose the threshold of zeros allowed
-      sliderInput("Nmax_zero_surrogates",
-                  label = "Set the number of missing values allowed per sample (default=Nmiss=1)",
-                  value = 1,
-                  min = 0,
-                  max = 55,
-                  step = 1
+      numericInput("Nmax_zero_surrogates",
+                  label = "Max missing values allowed per sample (default=Nmiss=1)",
+                  value = 1
       ),
       #Chose the threshold of missing values allowed
-      sliderInput("Nmax_miss_surrogates",
-                  label = "Set the number of zeros allowed per sample (default=Nmiss=1)",
-                  value = 1,
-                  min = 0,
-                  max = 55,
-                  step = 1
+      numericInput("Nmax_miss_surrogates",
+                  label ="Max zeros allowed per sample (default=Nmiss=1)",
+                  value = 1
       ),
+      
       div(br(),
           htmlOutput("Surrogates_settings"),
           br(),
@@ -71,8 +60,5 @@ tab_qc <- tabItem(
   ),
   br(),
   HTML('<hr style="border-color: #0088cc;">'),
-  actionButton(inputId = "run_button",
-               label = "Run Analysis!"),
-  br(),
   br()
 )

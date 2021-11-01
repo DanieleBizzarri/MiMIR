@@ -70,7 +70,7 @@ tab_upload <- tabItem(
   HTML('<hr style="border-color: #0088cc;">'),
   #Tables with the column names found in the files
   fluidPage(
-    h3(strong("Column names found")),
+    h3(strong("Variables names recognised")),
     textOutput("required_met"),
     br(),
     column(
@@ -86,7 +86,7 @@ tab_upload <- tabItem(
       )
     ),
     ),
-  helpText("Red= are required to continue; Orange=  not found but optional; Green= found"),
+  helpText("Red= are required to continue; Orange= not found but optional; Green= found."),
   br(),
   #Table with the uploaded files
   div(id = "data tabs",
@@ -117,6 +117,4 @@ tab_upload <- tabItem(
         
       )
   )
-  
-  
-  )
+)

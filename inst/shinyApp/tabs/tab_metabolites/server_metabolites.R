@@ -4,9 +4,16 @@ output$heat_met <- renderPlotly({
     req(required())
     if (input$MET56_14_cor == "MET56") {
       met = MET56
-    } else {
+    } else if (input$MET56_14_cor == "MET14"){
       met = MET14
+    } else if (input$MET56_14_cor == "MET_COVID"){
+      met = MET_COVID
+    }else if (input$MET56_14_cor == "MET_T2D"){
+      met = MET_T2D
+    }else if (input$MET56_14_cor == "MET_CVD"){
+      met = MET_CVD
     }
+    
     res<-cor_assoc(metabo_measures(),metabo_measures(), met, met)
     heat<-plot_corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
                       resort_on_p= TRUE,reorder_dend=F)
@@ -22,9 +29,16 @@ output$heat_na_metabo <- renderPlot({
     req(required())
     if (input$MET56_14_nas == "MET56") {
       met = MET56
-    } else {
+    } else if (input$MET56_14_cor == "MET14"){
       met = MET14
+    } else if (input$MET56_14_cor == "MET_COVID"){
+      met = MET_COVID
+    }else if (input$MET56_14_cor == "MET_T2D"){
+      met = MET_T2D
+    }else if (input$MET56_14_cor == "MET_CVD"){
+      met = MET_CVD
     }
+    
     plot_na_heatmap(t(metabo_measures()[,met]))
   }, error = function(err) {
     return(NA_message(main="Metabolites not available,\nplease check your uploaded files."))
@@ -53,3 +67,10 @@ output$hist_BBMRI <- renderPlotly({
     return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   })
 })
+
+#Creates the plotly histogram of the selected metabolites
+output$models_coef_heat <- renderPlotly({
+  model_coeff_heat(mort_betas=mort_betas,metaboAge_betas=PARAM$FIT_COEF, surrogates_betas=PARAM_surrogates$models_betas,
+                  Ahola_Olli_betas= Ahola_Olli_betas, CVD_score_betas= CVD_score_betas, COVID_score_betas= covid_betas)
+})
+

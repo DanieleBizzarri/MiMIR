@@ -37,6 +37,42 @@ METABO <- c(
   "sfa_fa", "glc", "lac", "cit", "ala", "gln", "his", "ile", "leu", "val", "phe", "tyr", "ace", "acace", "bohbut", "crea", "alb", "gp",
   "pyr", "glycerol", "glycine")
 
+
+BBMRI_METABO <- c("serum_c", "X","remnant_c", "vldl_c", "X","ldl_c", "hdl_c", "hdl2_c", "hdl3_c", "serum_tg", "vldl_tg", "ldl_tg", "hdl_tg",
+                  "X", "X", "X", "X", "estc", "X", "X","X", "freec", "X", "X","X", "X", "X", "X","X","X", "X", "X","X","vldl_d", "ldl_d", "hdl_d",
+                  "totpg", "tg_pg", "totcho", "pc", "sm", "apob", "apoa1", "apob_apoa1", "totfa", "unsatdeg","faw3", "faw6", 
+                  "pufa", "mufa", "sfa", "la", "dha", "faw3_fa", "faw6_fa",  "pufa_fa", "mufa_fa", "sfa_fa", "la_fa","dha_fa", 
+                  "X", "X", "ala", "gln", "glycine", "his", "X",  "ile", "leu", "val", "phe", "tyr", "glc", "lac", "pyr",
+                  "cit", "glycerol", "bohbut", "ace", "acace", "X", "crea", "alb", "gp",
+                  "xxl_vldl_p", "xxl_vldl_l", "xxl_vldl_pl", "xxl_vldl_c", "xxl_vldl_ce", "xxl_vldl_fc", "xxl_vldl_tg",
+                  "xl_vldl_p",  "xl_vldl_l",  "xl_vldl_pl",  "xl_vldl_c",  "xl_vldl_ce",  "xl_vldl_fc",  "xl_vldl_tg", 
+                  "l_vldl_p",   "l_vldl_l",   "l_vldl_pl",   "l_vldl_c",   "l_vldl_ce",   "l_vldl_fc",   "l_vldl_tg",
+                  "m_vldl_p",   "m_vldl_l",   "m_vldl_pl",   "m_vldl_c",   "m_vldl_ce",   "m_vldl_fc",   "m_vldl_tg",
+                  "s_vldl_p",   "s_vldl_l",   "s_vldl_pl",   "s_vldl_c",   "s_vldl_ce",   "s_vldl_fc",   "s_vldl_tg",
+                  "xs_vldl_p",  "xs_vldl_l",  "xs_vldl_pl",  "xs_vldl_c",  "xs_vldl_ce",  "xs_vldl_fc",  "xs_vldl_tg",
+                  "idl_p",      "idl_l",      "idl_pl",      "idl_c",      "idl_ce",      "idl_fc",      "idl_tg", 
+                  "l_ldl_p",    "l_ldl_l",    "l_ldl_pl",    "l_ldl_c",    "l_ldl_ce",    "l_ldl_fc",    "l_ldl_tg", 
+                  "m_ldl_p",    "m_ldl_l",    "m_ldl_pl",    "m_ldl_c",    "m_ldl_ce",    "m_ldl_fc",    "m_ldl_tg",
+                  "s_ldl_p",    "s_ldl_l",    "s_ldl_pl",    "s_ldl_c",    "s_ldl_ce",    "s_ldl_fc",    "s_ldl_tg",
+                  "xl_hdl_p",   "xl_hdl_l",   "xl_hdl_pl",   "xl_hdl_c",   "xl_hdl_ce",   "xl_hdl_fc",   "xl_hdl_tg", 
+                  "l_hdl_p",    "l_hdl_l",    "l_hdl_pl",    "l_hdl_c",    "l_hdl_ce",    "l_hdl_fc",    "l_hdl_tg", 
+                  "m_hdl_p",    "m_hdl_l",    "m_hdl_pl",    "m_hdl_c",    "m_hdl_ce",    "m_hdl_fc",    "m_hdl_tg", 
+                  "s_hdl_p",    "s_hdl_l",    "s_hdl_pl",    "s_hdl_c",    "s_hdl_ce",    "s_hdl_fc",    "s_hdl_tg",
+                  "xxl_vldl_pl_percentage", "xxl_vldl_c_percentage", "xxl_vldl_ce_percentage", "xxl_vldl_fc_percentage", "xxl_vldl_tg_percentage", 
+                  "xl_vldl_pl_percentage",  "xl_vldl_c_percentage",  "xl_vldl_ce_percentage",  "xl_vldl_fc_percentage",  "xl_vldl_tg_percentage", 
+                  "l_vldl_pl_percentage",   "l_vldl_c_percentage",   "l_vldl_ce_percentage",   "l_vldl_fc_percentage",   "l_vldl_tg_percentage", 
+                  "m_vldl_pl_percentage",   "m_vldl_c_percentage",   "m_vldl_ce_percentage",   "m_vldl_fc_percentage",   "m_vldl_tg_percentage", 
+                  "s_vldl_pl_percentage",   "s_vldl_c_percentage",   "s_vldl_ce_percentage",   "s_vldl_fc_percentage",   "s_vldl_tg_percentage", 
+                  "xs_vldl_pl_percentage",  "xs_vldl_c_percentage",  "xs_vldl_ce_percentage",  "xs_vldl_fc_percentage",  "xs_vldl_tg_percentage", 
+                  "idl_pl_percentage",      "idl_c_percentage",      "idl_ce_percentage",      "idl_fc_percentage",      "idl_tg_percentage", 
+                  "l_ldl_pl_percentage",    "l_ldl_c_percentage",    "l_ldl_ce_percentage",    "l_ldl_fc_percentage",    "l_ldl_tg_percentage", 
+                  "m_ldl_pl_percentage",    "m_ldl_c_percentage",    "m_ldl_ce_percentage",    "m_ldl_fc_percentage",    "m_ldl_tg_percentage", 
+                  "s_ldl_pl_percentage",    "s_ldl_c_percentage",    "s_ldl_ce_percentage",    "s_ldl_fc_percentage",    "s_ldl_tg_percentage",
+                  "xl_hdl_pl_percentage",   "xl_hdl_c_percentage",   "xl_hdl_ce_percentage",   "xl_hdl_fc_percentage",   "xl_hdl_tg_percentage", 
+                  "l_hdl_pl_percentage",    "l_hdl_c_percentage",    "l_hdl_ce_percentage",    "l_hdl_fc_percentage",    "l_hdl_tg_percentage", 
+                  "m_hdl_pl_percentage",    "m_hdl_c_percentage",    "m_hdl_ce_percentage",    "m_hdl_fc_percentage",    "m_hdl_tg_percentage", 
+                  "s_hdl_pl_percentage",    "s_hdl_c_percentage",    "s_hdl_ce_percentage",    "s_hdl_fc_percentage",    "s_hdl_tg_percentage")
+
 # Metabolite markers often deemed to be more or less independent and not numerically derived from eachother:
 MET63 <- tolower(c("Ala","Gln","His","Phe","Tyr","Ile","Leu","Val","Glc","Lac","Pyr","Cit","Ace",
                    "AcAce","bOHBut","Crea","Alb","Gp","XXL_VLDL_L","XL_VLDL_L","L_VLDL_L","M_VLDL_L",
@@ -64,9 +100,26 @@ MET57 <- tolower(c("Ala","Gln","His","Phe","Tyr","Ile","Leu","Val","Glc","Lac","
                    "TotFA","DHA","LA","FAw3","FAw6","PUFA","MUFA","SFA","FAw3_FA","FAw6_FA","PUFA_FA",
                    "MUFA_FA","SFA_FA","UnsatDeg","XXL_VLDL_L"))
 
+MET62 <- tolower(c("Ala","Gln","His","Phe","Tyr","Ile","Leu","Val","Glc","Lac","Cit","Ace",
+                   "AcAce","Crea","Alb","Gp","M_VLDL_L",
+                   "S_VLDL_L","XS_VLDL_L","IDL_L","L_LDL_L","M_LDL_L","S_LDL_L",
+                   "M_HDL_L","S_HDL_L","IDL_C","Serum_C","VLDL_C","LDL_C","HDL_C","HDL2_C","HDL3_C",
+                   "VLDL_D","LDL_D","HDL_D","Serum_TG","TotPG","PC","SM","TotCho","ApoA1","ApoB",
+                   "TotFA","DHA","LA","FAw3","FAw6","PUFA","MUFA","SFA","FAw3_FA","FAw6_FA","PUFA_FA",
+                   "MUFA_FA","SFA_FA","UnsatDeg","XXL_VLDL_L", "l_vldl_ce_percentage", "l_hdl_fc", 
+                   "apob_apoa1", "faw6_faw3", "glycine"))
+
 #The final set of metabolites used by the mortality score
 MET14<-c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl_l","alb","phe","acace","ile","vldl_d",
                "leu","val","his","lac")
+
+MET_COVID<-c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
+             "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
+             "alb","faw3","ldl_c","serum_tg")
+
+MET_T2D<-c("phe", "l_vldl_ce_percentage", "l_hdl_fc")
+
+MET_CVD<-c("phe","mufa_fa","faw6","dha")
 
 # Mortality score betas
 mort_betas <- data.frame(
@@ -92,36 +145,56 @@ mort_betas <- data.frame(
                -0.069223326,0.062262328),
   stringsAsFactors = FALSE)
 
+# Ahola Olli T2D score betas
+Ahola_Olli_betas<-data.frame(
+  Abbreviation=c("phe", "l_vldl_ce_percentage", "l_hdl_fc", "sex", "age", "BMI", "glucose"),
+  Metabolite=c("phenylanine","Cholesteryl esters to total lipids ratio in large VLDL", 
+               "free cholesterol in large HDL", "sex", "age", "BMI", "glucose"),
+  Beta_value=c(0.32,-0.474,-0.321, -0.364, 0.0286, 0.462, 0.640),
+  stringsAsFactors = FALSE)
 
-# covid_betas <- data.frame(
-#   Abbreviation=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
-#                  "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
-#                  "alb","faw3","ldl_c","serum_tg"),
-#   Metabolite=c("Glycoprotein acetyls", "docosahexaenoic acid", "creatinine","Monounsaturated fatty acids",
-#                "Apolipoprotein B/ Apolipoprotein A1","Tyrosine","Isoleucine","Ratio of saturated fatty acids to total fatty acids",
-#                "Glucose","Lactate","Ratio of omega-6 fatty acids to omega 3 fatty acids","Phenylanine", "Total cholesterol",
-#                "Ratio of omega-6 fatty acids to total fatty acids","Alanine","Polyunsaturated fatty acids",
-#                "Glycine","Histidine","Ratio of polyunsaturated fatty acids to total fatty acids",
-#                "Valine","Leucine","Albumin","Omega-3 fatty acids","Total cholesterol in LDL","Serum total triglycerides"),
-#   Beta_value=c(0.3713,0.2533, 0.2170, 0.1693, 0.1388, 0.1375, 0.1091, 0.0965, 0.0928,
-#                0.0772, 0.0642, 0.0289, -0.0116, -0.0493, -0.0498, -0.0578, -0.0648,
-#                -0.0987, -0.1404, -0.1812, -0.1844, -0.1914, -0.2208, -0.2466, -0.2652),
-#   stringsAsFactors = FALSE)
+# CVD score betas
+CVD_score_betas<-data.frame(
+  Abbreviation=c("phe","mufa_fa","faw6","dha","sex","systolic_blood_pressure","current_smoking","diabetes",
+                 "blood_pressure_lowering_med","lipidmed","totchol","hdlchol"),
+  Metabolite=c("phenylanine","mufa ratio to total fatty acids", 
+               "omega6 fatty acids"," dha", "sex","systolic_blood_pressure","current_smoking","diabetes",
+               "blood_pressure_lowering_med","lipidmed","totchol","hdlchol"),
+  Beta_value=c(0.225,-0.145,-0.137,0.1,-0.613,0.145,0.379,0.665,0.103,0.295,0.247,-0.315),
+  stringsAsFactors = FALSE)
+
+covid_betas <- data.frame(
+  Abbreviation=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
+                 "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
+                 "alb","faw3","ldl_c","serum_tg"),
+  Metabolite=c("Glycoprotein acetyls", "docosahexaenoic acid", "creatinine","Monounsaturated fatty acids",
+               "Apolipoprotein B/ Apolipoprotein A1","Tyrosine","Isoleucine","Ratio of saturated fatty acids to total fatty acids",
+               "Glucose","Lactate","Ratio of omega-6 fatty acids to omega 3 fatty acids","Phenylanine", "Total cholesterol",
+               "Ratio of omega-6 fatty acids to total fatty acids","Alanine","Polyunsaturated fatty acids",
+               "Glycine","Histidine","Ratio of polyunsaturated fatty acids to total fatty acids",
+               "Valine","Leucine","Albumin","Omega-3 fatty acids","Total cholesterol in LDL","Serum total triglycerides"),
+  Beta_value=c(0.3713,0.2533, 0.2170, 0.1693, 0.1388, 0.1375, 0.1091, 0.0965, 0.0928,
+               0.0772, 0.0642, 0.0289, -0.0116, -0.0493, -0.0498, -0.0578, -0.0648,
+               -0.0987, -0.1404, -0.1812, -0.1844, -0.1914, -0.2208, -0.2466, -0.2652),
+  stringsAsFactors = FALSE)
 
 #Phenotypic variables names
 pheno_names<-c("sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking",
                "metabolic_syndrome", "alcohol_consumption",
                "age","BMI", "hscrp","waist_circumference","weight","height",
-               "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb")
+               "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb",
+               "glucose", "systolic_blood_pressure", "Event", "EventAge")
 
 #Variables names related to each surrogate
-out_list<-c("sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking","metabolic_syndrome", "alcohol_consumption",
+out_list<-c("sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking",
+            "metabolic_syndrome", "alcohol_consumption",
             "age", "age","age","BMI", "hscrp",
             "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb")
 out_surro<-paste0("s_",out_list)
 
 #Binarized variables names related to each surrogate
-bin_names<-c("sex","diabetes","lipidmed", "blood_pressure_lowering_med", "current_smoking","metabolic_syndrome","alcohol_consumption",
+bin_names<-c("sex","diabetes","lipidmed", "blood_pressure_lowering_med", "current_smoking",
+             "metabolic_syndrome","alcohol_consumption",
              "high_age","middle_age","low_age","obesity", "high_hscrp",
              "high_triglycerides","high_ldl_chol","low_hdlchol","high_totchol","low_eGFR","low_wbc","low_hgb")
 bin_surro<-paste0("s_",bin_names)
@@ -140,39 +213,84 @@ utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore",
 
 #Import packages
 #' @import foreach
+#' @importFrom purrr map_chr
+#' @importFrom purrr map_lgl
 #' @import dplyr
 #' @import shiny
 #' @import caret
+#' @import ggfortify
+#' @import survival
+#' @import limma
 NULL
+
+######################
+## Upload functions ##
+######################
+#' Function to translate metabolites names alternatives to the BBMRI names
+#'
+#' @param names The NH-metabolomics names
+#' @return The uploaded names and the BBMRI names of the metabolites available in BBMRI.
+#' @export
+
+find_BBMRI_names<-function(names){
+  new_names <- names %>% purrr::map_chr(function(id) {
+    # Look through the alternative_ids
+    hits <-
+      purrr::map_lgl(
+        metabo_names_translator$alternative_names,
+        ~ id %in% .
+      )
+    
+    # If one unambiguous hit, return it.
+    if (sum(hits) == 1L) {
+      return(metabo_names_translator$BBMRI_names[hits])
+      # If not found, give a warning and pass through the input.
+    } else {
+      warning("Biomarker not found: ", id, call. = FALSE)
+      return(id)
+    } 
+  })
+  n<-data.frame(uploaded=names,BBMRI_names=new_names)
+  #n<-n[which(n$BBMRI_names %in% metabo_names_translator$BBMRI_names),]
+  return(n)
+}
 
 ###############################
 ## Mortality Score functions ##
 ###############################
-#' Function to prepare the metabolites data for Deelen et al. mortality score.
+#' Function to prepare the metabolites data for the mortality, T2D and CVD scores.
 #'
 #' @param dat The NH-metabolomics matrix
 #' @param featID String vector with the names of metabolic features used
+#' @param plusone TRUE or FALSe if 1.0 should be  added to all metabolites to calculate the score
 #' @param quiet TRUE/FALSE if TRUE if will suppress all messages from the function
 #' @return The NH-metabolomics matrix after checking for zeros and zscale the log metabolites concentrations
 #' @export
 
-prep.mort_data <- function(dat,featID=c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl_l","alb","phe","acace","ile","vldl_d",
-                                        "leu","val","his","lac"),quiet=FALSE){
+prep_met_for_scores <- function(dat,featID,plusone=F, quiet=FALSE){
   if(!quiet){
     cat("|| Preparing data ... \n")
   }
   ## 1. Check for zeroes:
-  to_fix <- names(which(colSums(dat[,featID]==0,na.rm=TRUE)>0))
-  if(length(to_fix)>0){
+  if(plusone){
     if(!quiet){
-      cat(paste0("| Adding 1.0 to metabolites featuring zero's: '",paste(to_fix,collapse="', '"),"'\n"))
+    cat("| Adding 1.0 to all the metabolites\n")
     }
-    dat[,to_fix] <- dat[,to_fix] + 1
-  } else {
-    if(!quiet){
-      cat(paste0("| No metabolites found featuring zero's \n"))
+    dat <- dat[,featID] + 1
+  }else{
+    to_fix <- names(which(colSums(dat[,featID]==0,na.rm=TRUE)>0))
+    if(length(to_fix)>0){
+      if(!quiet){
+        cat(paste0("| Adding 1.0 to metabolites featuring zero's: '",paste(to_fix,collapse="', '"),"'\n"))
+      }
+      dat[,to_fix] <- dat[,to_fix] + 1
+    } else {
+      if(!quiet){
+        cat(paste0("| No metabolites found featuring zero's \n"))
+      }
     }
   }
+  
   ## 2. Scale:
   dat[,featID] <- scale(log(dat[,featID]),center=TRUE,scale=TRUE)
   if(!quiet){
@@ -184,7 +302,6 @@ prep.mort_data <- function(dat,featID=c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl
   }
   return(dat)
 }
-
 
 #' Function to compute Deelen et al. mortality score on metabolite data.
 #'
@@ -199,7 +316,7 @@ comp.mort_score <- function(dat,betas=mort_betas,quiet=FALSE){
   if(!quiet){
     cat("=== Computing mortality score === \n")
   }
-  prepped_dat <- prep.mort_data(dat,featID=betas$Abbreviation,quiet=quiet)
+  prepped_dat <- prep_met_for_scores(dat,featID=betas$Abbreviation, plusone=F, quiet=quiet)
   ## 2. Compute:
   if(!quiet){
     cat("| Computing score .. \n")
@@ -214,57 +331,173 @@ comp.mort_score <- function(dat,betas=mort_betas,quiet=FALSE){
   return(mortScore)
 }
 
-# prep_covid_data <- function(dat, featID=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
-#                                          "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
-#                                          "alb","faw3","ldl_c","serum_tg"), quiet=FALSE){
-#   if(!quiet){
-#     cat("|| Preparing data ... \n")
-#   }
-#   dat[,"faw6_faw3"]<-dat[,"faw6"] / dat[,"faw3"]
-#   ## 1. Check for zeroes:
-#   to_fix <- names(which(colSums(dat[,featID]==0,na.rm=TRUE)>0))
-#   if(length(to_fix)>0){
-#     if(!quiet){
-#       cat(paste0("| Adding 1.0 to metabolites featuring zero's: '",paste(to_fix,collapse="', '"),"'\n"))
-#     }
-#     dat[,to_fix] <- dat[,to_fix] + 1
-#   } else {
-#     if(!quiet){
-#       cat(paste0("| No metabolites found featuring zero's \n"))
-#     }
-#   }
-#   ## 2. Scale:
-#   dat[,featID] <- scale(dat[,featID],center=TRUE,scale=TRUE)
-#   if(!quiet){
-#     cat("| Perform log transform & scaling to zero mean and unity sd .. ")
-#   }
-#   
-#   if(!quiet){
-#     cat("Done!\n")
-#   }
-#   return(dat)
-# }
+###############################
+## Other scores functions ##
+###############################
+#' Function to compute T2D score by Ahola Olli mortality score on metabolite data.
+#'
+#' @param dat The NH-metabolomics matrix 
+#' @param betas The betas of the linear regression composing the mortality score
+#' @param quiet TRUE/FALSE if TRUE if will suppress all messages from the function
+#' @return The T2D by Ahola Olli
+#' @export
+#' 
+comp.T2D_Ahola_Olli<- function(met,phen,betas=Ahola_Olli_betas,quiet=FALSE){
+  ## 1. Prepare data:
+  if(!quiet){
+    cat("=== Computing Ahola Olli T2D score === \n")
+  }
+  prepped_met <- prep_met_for_scores(met,featID=betas$Abbreviation[1:3],plusone=T,quiet=quiet)
+  ## 2. Compute:
+  if(!quiet){
+    cat("| Computing score .. \n")
+  }
+  prepped_data<-cbind(met,phen)
+  if(length(which(colnames(prepped_data) %in% betas$Abbreviation))==7){
+    if(any(colSums(is.na(prepped_data[,betas$Abbreviation])) == dim(prepped_data)[1])){
+      miss_phen<-names(which(colSums(is.na(prepped_data[,betas$Abbreviation])) == dim(prepped_data)[1]))
+      return(paste("It was not possible to calculate the score because all the values of", paste(miss_phen, collapse=", "), "are missing"))
+    }else{
+      T2DScore <- as.data.frame(as.matrix(prepped_data[,betas$Abbreviation]) %*% betas$Beta_value)
+      colnames(T2DScore)<-"T2Dscore"
+      rownames(T2DScore)<-rownames(met)
+      
+      if(!quiet){
+        cat("Done!\n\n")
+      }
+      return(T2DScore)
+    }
+  }else{
+    i<-colnames(prepped_data)[which(colnames(prepped_data) %in% betas$Abbreviation)] 
+    miss_phen<-setdiff(betas$Abbreviation, i)
+    return(paste("It was not possible to calculate the score because of the missing variable(s):", paste(miss_phen, collapse=", ")))
+  }
+}
 
-# comp_covid_score <- function(dat,betas=mort_betas,quiet=FALSE){
-#   ## 1. Prepare data:
-#   if(!quiet){
-#     cat("=== Computing mortality score === \n")
-#   }
-#   prepped_dat <- prep_covid_data(dat,featID=betas$Abbreviation,quiet=quiet)
-#   ## 2. Compute:
-#   if(!quiet){
-#     cat("| Computing score .. \n")
-#   }
-#   
-#   covidScore<-as.numeric(1/(1+exp(-1 * (rowSums(prepped_dat[,betas$Abbreviation] %*% betas$Beta_value)))))
-#   colnames(mortScore)<-"mortScore"
-#   rownames(mortScore)<-rownames(prepped_dat)
-#   
-#   if(!quiet){
-#     cat("Done!\n\n")
-#   }
-#   return(covidScore)
-# }
+#' Function to compute CVD score by Peter Wurtz on metabolite data.
+#'
+#' @param dat The NH-metabolomics matrix 
+#' @param betas The betas of the linear regression composing the score
+#' @param quiet TRUE/FALSE if TRUE if will suppress all messages from the function
+#' @return The CVD score by Peter Wurtz
+#' @export
+#' 
+comp.CVD_score <- function(met,phen,betas=CVD_score_betas,quiet=FALSE){
+  ## 1. Prepare data:
+  if(!quiet){
+    cat("=== Computing CVD score === \n")
+  }
+  prepped_met <- prep_met_for_scores(met,featID=betas$Abbreviation[1:4],plusone=FALSE,quiet=quiet)
+  ## 2. Compute:
+  if(!quiet){
+    cat("| Computing score .. \n")
+  }
+  prepped_data<-cbind(met,phen)
+  if(length(which(colnames(prepped_data)%in% betas$Abbreviation))==12){
+    if(any(colSums(is.na(prepped_data[,betas$Abbreviation])) == dim(prepped_data)[1])){
+      miss_phen<-names(which(colSums(is.na(prepped_data[,betas$Abbreviation])) == dim(prepped_data)[1]))
+      return(paste("It was not possible to calculate the score because all the values of", paste(miss_phen, collapse=", "), "are missing"))
+    }else{
+      CVD_score <- as.data.frame(as.matrix(prepped_data[,betas$Abbreviation]) %*% betas$Beta_value)
+      colnames(CVD_score)<-"CVD_score"
+      rownames(CVD_score)<-rownames(met)
+      
+      if(!quiet){
+        cat("Done!\n\n")
+      }
+      return(CVD_score)
+    }
+  } else{
+    i<-colnames(prepped_data)[which(colnames(prepped_data) %in% betas$Abbreviation)] 
+    miss_phen<-setdiff(betas$Abbreviation, i)
+    return(paste("It was not possible to calculate the score because of the missing variable(s):", paste(miss_phen, collapse=", ")))
+  }
+  
+}
+
+#' Function to prepare the metabolites data for the COVID score
+#'
+#' @param dat The NH-metabolomics matrix
+#' @param featID String vector with the names of metabolic features used
+#' @param quiet TRUE/FALSE if TRUE if will suppress all messages from the function
+#' @return The NH-metabolomics matrix after checking for zeros and zscale the log metabolites concentrations
+#' @export
+#' 
+prep_data_COVID_score <- function(dat,featID=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
+                                               "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
+                                               "alb","faw3","ldl_c","serum_tg"),quiet=FALSE){
+  if(!quiet){
+    cat("|| Preparing data ... \n")
+  }
+  
+  if(length(which(colnames(dat)=="faw6_faw3"))==0){
+    dat$faw6_faw3<-dat$faw6/dat$faw3
+  }
+  MEANS=colMedians(as.matrix(dat[,featID]),na.rm=T)
+  names(MEANS)<-featID
+  SDS=colSds(as.matrix(dat[,featID]),na.rm=T)
+  names(SDS)<-featID
+  # 1. Subset samples on SD:
+  dat <- subset_samples_sd_surrogates(x=as.matrix(dat[,featID]), MEAN=MEANS, SD=SDS,N=4, quiet=quiet)
+  
+  ## 2. Scale:
+  dat[,featID] <- scale(dat[,featID],center=TRUE,scale=TRUE)
+  if(!quiet){
+    cat("| Perform log transform & scaling to zero mean and unity sd .. ")
+  }
+  
+  if(!quiet){
+    cat("Done!\n")
+  }
+  return(dat)
+}
+
+#' Function to compute COVID score by Nightingale Health from the metabolite data.
+#'
+#' @param dat The NH-metabolomics matrix 
+#' @param betas The betas of the linear regression composing the score
+#' @param quiet TRUE/FALSE if TRUE if will suppress all messages from the function
+#' @return The COVID score by Nightingale Health
+#' @export
+#' 
+comp_covid_score <- function(dat,betas=covid_betas ,quiet=FALSE){
+  ## 1. Prepare data:
+  if(!quiet){
+    cat("=== Computing mortality score === \n")
+  }
+  prepped_data <- prep_data_COVID_score(dat,featID=betas$Abbreviation,quiet=quiet)
+  ## 2. Compute:
+  if(!quiet){
+    cat("| Computing score .. \n")
+  }
+  
+  
+  if(length(which(colnames(prepped_data)%in% betas$Abbreviation))==25){
+    if(any(colSums(is.na(prepped_data[,betas$Abbreviation])) == dim(prepped_data)[1])){
+      miss_phen<-names(which(colSums(is.na(prepped_data[,betas$Abbreviation])) == dim(prepped_data)[1]))
+      return(paste("It was not possible to calculate the score because all the values of", paste(miss_phen, collapse=", "), "are missing"))
+    }else{
+      covidScore<-as.data.frame(as.matrix(prepped_dat[,betas$Abbreviation]) %*% betas$Beta_value)
+      colnames(covidScore)<-"covidScore"
+      rownames(covidScore)<-rownames(prepped_dat)
+      
+      if(!quiet){
+        cat("Done!\n\n")
+      }
+      return(CVD_score)
+    }
+  } else{
+    i<-colnames(prepped_data)[which(colnames(prepped_data) %in% betas$Abbreviation)] 
+    miss_phen<-setdiff(betas$Abbreviation, i)
+    return(paste("It was not possible to calculate the score because of the missing variable(s):", paste(miss_phen, collapse=", ")))
+  }
+  
+  if(!quiet){
+    cat("Done!\n\n")
+  }
+  return(covidScore)
+}
+
 
 #########################
 ## MetaboAge functions ##
@@ -694,8 +927,6 @@ pheno_barplots<-function(bin_phenotypes){
   fig
 }
 
-
-
 #' Function to prepare the metabolomics dataset to compute the surrogates by Bizzarri et al.
 #'
 #' @param mat The NH-metabolomics matrix; it may contain a mixture of flags and metabolites in the columns.
@@ -753,6 +984,7 @@ QCprep_surrogates<-function(mat,PARAM_surrogates,
 #' @param bin_names string vector indicating the names of the binary variables obtained
 #' @param Nmax_zero max number of zeros allowed per sample
 #' @param Nmax_miss max number of missing values allowed per sample
+#' @param post TRUE/FALSE. If TRUE it will calculate the posterior probabilities
 #' @param roc TRUE/FALSE. If TRUE it will produce an image with all the roc curves 
 #' for the surrogate with the avialable phenotypes in the current dataset
 #' @param quiet TRUE/FALSE. if TRUE if will suppress all messages from the function
@@ -760,7 +992,7 @@ QCprep_surrogates<-function(mat,PARAM_surrogates,
 #' if pheno is available: a list with the surrogates, the roc curves, the phenotypes, the binarized phenotypes and the NH metabolomics matrix after QC,
 #' @export
 #
-calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates, bin_names, Nmax_miss=1,Nmax_zero=1, roc=FALSE,quiet=FALSE){
+calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates, bin_names, Nmax_miss=1,Nmax_zero=1, post=TRUE, roc=FALSE,quiet=FALSE){
   bin_surro=paste0("s_",bin_names)
   #QC of the metabolites
   metabo_measures<-QCprep_surrogates(as.matrix(met[,MET63]), PARAM_surrogates, quiet=quiet,Nmax_miss=Nmax_miss,Nmax_zero=Nmax_zero)
@@ -787,10 +1019,10 @@ calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates, bin_names, 
       return(pred$predictions_eval)
     }
   }else{
-    #Surrogates Calculation
-    surrogates<-foreach::foreach(i=bin_names, .combine="cbind") %do% {
-      pred<-apply.fit_surro(as.matrix(metabo_measures),PARAM_surrogates$models_betas[paste0("s_",i),])
-    }
+      #Surrogates Calculation
+      surrogates<-foreach::foreach(i=bin_names, .combine="cbind") %do% {
+        pred<-apply.fit_surro(as.matrix(metabo_measures),PARAM_surrogates$models_betas[paste0("s_",i),], post=post)
+      }
   }
   colnames(surrogates)<-bin_surro
   rownames(surrogates)<-rownames(metabo_measures)
@@ -808,22 +1040,23 @@ calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates, bin_names, 
 #' @param x The NH-metabolomics matrix 
 #' @param MEAN numeric vector indicating the mean of the metabolites in x
 #' @param SD numeric vector indicating the standard deviations of the metabolites in x
+#' @param N number of standard deviations away from the mean
 #' @param quiet TRUE/FALSE. if TRUE if will suppress all messages from the function
 #' @return The NH-metabolomics matrix with the selected samples
 #' @export
 #'
-subset_samples_sd_surrogates<-function(x,MEAN,SD,quiet=FALSE){
+subset_samples_sd_surrogates<-function(x,MEAN,SD, N=5, quiet=FALSE){
   MEAN <- MEAN[colnames(x)]
   SD <- SD[colnames(x)]
   Dummi <- x
   # Exclude persons being an outlier:
-  outl_samp <- rownames(Dummi)[unique(which(((Dummi > t(replicate(nrow(Dummi),MEAN)) + 5*t(replicate(nrow(Dummi),SD))) | (Dummi < t(replicate(nrow(Dummi),MEAN)) - 5*t(replicate(nrow(Dummi),SD)))),arr.ind=TRUE)[,"row"])]
+  outl_samp <- rownames(Dummi)[unique(which(((Dummi > t(replicate(nrow(Dummi),MEAN)) + N*t(replicate(nrow(Dummi),SD))) | (Dummi < t(replicate(nrow(Dummi),MEAN)) - 5*t(replicate(nrow(Dummi),SD)))),arr.ind=TRUE)[,"row"])]
   if(!is.null(outl_samp)){
     sample_names <- setdiff(rownames(Dummi),outl_samp)
     x <- x[sample_names,,drop=FALSE]
   }
   if(!quiet){
-    cat(report.dim(x,header=paste0("Pruning samples on 5SD")))
+    cat(report.dim(x,header=paste0("Pruning samples on", N, "SD")))
   }
   return(invisible(x))
 }
@@ -835,12 +1068,17 @@ subset_samples_sd_surrogates<-function(x,MEAN,SD,quiet=FALSE){
 #' @return The surrogates by Bizzarri et al.
 #' @export
 #'
-apply.fit_surro<-function(mat,FIT){
+apply.fit_surro<-function(mat,FIT, post=TRUE){
   # Resort:
   BETA <- FIT[colnames(mat)]
   INTC <- FIT[1]
-  # Predict surrogate:
-  p<-as.numeric(1/(1+exp(-1 * (INTC+ rowSums(mat %*% BETA)))))
+  if(post){
+    # Predict surrogate:
+    p<-as.numeric(1/(1+exp(-1 * (INTC+ rowSums(mat %*% BETA)))))
+  }else{
+    p <- as.numeric(as.vector(mat %*% BETA) + as.vector(INTC),stringsAsFactors=FALSE)
+  }
+  
   names(p)<-rownames(mat)
   return(p)
 }
@@ -1414,6 +1652,47 @@ BBMRI_hist_plot<-function(dat, x_name, color=c21, scaled=FALSE, datatype="metabo
 }
 
 
+#' Function to plot the scaled coefficients of the metabolic scores
+#'
+#' @param mort_betas dataframe withthe coefficients of the mortality score
+#' @param metaboAge_betas dataframe with the coefficients of the metaboAge
+#' @param surrogates_betas dataframe with the coefficients of the surrogates
+#' @param Ahola_Olli_betas dataframe with the coefficients of the T2D score
+#' @param CVD_score_betas dataframe with the coefficients of the CVD score
+#' @param COVID_score_betas ataframe with the coefficients of the COVID_score
+#' @return heatmapply with the scaled coefficients of the metabolic scores
+#' @export
+#'
+model_coeff_heat<-function(mort_betas, metaboAge_betas, surrogates_betas, Ahola_Olli_betas, CVD_score_betas, COVID_score_betas){
+  models_betas<-matrix(0, 24, 62)
+  rownames(models_betas)<-c("mortScore","MetaboAge", rownames(surrogates_betas),"T2D-score","CVD_score", "COVID_score")
+  colnames(models_betas)<-MET62
+  models_betas["mortScore",mort_betas$Abbreviation]<-mort_betas$Beta_value
+  models_betas["MetaboAge", names(metaboAge_betas)[-1]]<-metaboAge_betas[-1]
+  #surrogates
+  for(x in rownames(surrogates_betas)){
+    models_betas[x,colnames(surrogates_betas)[-1]]<-surrogates_betas[x,-1]
+  }
+  met<-Ahola_Olli_betas$Abbreviation[which(Ahola_Olli_betas$Abbreviation %in% MET62)]
+  models_betas["T2D-score",met]<-Ahola_Olli_betas$Beta_value[which(Ahola_Olli_betas$Abbreviation %in% MET62)]
+  met<-CVD_score_betas$Abbreviation[which(CVD_score_betas$Abbreviation %in% MET62)]
+  models_betas["CVD_score",met]<-CVD_score_betas$Beta_value[which(CVD_score_betas$Abbreviation %in% MET62)]
+  met<-COVID_score_betas$Abbreviation[which(COVID_score_betas$Abbreviation %in% MET62)]
+  models_betas["COVID_score",met]<-COVID_score_betas$Beta_value[which(COVID_score_betas$Abbreviation %in% MET62)]
+  
+  
+  mat <-models_betas
+  mat <- sapply(colnames(mat), function(colname) {
+    sapply(rownames(mat), function(rowname) {
+      paste("The original coefficient is", round(models_betas[rowname, colname],digits=3))
+    })
+  })
+  
+  heatmaply::heatmaply(models_betas,main=paste("<b> Models Coefficients scaled on the rows<b>"),
+                       scale="row",custom_hovertext = mat,
+                       scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(low = "blue", mid="white", high = "red", limits=c(-0.1146100, 0.14128)),
+                       margins=c(0,0,40,0))
+}
 
 #' Function to plot the histogram of the mortality score separated for different age ranges
 #'
@@ -1470,6 +1749,89 @@ hist_plots_mortality<-function(mort_score,phenotypes){
              titlefont = axis_font),barmode = "overlay")
   fig
 }
+
+#' Function that creates a boxplot with a continuous variable split using the binary variable
+#'
+#' @param data The data.frame containing the 2 variables
+#' @param pred character indicating the y variable
+#' @param pheno character indicating the binary variable
+#' @return plotly boxplot with the continuous variable split using the binary variable
+#' @export
+#'
+ttest_scores<-function(dat, pred, pheno){
+  
+  dat[which(is.na(dat),arr.ind=T)]<-NaN
+  dat$pheno<-factor(dat$pheno)
+
+  tt<-stats::t.test(dat[which(dat$pheno==1),"predictor"],dat[which(dat$pheno==0),"predictor"], var.equal = TRUE )
+  
+  pl<-plotly::plot_ly(dat,
+                            x = ~ pheno,
+                            y = ~ predictor,
+                            color = ~pheno,
+                            type = "box",
+                            colors = c("#377EB8","#E41A1C", "grey")
+  ) %>% 
+    plotly::layout(
+                   title = list(text=paste0("<b>",pred," distribution split for ",pheno,", pvalue=",formatC(tt$p.value, format = "e", digits = 3),"<b>"),y = 0.98),
+                   xaxis = list(title = paste("<b>",pheno,"<b>"),
+                                zeroline = FALSE),
+                   yaxis = list(title = paste("<b>",pred,"<b>"),
+                                zeroline = FALSE)
+    )
+  
+  return(pl)
+}
+
+#' Function that creates a Kaplan Meier for an Event of the predictor divided by its mean 
+#'
+#' @param predictors The data.frame containing the predictors
+#' @param pheno The data.frame containing the phenotypes
+#' @param score a character string indicating which predictor to use
+#' @return plotly with a Kaplan Meier for an Event of the predictor divided by its mean 
+#' @export
+#'
+kapmeier_scores<-function(predictors, pheno, score, Eventname="Event"){
+  dat<-data.frame(pheno[,c("age","Event","EventAge")], predictors[,score])
+  colnames(dat)[4]<-"score"
+  dat<-dat[which(!is.na(dat$age)),]
+  dat<-dat[which(!is.na(dat$EventAge)),]
+  dat<-dat[which(!is.na(dat$Event)),]
+  dat<-dat[which(!is.na(dat[,"score"])),]
+  if(length(which(dat$Event==-1))!=0){
+    dat <-dat[-which(dat$Event==-1),]
+  }
+  
+  dat$tertile <- with(dat, factor(
+    findInterval( score, c(-Inf,
+                         quantile(score, probs=c(0.3333333, 0.6666666)), Inf) ), 
+    labels=c("Tertile 1","Tertile 2","Tertile 3")
+  ))
+  
+  # M<-mean(predictors[,score],na.rm=T)
+# dat$score_divided<-rep(NA,dim(dat)[1])
+#   dat$score_divided[which(dat[,score]<=M)]<-paste0(score,"<mean(",score,")")
+#   dat$score_divided[which(dat[,score]>M)]<-paste0(score,">mean(",score,")") 
+#   
+#   dat$score_divided<-as.factor(dat$score_divided)
+  
+  dat<-dat[-which(dat$tertile=="Tertile 2"),]
+  
+  km_trt_fit <- survminer::surv_fit(Surv(time = dat$EventAge-dat$age , event=dat$Event) ~ 
+                                      tertile, data=dat)
+  
+  pl<-ggplot2::autoplot(km_trt_fit, xlab = "Time (in years)", ylab = "Survival",
+                        main = paste0("Kaplan Meier of ",score," associated with ", Eventname,
+                                     "\np=",formatC(survminer::surv_pvalue(km_trt_fit)[,2], format = "e", digits = 3),
+                                     ", N=", dim(dat)[1],", Nevent=",sum(dat$Event)))
+  
+  
+  pl<-plotly::ggplotly(pl) 
+  
+  
+  return(pl)
+}
+
 
 #' SubFunction for plotting data1 x data2 associations on basis of (partial) correlations:
 #'
@@ -1776,8 +2138,8 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
   raw.yval <- tapply(resp, raw.bins, mean)
   raw.cali <- data.frame(method = rep("Original", nbins), 
                          x = raw.xval, y = raw.yval)
-  raw.logl <- (-1/length(resp)) * sum(resp * log(pred) + (1 - 
-                                                            resp) * (log(1 - pred)), na.rm = TRUE)
+  raw.logl <- (-1/length(resp)) * sum(resp * log(pred) + 
+                                        (1 - resp) * (log(1 - pred)), na.rm = TRUE)
   cal.bins <- cut(calibrated, nbins, include.lowest = TRUE)
   cal.xval <- tapply(calibrated, cal.bins, mean)
   cal.yval <- tapply(resp, cal.bins, mean)
@@ -1864,12 +2226,13 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
 #' @return list with Reliability diagram and histogram with calibrations and original predictions
 #' @export
 #'
-plattCalib_evaluation<-function(r, p, name, nbins = 10, annot_x=c(1,1),annot_y=c(0.1,0.3)){
+plattCalib_evaluation<-function(r, p, p.orig, name, nbins = 10, annot_x=c(1,1),annot_y=c(0.1,0.3)){
   
   i<-which(is.na(r))
   if(length(i!=0)){
     r<-r[-i]
     p<-p[-i]
+    p.orig<-p.orig[-i]
   }
   
   set.seed(222)
@@ -1878,6 +2241,7 @@ plattCalib_evaluation<-function(r, p, name, nbins = 10, annot_x=c(1,1),annot_y=c
   p.calib<-p[train_ind]
   resp<-as.numeric(r[-train_ind])-1
   pred<-p[-train_ind]
+  pred.orig<-p.orig[-train_ind]
   
   # add/subtract epsilon to predictions at (0,1) to avoid infinite log-loss
   
@@ -1891,11 +2255,11 @@ plattCalib_evaluation<-function(r, p, name, nbins = 10, annot_x=c(1,1),annot_y=c
   
   # calculate visualization/return measures for original probabilities (on either calibration or validation data) 
   
-  raw.bins <- cut(pred, nbins, include.lowest = TRUE)
-  raw.xval <- tapply(pred, raw.bins, mean)
+  raw.bins <- cut(pred.orig, nbins, include.lowest = TRUE)
+  raw.xval <- tapply(pred.orig, raw.bins, mean)
   raw.yval <- tapply(resp, raw.bins, mean) 
   raw.cali <- data.frame(method = rep('Original', nbins), x = raw.xval, y = raw.yval)
-  raw.logl <- (-1/length(resp)) * sum(resp*log(pred) + (1-resp)*(log(1-pred)), na.rm = TRUE)
+  raw.logl <- (-1/length(resp)) * sum(resp*log(pred.orig) + (1-resp)*(log(1-pred.orig)), na.rm = TRUE)
   
   # calculate needed measures using transformed probabilities
   
@@ -1906,10 +2270,10 @@ plattCalib_evaluation<-function(r, p, name, nbins = 10, annot_x=c(1,1),annot_y=c
   cal.logl <- (-1/length(resp)) * sum(resp*log(calibrated) + (1-resp)*(log(1-calibrated)), na.rm = TRUE)
   
   ## Calibration Errors ##
-  ece_orig <- getECE(resp, pred, nbins)
+  ece_orig <- getECE(resp, pred.orig, nbins)
   ece_calib <- getECE(resp, calibrated, nbins)
   ECE<-data.frame(ece_orig, ece_calib)
-  mce_orig <- getMCE(resp, pred, nbins)
+  mce_orig <- getMCE(resp, pred.orig, nbins)
   mce_calib <- getMCE(resp, calibrated, nbins)
   MCE<-data.frame(mce_orig, mce_calib)
   
@@ -1951,8 +2315,8 @@ plattCalib_evaluation<-function(r, p, name, nbins = 10, annot_x=c(1,1),annot_y=c
              bordercolor=c('blue','red'),
              borderwidth=2))
   
-  hdata<-data.frame(pred, calibrated)
-  hPlot<-plotly::plot_ly(hdata, x = ~pred, opacity = 0.45, type = "histogram", nbinsx = nbins,
+  hdata<-data.frame(pred.orig, calibrated)
+  hPlot<-plotly::plot_ly(hdata, x = ~pred.orig, opacity = 0.45, type = "histogram", nbinsx = nbins,
                  marker = list(color = "blue"), name = "Original") %>% 
     plotly::add_histogram(x = calibrated, marker = list(color = "red"), 
                   name = "Calibrated") %>% 
@@ -2155,73 +2519,111 @@ NA_message<-function(main="Metabolites are missing, please check your upload!"){
 
 
 
+#' Function that produces a MetaboWAS
+#'
+#' @param met metabolites data.frame
+#' @param pheno phenotypes data.frame
+#' @param test_variable the variable to be investigated 
+#' @param covariates the covariates that you want to add
+#' @param img TRUE to plot a Manhattan plot
+#' @return res= the results of the MetaboWAS, manhplot= the Manhattan plot, N_hits= the number of significant hits
+#' @export
+#'
+MetaboWAS<-function(met, pheno, test_variable, covariates, img=T){
+  res<-do.metabowas(phen=pheno, dat= t(met), test_variable = test_variable, covariates=covariates)
+  N_hits<-length(which(res$pval.adj<=0.05))
+  
+  if(img){
+    metabo_names_translator<-metabo_names_translator[which(!is.na(metabo_names_translator$BBMRI_names)),]
+    res<-res[metabo_names_translator$BBMRI_names,]
+    res$groups<-metabo_names_translator$group
+    res$ord<-1:dim(res)[1]
+    res$met_name<-rownames(res)
+    
+    axis_set <- res %>% 
+      group_by(groups) %>% 
+      summarise(center = mean(ord))
+    
+    ylim <- res %>% 
+      filter(pval.adj == min(pval.adj,na.rm = T)) %>% 
+      mutate(ylim = abs(floor(log10(pval.adj))) + 2) %>% 
+      pull(ylim)
+    if(!is.null(covariates)){
+      if(length(covariates)>1){
+        title<-paste("MetaboWAS:",test_variable,"corrected for",paste(covariates, collapse=","),
+                     "\nNumber of significant hits:",N_hits)
+      }else{
+        title<-paste("MetaboWAS:",test_variable,"corrected for",covariates,
+                     "\nNumber of significant hits:",N_hits)
+      }
+      
+    }else{
+      title<-paste("MetaboWAS:",test_variable,
+                   "\nNumber of significant hits:",N_hits)
+    }
+    
+    manhplot <- ggplot(res, aes(label = met_name, label2=groups, label3=pval.adj)) +
+      geom_hline(yintercept = -log10(0.05), color = "grey40", linetype = "dashed") + 
+      geom_point(aes(x = ord, y = -log10(pval.adj),
+                     color = as.factor(groups), size = -log10(pval.adj)), alpha = 0.75) +
+      ggtitle(title)+
+      scale_x_continuous(label = axis_set$groups, breaks = axis_set$center) +
+      scale_y_continuous(expand = c(0,0), limits = c(0, ylim)) +
+      scale_size_continuous(range = c(0.5,3)) +
+      labs(x = "metabolites", 
+           y = "-log(p adjusted)") + 
+      theme_minimal() +
+      theme( 
+        legend.position = "none",
+        panel.border = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.text.x = element_text(angle = 60, size = 8, vjust = 0.5)
+      )
+    
+    manhplot<-ggplotly(manhplot, 
+                       tooltip=c("met_name", "groups", "pval.adj"))
+  }
+  
+  list(res=res, manhplot=manhplot, N_hits=N_hits)
+}
 
 
-# pheno_NA<-function(){
-#   title_font <- list(
-#     family = "Arial",
-#     size = 20,
-#     margin=10
-#   )
-#   
-#   ax <- list(
-#     title = "",
-#     zeroline = FALSE,
-#     showline = FALSE,
-#     showticklabels = FALSE,
-#     showgrid = FALSE
-#   )
-#   
-#    plot_ly(x=0,y=0, opacity=0, type = "histogram")%>% 
-#     layout(title = list(text='<b>Phenotype not available!<b>',font=title_font, y = 0.98),
-#                         xaxis = ax, yaxis = ax)
-# }
-# 
-# phenos_NA<-function(){
-#   title_font <- list(
-#     family = "Arial",
-#     size = 20,
-#     margin=10
-#   )
-#   
-#   ax <- list(
-#     title = "",
-#     zeroline = FALSE,
-#     showline = FALSE,
-#     showticklabels = FALSE,
-#     showgrid = FALSE
-#   )
-#   
-#   plot_ly(x=0,y=0, opacity=0, type = "histogram")%>% 
-#     layout(title = list(text='<b>Phenotypes not available, please upload them to get this image!<b>',font=title_font, y = 0.98),
-#            xaxis = ax, yaxis = ax)
-# }
-# 
-# met_NA<-function(){
-#   title_font <- list(
-#     family = "Arial",
-#     size = 20,
-#     margin=10
-#   )
-#   
-#   ax <- list(
-#     title = "",
-#     zeroline = FALSE,
-#     showline = FALSE,
-#     showticklabels = FALSE,
-#     showgrid = FALSE
-#   )
-#   
-#   plot_ly(x=0,y=0, opacity=0, type = "histogram")%>% 
-#     layout(title = list(text='<b>Metabolites are missing, please check your upload!<b>',font=title_font, y = 0.98),
-#            xaxis = ax, yaxis = ax)
-# }
-# 
-# met_NA_image<-function(){
-#   plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
-#   text(x = 0.5, y = 0.5, "Metabolites are missing, please check your upload!",cex = 1.6, col = "black", font=2)
-# }
-# pheno_NA_image<-function(){
-#   plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
-#   text(x = 0.5, y = 0.5, "Phenotypes not available, please upload them to get this image!",cex = 1.6, col = "black", font=2)
-# }
+#' Helper function to do a MetaboWAS
+#'
+#' @param phen phenotypes data.frame
+#' @param dat metabolites data.frame
+#' @param test_variable the variable to be investigated 
+#' @param covariates the covariates that you want to add
+#' @param quiet if FALSE it will plot the amount of people avaialble
+#' @param PC the number of Principal compontents that represent the 90% of the variance, in case you want to correct for this number (instead of Bonferroni/BH)
+#' @return results= the results of the MetaboWAS (estimate, tstatistics, pvalue, BH corrected pvalue)
+#' @export
+#'
+do.metabowas<-function(phen,dat,test_variable="age",covariates=c("sex"), PC=NULL, quiet=T){
+  if(!is.null(covariates)){
+    vars <- phen[, c(test_variable, covariates)]
+  }else{
+    vars <- as.data.frame(phen[,test_variable])
+    rownames(vars)<-rownames(phen)
+    colnames(vars)<-test_variable
+  }
+  vars <- na.omit(vars)
+  if(!quiet){
+    print(paste("The number of samples is:",dim(vars)[1]))
+  }
+  dat <- dat[, match(rownames(vars), colnames(dat))]
+  design <- model.matrix(~ ., vars)
+  fit <- lmFit(dat, design)
+  fit <- eBayes(fit)
+  result <- limma::topTable(fit, coef=2, number=Inf)
+  colnames(result) <- c("estimate","AveEpr","tstat","pval","pval.adj")
+  result <- result[,c("estimate","tstat","pval","pval.adj")]
+  if(!is.null(PC)){
+    result$PC.adj<-(result$pval * PC)
+  }
+  return(result)
+}
+
+
+

@@ -21,26 +21,46 @@ output[["MetaboAge_table"]] <- DT::renderDataTable({
   })
 })
 
-
-## Render surrogates to ui
-output[["surrogates_table"]] <- DT::renderDataTable({
+## Render T2Dscore to ui
+output[["T2Dscore_table"]] <- DT::renderDataTable({
   tryCatch({
-    DT::datatable(surrogates(), options = list(pageLength = 5, scrollX = TRUE))
+    DT::datatable(T2D_score_AholaOlli(), options = list(pageLength = 5, scrollX = TRUE))
   }, error = function(err) {
-    return(DT::datatable(data.frame(c(
-      "No data available"
-    )), rownames = FALSE, colnames = ""))
+    return(DT::datatable(data.frame(
+      T2D_score_AholaOlli()
+    ), rownames = FALSE, colnames = ""))
   })
 })
 
-## Render calibrated surrogates to ui
-output[["calibrated_surro_table"]] <- DT::renderDataTable({
-  cal<-calib_data_frame(calibrations(), metabo_measures(), bin_pheno_available())
+## Render CVDscore to ui
+output[["CVDscore_table"]] <- DT::renderDataTable({
   tryCatch({
-    DT::datatable(data.frame(cal), options = list(pageLength = 5, scrollX = TRUE))
+    DT::datatable(CVD_score(), options = list(pageLength = 5, scrollX = TRUE))
   }, error = function(err) {
-    return(DT::datatable(data.frame(c(
-      "No data available"
-    )), rownames = FALSE, colnames = ""))
+    return(DT::datatable(data.frame(
+      CVD_score()
+    ), rownames = FALSE, colnames = ""))
+  })
+})
+
+## Render COVID to ui
+output[["COVIDscore_table"]] <- DT::renderDataTable({
+  tryCatch({
+    DT::datatable(COVID_score(), options = list(pageLength = 5, scrollX = TRUE))
+  }, error = function(err) {
+    return(DT::datatable(data.frame(
+      COVID_score()
+    ), rownames = FALSE, colnames = ""))
+  })
+})
+
+## Render MetaboAge to ui
+output[["predictors_table"]] <- DT::renderDataTable({
+  tryCatch({
+    DT::datatable(predictors(), options = list(pageLength = 5, scrollX = TRUE))
+  }, error = function(err) {
+    return(DT::datatable(data.frame(
+      CVD_score()
+    ), rownames = FALSE, colnames = ""))
   })
 })

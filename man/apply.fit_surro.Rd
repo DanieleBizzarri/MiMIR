@@ -4,7 +4,7 @@
 \alias{apply.fit_surro}
 \title{Function that apply on of the surrogates models to the NH-metabolomics concentrations}
 \usage{
-apply.fit_surro(mat, FIT)
+apply.fit_surro(mat, FIT, post = TRUE)
 }
 \arguments{
 \item{mat}{The NH-metabolomics matrix}

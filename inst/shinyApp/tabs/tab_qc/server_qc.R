@@ -66,7 +66,9 @@ output$QC_surrogates_text <- renderPrint(result <- QCprep_surrogates(as.matrix(m
 
 # Calculate the mortality score
 mort_score <- reactive({
-  return(comp.mort_score(metabo_measures(),quiet=TRUE))
+  mortsc<-comp.mort_score(metabo_measures(),quiet=TRUE)
+  #rownames(mortsc)<-rownames(metabo_measures())
+  return(mortsc)
 })
 
 # Calculate the MetaboAge
@@ -75,8 +77,16 @@ MetaboAge <- reactive({
                            PARAM,quiet=TRUE,
                            Nmax_miss=input$Nmax_miss_metaboAge,
                            Nmax_zero=input$Nmax_zero_metaboAge)
+  metaboage<-apply.fit(metabo_metaboage,FIT=PARAM$FIT_COEF)
   
-  return(apply.fit(metabo_metaboage,FIT=PARAM$FIT_COEF))
+  #rownames(metaboage)<-rownames(metabo_measures())
+  if(!is.null(phenotypes()[,"age"])){
+    metaboage<-data.frame(metaboage=metaboage, deltaMetaboAge=metaboage-(phenotypes()[,"age"]))
+    colnames(metaboage)<-c("MetaboAge","deltaMetaboAge")
+    return(metaboage)
+  }else{
+    return(metaboage)
+  }
 })
 
 # Calculate the surrogates
@@ -86,23 +96,63 @@ surrogates <- reactive({
                                     Nmax_zero=input$Nmax_zero_surrogates,
                                     bin_names = bin_names,
                                     roc=F, quiet=T)
-  return(surro$surrogates)
+  surrogates<-surro$surrogates
+  #rownames(surrogates)<-rownames(metabo_measures())
+  return(surrogates)
+})
+
+# Calculate the T2D score
+T2D_score_AholaOlli <- reactive({
+  T2Dscore<-comp.T2D_Ahola_Olli(met=metabo_measures(),phen=phenotypes(),quiet=TRUE)
+})
+# Calculate CVD score
+CVD_score <- reactive({
+  CVDscore<-comp.CVD_score(met=metabo_measures(),phen=phenotypes(),quiet=TRUE)
+})
+
+# Calculate CVD score
+COVID_score <- reactive({
+  CVDscore<-comp_covid_score(dat=metabo_measures(),quiet=TRUE)
 })
 
 # Compose the predictors table with mortality score, metaboage and surrogates
 predictors<-reactive({
-  mortality<-data.frame(ID=row.names(mort_score()),mort_score())
+  mortality<-data.frame(ID=rownames(mort_score()),mort_score())
   metaboage<-data.frame(ID=rownames(MetaboAge()),MetaboAge())
   surro<-data.frame(ID=rownames(surrogates()),surrogates())
   
-  mort_age<-merge(mortality,metaboage, by.x= 'ID',by.y="ID", all=TRUE)
-  predictors<-merge(mort_age,surro, by.x= 'ID',by.y="ID", all=TRUE)
+  predictors<-merge(mortality,metaboage, by.x= 'ID',by.y="ID", all=TRUE)
+  if(length(t(T2D_score_AholaOlli()))>2){
+    T2D_score<-data.frame(ID=rownames(T2D_score_AholaOlli()),T2D_score_AholaOlli())
+    predictors<-merge(predictors,T2D_score, by.x= 'ID',by.y="ID", all=TRUE)
+  }
+  if(length(t(CVD_score()))>2){
+    CVDscore<-data.frame(ID=rownames(CVD_score()),CVD_score())
+    predictors<-merge(predictors,CVDscore, by.x= 'ID',by.y="ID", all=TRUE)
+  }
+  if(length(t(COVID_score()))>2){
+    COVID_score<-data.frame(ID=rownames(COVID_score()),COVID_score())
+    predictors<-merge(predictors,COVID_score, by.x= 'ID',by.y="ID", all=TRUE)
+  }
+  
+  predictors<-merge(predictors,surro, by.x= 'ID',by.y="ID", all=TRUE)
+  
+  ind<-order(match(predictors$ID, rownames(metabo_measures())))
+  predictors<-predictors[ind,]
+  rownames(predictors)<-predictors$ID
+  
   return(predictors)
 })
 
 # Calibrated surrogates
 calibrations<-reactive({
-  calib<-calibration_surro(bin_phenotypes=bin_phenotypes(), surrogates=surrogates(), 
+  surro<-calculate_surrogate_scores(met=metabo_measures(), PARAM_surrogates = PARAM_surrogates,
+                                    Nmax_miss=input$Nmax_miss_surrogates,
+                                    Nmax_zero=input$Nmax_zero_surrogates,
+                                    bin_names = bin_names,
+                                    roc=F, quiet=T, post=F)
+  surro<-surro$surrogates
+  calib<-calibration_surro(bin_phenotypes=bin_phenotypes(), surrogates=surro, 
                            bin_names=bin_names, bin_pheno_available=bin_pheno_available(), pl=FALSE)
 })
 

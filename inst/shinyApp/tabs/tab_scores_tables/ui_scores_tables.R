@@ -24,21 +24,39 @@ tab_scores_tables <- tabItem(
           HTML('<hr style="border-color: #0088cc;">'),
           style = "position: center"
           ),
-        # Surrogates tab
+        # T2D AholaOlli tab
         tabPanel(
-          "Surrogates",
+          "T2Dscore",
           HTML('<hr style="border-color: #0088cc;">'),
-          DT::dataTableOutput("surrogates_table") %>% withSpinner(),
-          HTML('<hr style="border-color: #0088cc;">')
-          ),
-        # Calibrated surrogates tab
+          DT::dataTableOutput("T2Dscore_table") %>% withSpinner(),
+          HTML('<hr style="border-color: #0088cc;">'),
+          style = "position: center"
+        )
+        ,
+        # CVD score tab
         tabPanel(
-          "Calibrated Surrogates",
+          "CVDscore",
           HTML('<hr style="border-color: #0088cc;">'),
-          DT::dataTableOutput("calibrated_surro_table") %>% withSpinner(),
-          helpText("These are the Metabolic Surrogate markers that were calibrated on this dataset, using the Platt Calibration"),
-          HTML('<hr style="border-color: #0088cc;">')
-          )
+          DT::dataTableOutput("CVDscore_table") %>% withSpinner(),
+          HTML('<hr style="border-color: #0088cc;">'),
+          style = "position: center"
+        ),
+        # COVID score tab
+        tabPanel(
+          "COVIDscore",
+          HTML('<hr style="border-color: #0088cc;">'),
+          DT::dataTableOutput("COVIDscore_table") %>% withSpinner(),
+          HTML('<hr style="border-color: #0088cc;">'),
+          style = "position: center"
+        ),
+        # All predictors tab
+        tabPanel(
+          "All predictors",
+          HTML('<hr style="border-color: #0088cc;">'),
+          DT::dataTableOutput("predictors_table") %>% withSpinner(),
+          HTML('<hr style="border-color: #0088cc;">'),
+          style = "position: center"
+        )
         )
   )
 )

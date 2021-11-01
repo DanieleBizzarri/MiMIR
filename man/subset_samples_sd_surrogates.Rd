@@ -5,7 +5,7 @@
 \title{Function created that subsets the NH-metabolomics matrix samples to the ones for which the metabolites
 included in the surrogates calculations for which the metabolic concentrations are not more than 5SD away from their mean in BBMRI-NL}
 \usage{
-subset_samples_sd_surrogates(x, MEAN, SD, quiet = FALSE)
+subset_samples_sd_surrogates(x, MEAN, SD, N = 5, quiet = FALSE)
 }
 \arguments{
 \item{x}{The NH-metabolomics matrix}
@@ -13,6 +13,8 @@ subset_samples_sd_surrogates(x, MEAN, SD, quiet = FALSE)
 \item{MEAN}{numeric vector indicating the mean of the metabolites in x}
 
 \item{SD}{numeric vector indicating the standard deviations of the metabolites in x}
+
+\item{N}{number of standard deviations away from the mean}
 
 \item{quiet}{TRUE/FALSE. if TRUE if will suppress all messages from the function}
 }

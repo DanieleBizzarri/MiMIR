@@ -11,6 +11,7 @@ calculate_surrogate_scores(
   bin_names,
   Nmax_miss = 1,
   Nmax_zero = 1,
+  post = TRUE,
   roc = FALSE,
   quiet = FALSE
 )
@@ -29,6 +30,8 @@ calculate_surrogate_scores(
 \item{Nmax_miss}{max number of missing values allowed per sample}
 
 \item{Nmax_zero}{max number of zeros allowed per sample}
+
+\item{post}{TRUE/FALSE. If TRUE it will calculate the posterior probabilities}
 
 \item{roc}{TRUE/FALSE. If TRUE it will produce an image with all the roc curves
 for the surrogate with the avialable phenotypes in the current dataset}
