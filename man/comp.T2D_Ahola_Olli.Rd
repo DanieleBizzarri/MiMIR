@@ -7,11 +7,13 @@
 comp.T2D_Ahola_Olli(met, phen, betas = Ahola_Olli_betas, quiet = FALSE)
 }
 \arguments{
+\item{met}{The NH-metabolomics matrix of the samples}
+
+\item{phen}{phenotypic information of the sampels}
+
 \item{betas}{The betas of the linear regression composing the mortality score}
 
 \item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
-
-\item{dat}{The NH-metabolomics matrix}
 }
 \value{
 The T2D by Ahola Olli

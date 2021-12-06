@@ -209,18 +209,25 @@ names(c21)<-c("mortScore", "MetaboAge", bin_surro)
 #Global variables
 utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore", 
                          "surro","AUC","outcome", "Uploaded", "biobank",
-                         "BBMRI_hist_scaled","BBMRI_hist"))
+                         "BBMRI_hist_scaled","BBMRI_hist", "ord", "pval.adj",
+                         "met_name", "prepped_dat", "CVD_score", "metabo_names_translator"))
 
 #Import packages
-#' @import foreach
+
 #' @importFrom purrr map_chr
 #' @importFrom purrr map_lgl
+#' @import foreach
+#' @importFrom caret createDataPartition
+#' @importFrom stats model.matrix
+#' @importFrom stats na.omit
+#' @importFrom matrixStats colMedians
+#' @importFrom matrixStats colSds
 #' @import dplyr
 #' @import shiny
-#' @import caret
 #' @import ggfortify
 #' @import survival
 #' @import limma
+#' @import survminer
 NULL
 
 ######################
@@ -336,7 +343,8 @@ comp.mort_score <- function(dat,betas=mort_betas,quiet=FALSE){
 ###############################
 #' Function to compute T2D score by Ahola Olli mortality score on metabolite data.
 #'
-#' @param dat The NH-metabolomics matrix 
+#' @param met The NH-metabolomics matrix of the samples
+#' @param phen phenotypic information of the sampels 
 #' @param betas The betas of the linear regression composing the mortality score
 #' @param quiet TRUE/FALSE if TRUE if will suppress all messages from the function
 #' @return The T2D by Ahola Olli
@@ -376,7 +384,8 @@ comp.T2D_Ahola_Olli<- function(met,phen,betas=Ahola_Olli_betas,quiet=FALSE){
 
 #' Function to compute CVD score by Peter Wurtz on metabolite data.
 #'
-#' @param dat The NH-metabolomics matrix 
+#' @param met The NH-metabolomics matrix of the samples
+#' @param phen phenotypic information of the samples
 #' @param betas The betas of the linear regression composing the score
 #' @param quiet TRUE/FALSE if TRUE if will suppress all messages from the function
 #' @return The CVD score by Peter Wurtz
@@ -433,9 +442,9 @@ prep_data_COVID_score <- function(dat,featID=c("gp","dha","crea","mufa", "apob_a
   if(length(which(colnames(dat)=="faw6_faw3"))==0){
     dat$faw6_faw3<-dat$faw6/dat$faw3
   }
-  MEANS=colMedians(as.matrix(dat[,featID]),na.rm=T)
+  MEANS=matrixStats::colMedians(as.matrix(dat[,featID]),na.rm=T)
   names(MEANS)<-featID
-  SDS=colSds(as.matrix(dat[,featID]),na.rm=T)
+  SDS=matrixStats::colSds(as.matrix(dat[,featID]),na.rm=T)
   names(SDS)<-featID
   # 1. Subset samples on SD:
   dat <- subset_samples_sd_surrogates(x=as.matrix(dat[,featID]), MEAN=MEANS, SD=SDS,N=4, quiet=quiet)
@@ -1065,10 +1074,11 @@ subset_samples_sd_surrogates<-function(x,MEAN,SD, N=5, quiet=FALSE){
 #'
 #' @param mat The NH-metabolomics matrix 
 #' @param FIT The betas of the logistic regressions composing the surrogates by Bizzarri et al.
+#' @param post True if you want to obtain posterior probabilities
 #' @return The surrogates by Bizzarri et al.
 #' @export
 #'
-apply.fit_surro<-function(mat,FIT, post=TRUE){
+apply.fit_surro<-function(mat, FIT, post=TRUE){
   # Resort:
   BETA <- FIT[colnames(mat)]
   INTC <- FIT[1]
@@ -1378,7 +1388,7 @@ ttest_surrogates<-function(surrogates,bin_phenotypes){
 #' @export
 #'
 LOBOV_accuracies<-function(surrogates, bin_phenotypes, bin_pheno_available, acc_LOBOV){
-  AUCs<-foreach(i=1:length(bin_pheno_available), .combine="rbind") %do%{
+  AUCs<- foreach::foreach(i=1:length(bin_pheno_available), .combine="rbind") %do%{
     ROC_curve<-pROC::roc(bin_phenotypes[,bin_pheno_available[i]], as.numeric(surrogates[,paste0("s_",bin_pheno_available[i])]), plot=F, 
                          col=c21[surro], quiet = TRUE,
                          lwd=4, print.auc=TRUE, main = i, xaxs="i", yaxs="i", grid=TRUE, asp=NA) #AUC
@@ -1466,7 +1476,7 @@ scatterplot_predictions <- function(x, p, title, xname, yname) {
                                   "\n med. error=", as.character(round(stats::median(abs(df$original - df$predicted)), digits=3))),
                                 xref='paper',
                                 yref='paper',
-                                x = 1.24, y = 0.25,
+                                x = 1.1, y = 0.25,
                                 showarrow=FALSE,
                                 bordercolor=c("black"),
                                 borderwidth=2
@@ -1752,7 +1762,7 @@ hist_plots_mortality<-function(mort_score,phenotypes){
 
 #' Function that creates a boxplot with a continuous variable split using the binary variable
 #'
-#' @param data The data.frame containing the 2 variables
+#' @param dat The data.frame containing the 2 variables
 #' @param pred character indicating the y variable
 #' @param pheno character indicating the binary variable
 #' @return plotly boxplot with the continuous variable split using the binary variable
@@ -1788,6 +1798,7 @@ ttest_scores<-function(dat, pred, pheno){
 #' @param predictors The data.frame containing the predictors
 #' @param pheno The data.frame containing the phenotypes
 #' @param score a character string indicating which predictor to use
+#' @param Eventname a character string with the name of the event to print on the plot
 #' @return plotly with a Kaplan Meier for an Event of the predictor divided by its mean 
 #' @export
 #'
@@ -1803,7 +1814,7 @@ kapmeier_scores<-function(predictors, pheno, score, Eventname="Event"){
   }
   
   dat$tertile <- with(dat, factor(
-    findInterval( score, c(-Inf,
+    findInterval(score, c(-Inf,
                          quantile(score, probs=c(0.3333333, 0.6666666)), Inf) ), 
     labels=c("Tertile 1","Tertile 2","Tertile 3")
   ))
@@ -1821,7 +1832,7 @@ kapmeier_scores<-function(predictors, pheno, score, Eventname="Event"){
                                       tertile, data=dat)
   
   pl<-ggplot2::autoplot(km_trt_fit, xlab = "Time (in years)", ylab = "Survival",
-                        main = paste0("Kaplan Meier of ",score," associated with ", Eventname,
+                        main = paste0("<b>Kaplan Meier of ",score," associated with ", Eventname,"<b>",
                                      "\np=",formatC(survminer::surv_pvalue(km_trt_fit)[,2], format = "e", digits = 3),
                                      ", N=", dim(dat)[1],", Nevent=",sum(dat$Event)))
   
@@ -2219,6 +2230,7 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
 #'
 #' @param r binary real data
 #' @param p predicted probabilities
+#' @param p.orig the uncalibrated posterior probabilities
 #' @param name character string indicating the name of the calibrated variable
 #' @param nbins number of bins to create the plots
 #' @param annot_x integer indicating the x axis points in which the ECE and MCE values will be plotted
@@ -2550,7 +2562,7 @@ MetaboWAS<-function(met, pheno, test_variable, covariates, img=T){
       pull(ylim)
     if(!is.null(covariates)){
       if(length(covariates)>1){
-        title<-paste("MetaboWAS:",test_variable,"corrected for",paste(covariates, collapse=","),
+        title<-paste("<b>MetaboWAS:",test_variable,"corrected for",paste(covariates, collapse=","),"<b>",
                      "\nNumber of significant hits:",N_hits)
       }else{
         title<-paste("MetaboWAS:",test_variable,"corrected for",covariates,
@@ -2558,30 +2570,30 @@ MetaboWAS<-function(met, pheno, test_variable, covariates, img=T){
       }
       
     }else{
-      title<-paste("MetaboWAS:",test_variable,
+      title<-paste("<b>MetaboWAS:",test_variable,"<b>",
                    "\nNumber of significant hits:",N_hits)
     }
     
-    manhplot <- ggplot(res, aes(label = met_name, label2=groups, label3=pval.adj)) +
-      geom_hline(yintercept = -log10(0.05), color = "grey40", linetype = "dashed") + 
-      geom_point(aes(x = ord, y = -log10(pval.adj),
+    manhplot <- ggplot2:: ggplot(res, ggplot2::aes(label = met_name, label2=groups, label3=pval.adj)) +
+      ggplot2::geom_hline(yintercept = -log10(0.05), color = "grey40", linetype = "dashed") + 
+      ggplot2::geom_point(ggplot2::aes(x = ord, y = -log10(pval.adj),
                      color = as.factor(groups), size = -log10(pval.adj)), alpha = 0.75) +
-      ggtitle(title)+
-      scale_x_continuous(label = axis_set$groups, breaks = axis_set$center) +
-      scale_y_continuous(expand = c(0,0), limits = c(0, ylim)) +
-      scale_size_continuous(range = c(0.5,3)) +
-      labs(x = "metabolites", 
+      ggplot2::ggtitle(title)+
+      ggplot2::scale_x_continuous(label = axis_set$groups, breaks = axis_set$center) +
+      ggplot2::scale_y_continuous(expand = c(0,0), limits = c(0, ylim)) +
+      ggplot2::scale_size_continuous(range = c(0.5,3)) +
+      ggplot2::labs(x = "metabolites", 
            y = "-log(p adjusted)") + 
-      theme_minimal() +
-      theme( 
+      ggplot2::theme_minimal() +
+      ggplot2::theme( 
         legend.position = "none",
-        panel.border = element_blank(),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        axis.text.x = element_text(angle = 60, size = 8, vjust = 0.5)
+        panel.border = ggplot2::element_blank(),
+        panel.grid.major.x = ggplot2::element_blank(),
+        panel.grid.minor.x = ggplot2::element_blank(),
+        axis.text.x = ggplot2:: element_text(angle = 60, size = 8, vjust = 0.5)
       )
     
-    manhplot<-ggplotly(manhplot, 
+    manhplot<-plotly::ggplotly(manhplot, 
                        tooltip=c("met_name", "groups", "pval.adj"))
   }
   
@@ -2608,12 +2620,12 @@ do.metabowas<-function(phen,dat,test_variable="age",covariates=c("sex"), PC=NULL
     rownames(vars)<-rownames(phen)
     colnames(vars)<-test_variable
   }
-  vars <- na.omit(vars)
+  vars <- stats:: na.omit(vars)
   if(!quiet){
     print(paste("The number of samples is:",dim(vars)[1]))
   }
   dat <- dat[, match(rownames(vars), colnames(dat))]
-  design <- model.matrix(~ ., vars)
+  design <- stats:: model.matrix(~ ., vars)
   fit <- lmFit(dat, design)
   fit <- eBayes(fit)
   result <- limma::topTable(fit, coef=2, number=Inf)

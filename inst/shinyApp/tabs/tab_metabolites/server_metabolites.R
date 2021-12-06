@@ -14,6 +14,10 @@ output$heat_met <- renderPlotly({
       met = MET_CVD
     }
     
+    if(any(colSums(is.na(metabo_measures()[,met])) %in% dim(metabo_measures())[1])){
+      met<-met[-which(colSums(is.na(metabo_measures()[,met])) %in% dim(metabo_measures())[1])]
+    }
+    
     res<-cor_assoc(metabo_measures(),metabo_measures(), met, met)
     heat<-plot_corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
                       resort_on_p= TRUE,reorder_dend=F)
@@ -29,13 +33,13 @@ output$heat_na_metabo <- renderPlot({
     req(required())
     if (input$MET56_14_nas == "MET56") {
       met = MET56
-    } else if (input$MET56_14_cor == "MET14"){
+    } else if (input$MET56_14_nas == "MET14"){
       met = MET14
-    } else if (input$MET56_14_cor == "MET_COVID"){
+    } else if (input$MET56_14_nas == "MET_COVID"){
       met = MET_COVID
-    }else if (input$MET56_14_cor == "MET_T2D"){
+    }else if (input$MET56_14_nas == "MET_T2D"){
       met = MET_T2D
-    }else if (input$MET56_14_cor == "MET_CVD"){
+    }else if (input$MET56_14_nas == "MET_CVD"){
       met = MET_CVD
     }
     

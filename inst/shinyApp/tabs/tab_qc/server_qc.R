@@ -112,7 +112,7 @@ CVD_score <- reactive({
 
 # Calculate CVD score
 COVID_score <- reactive({
-  CVDscore<-comp_covid_score(dat=metabo_measures(),quiet=TRUE)
+  COVIDscore<-comp_covid_score(dat=metabo_measures(),quiet=TRUE)
 })
 
 # Compose the predictors table with mortality score, metaboage and surrogates

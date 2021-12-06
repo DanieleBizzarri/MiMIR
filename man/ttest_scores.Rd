@@ -7,11 +7,11 @@
 ttest_scores(dat, pred, pheno)
 }
 \arguments{
+\item{dat}{The data.frame containing the 2 variables}
+
 \item{pred}{character indicating the y variable}
 
 \item{pheno}{character indicating the binary variable}
-
-\item{data}{The data.frame containing the 2 variables}
 }
 \value{
 plotly boxplot with the continuous variable split using the binary variable

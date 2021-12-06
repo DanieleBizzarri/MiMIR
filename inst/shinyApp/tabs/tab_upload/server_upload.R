@@ -4,11 +4,9 @@ output[["get_started"]] <- renderUI({
     div(
       br(),
       span(
-        "This webtool was created with the intention of providing a set of interesting scores
-        retrieved from the metabolic features created by Nightingale-Health. 
-        Thee app works only with a file with the Nighitngale NH-metabolomics measurements  in a specific format.
-        It is also recommended to provide a file with the required phenotypes to calculate the accuracy and
-        calibrate the surrogate models.",
+        "This webtool was created to easily allow the computation of several
+        existing metabolic scores made with Nightingale Health data.
+        This application works only with a file with the Nighitngale NH-metabolomics measurements  in a specific format:",
         style = "text-align: justify; display: block; width: 95%"
       ),
       br(),
@@ -24,13 +22,14 @@ output[["get_started"]] <- renderUI({
         If a metabolite is not found please upload again the file with the name you can find in the example dataset.
         Notice that it also requires a columns with unique sample IDs.
         The models only use subsets of the metabolites measured by the 
-        Nightingale Health platform (see paper). If these metabolites are missing 
-        of if they don't have the correct names, an error will be returned.",
+        Nightingale Health platform (see Supplementary Info). If these metabolites are missing 
+        or if they don't have the correct names, an error will be returned.",
         style = "text-align: justify; display: block; width: 95%"
       ),
       br(),
       span(
-        "Phenotypic variables file (optional) instructions:",
+        "It is also recommended to provide a file with the required phenotypes to calculate the accuracy and
+        calibrate the models. Phenotypic variables file (optional) instructions:",
         tags$br(),
         "- The input data should contain the raw phenotypes with the columns name as the example dataset.",
         tags$br(),
@@ -43,7 +42,7 @@ output[["get_started"]] <- renderUI({
       span(
         tags$br(),
         "Please ensure that your dataset looks similar to this example dataset before submitting.
-        You can check the found column names below in the table 'Variables names recognised'. 
+        You can check the column names below in the table 'Variables names recognised'. 
         If a column updated was not recognise please upload agein the file with the correct naming",
         style = "text-align: justify; display: block; width: 95%"
       ),
@@ -53,30 +52,12 @@ output[["get_started"]] <- renderUI({
   )
 })
 
-###################
-##Example dataset##
-###################
-output$downloadData <- downloadHandler(
-  filename = function() {
-    paste("metabolic_predictors_example_dataset", "zip", sep=".")
-  },
-  content = function(fname) {
-    temp <- setwd(tempdir())
-    setwd(temp)
-    files <- c("example_metabolic_dataset.csv", "example_phenotypic_dataset.csv")
-    
-    write.csv(synthetic_metabolic_dataset, "example_metabolic_dataset.csv")
-    write.csv(synthetic_phenotypic_dataset, "example_phenotypic_dataset.csv")
-    zip(zipfile = fname, files = files)
-  },
-  contentType = "application/zip"
-  )
 
 ####################
 ## Uploaded files ##
 ####################
 ## Read metabolites data file
-metabo_measures <- reactive({
+upload_met <- reactive({
   if (is.null(input$file_samples$datapath)) {
     return(NULL)
   }
@@ -106,7 +87,7 @@ metabo_measures <- reactive({
     })
 
 #Read phenotypes data file
-phenotypes <- reactive({
+upload_phen <- reactive({
   if (is.null(input$file_phenotypes$datapath)) {
     return(NULL)
   }
@@ -134,6 +115,59 @@ phenotypes <- reactive({
   phenotypes
 })
 
+####################
+## Synthetic Data ##
+####################
+syn_met<-eventReactive(input$load_synth_data,{
+  metabo_measures<-as.data.frame(synthetic_metabolic_dataset)
+})
+
+syn_phen<-eventReactive(input$load_synth_data,{
+  phenotypes<-synthetic_phenotypic_dataset
+})
+
+output$downloadData <- downloadHandler(
+  filename = function() {
+    paste("metabolic_predictors_example_dataset", "zip", sep=".")
+  },
+  content = function(fname) {
+    temp <- setwd(tempdir())
+    setwd(temp)
+    files <- c("example_metabolic_dataset.csv", "example_phenotypic_dataset.csv")
+    
+    write.csv(synthetic_metabolic_dataset, "example_metabolic_dataset.csv")
+    write.csv(synthetic_phenotypic_dataset, "example_phenotypic_dataset.csv")
+    zip(zipfile = fname, files = files)
+  },
+  contentType = "application/zip"
+)
+
+####################################
+## Dataset (uploaded or synthetic)##
+####################################
+metabo_measures<-reactive({
+  if(!is.null(upload_met())){
+    metabo_measures<-upload_met()
+  }else if(!is.null(syn_met())){
+    metabo_measures<-syn_met()
+  }else{
+    metabo_measures<-NULL
+  }
+
+})
+
+phenotypes<-reactive({
+  if(!is.null(upload_phen())){
+    phenotypes<-upload_phen()
+  }else if(!is.null(syn_met())){
+    phenotypes<-syn_phen()
+  }else{
+    phenotypes<-NULL
+  }
+})
+##############################
+## Check available features ##
+##############################
 # Variable storing the selected phenotypes found in the uploaded file
 pheno_available <- reactive({
   phen_names<-pheno_names[which(pheno_names %in% colnames(phenotypes()))]
@@ -171,10 +205,13 @@ output$required_met <- renderText({
   "All required metabolites were found!"
 })
 
+############
+## Tables ##
+############
 #Table with the metabolites names found in the uploaded file
 output[["found_met"]] <- DT::renderDataTable({
   tryCatch({
-    req(input$file_samples$datapath)
+    req(metabo_measures())
     found_met<-data.frame(met=MET62, presence=(MET62 %in% colnames(metabo_measures())))
     found_met<-found_met[order(found_met$presence, decreasing = F),]
     if(found_met[which(found_met$met=="faw6_faw3"),"presence"]==F){
@@ -196,7 +233,7 @@ output[["found_met"]] <- DT::renderDataTable({
 #Table with phenotypes names found in the uploaded file
 output[["found_phen"]] <- DT::renderDataTable({
   tryCatch({
-    req(input$file_phenotypes$datapath)
+    req(phenotypes())
     found_phen<-data.frame(phen=pheno_names, presence=(pheno_names %in% colnames(phenotypes())))
     found_phen<-found_phen[order(found_phen$presence,decreasing = F),]
     
@@ -214,7 +251,7 @@ output[["found_phen"]] <- DT::renderDataTable({
 # Render metabo_measures data to ui
 output[["metabo_table"]] <- DT::renderDataTable({
   tryCatch({
-    req(input$file_samples$datapath)
+    req(metabo_measures())
     DT::datatable(metabo_measures(), options = list(pageLength = 10, scrollX = TRUE))
   }, error = function(err) {
     return(DT::datatable(data.frame(c(
@@ -226,7 +263,7 @@ output[["metabo_table"]] <- DT::renderDataTable({
 # Render pheno_table data to ui
 output[["pheno_table"]] <- DT::renderDataTable({
   tryCatch({
-    req(input$file_phenotypes$datapath)
+    req(phenotypes())
     DT::datatable(phenotypes(), options = list(pageLength = 10, scrollX = TRUE))
   }, error = function(err) {
     return(DT::datatable(data.frame(c(
@@ -238,7 +275,7 @@ output[["pheno_table"]] <- DT::renderDataTable({
 # Render bin_pheno_table data to ui
 output[["bin_pheno_table"]] <- DT::renderDataTable({
   tryCatch({
-    req(input$file_phenotypes$datapath)
+    req(phenotypes())
     DT::datatable(bin_phenotypes(), options = list(pageLength = 10, scrollX = TRUE))
   }, error = function(err) {
     return(DT::datatable(data.frame(c(

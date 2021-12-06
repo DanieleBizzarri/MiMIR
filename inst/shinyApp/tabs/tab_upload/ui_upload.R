@@ -56,7 +56,13 @@ tab_upload <- tabItem(
       br(),
       #Example Synthetic Dataset
       h5(strong("Example dataset:")),
-      downloadButton('downloadData', 'Download example'),
+      div(
+        actionButton('load_synth_data', 'Load Example dataset'),
+      ),
+      br(),
+      div(
+        downloadButton('downloadData', 'Download Example dataset'),
+      ),
       br(),
     ),
     # Explanation

@@ -10,6 +10,8 @@ apply.fit_surro(mat, FIT, post = TRUE)
 \item{mat}{The NH-metabolomics matrix}
 
 \item{FIT}{The betas of the logistic regressions composing the surrogates by Bizzarri et al.}
+
+\item{post}{True if you want to obtain posterior probabilities}
 }
 \value{
 The surrogates by Bizzarri et al.

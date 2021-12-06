@@ -19,6 +19,8 @@ plattCalib_evaluation(
 
 \item{p}{predicted probabilities}
 
+\item{p.orig}{the uncalibrated posterior probabilities}
+
 \item{name}{character string indicating the name of the calibrated variable}
 
 \item{nbins}{number of bins to create the plots}

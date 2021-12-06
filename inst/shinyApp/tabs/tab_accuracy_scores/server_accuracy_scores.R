@@ -94,8 +94,8 @@ output$km_score <- renderPlotly({
 output$metWASvar = renderUI({
   selectInput("metWASvar2",
               "Test variable:",
-              as.character(c(colnames(predictors()[-1]),
-                             colnames(phenotypes())
+              as.character(c(colnames(phenotypes()),
+                             colnames(predictors()[-1])
               ))
   )
 })

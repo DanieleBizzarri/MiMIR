@@ -35,7 +35,12 @@ Imports:
     dplyr,
     ggplot2,
     reshape2,
-    caret
+    caret,
+    ggfortify,
+    limma,
+    purrr,
+    survival,
+    survminer
 Suggests: 
     rmarkdown,
     knitr

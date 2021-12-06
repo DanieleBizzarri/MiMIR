@@ -7,11 +7,13 @@
 comp.CVD_score(met, phen, betas = CVD_score_betas, quiet = FALSE)
 }
 \arguments{
+\item{met}{The NH-metabolomics matrix of the samples}
+
+\item{phen}{phenotypic information of the samples}
+
 \item{betas}{The betas of the linear regression composing the score}
 
 \item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
-
-\item{dat}{The NH-metabolomics matrix}
 }
 \value{
 The CVD score by Peter Wurtz

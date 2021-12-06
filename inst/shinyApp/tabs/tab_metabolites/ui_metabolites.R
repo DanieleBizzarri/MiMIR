@@ -15,11 +15,11 @@ tab_metabolites <- tabItem(
           radioButtons(
             "MET56_14_cor",
             "Metabolites selections:",
-            c("MetaboAge and surrogates metabolites" = "MET56",
-              "Mortality score metabolites" = "MET14",
-              "COVID score metabolites"="MET_COVID",
-              "T2D score metabolites" = "MET_T2D",
-              "CVD score metabolites" = "MET_CVD")
+            c("MetaboAge and surrogates" = "MET56",
+              "Mortality score" = "MET14",
+              "COVID score"="MET_COVID",
+              "T2D score" = "MET_T2D",
+              "CVD score" = "MET_CVD")
           )
         ),
         mainPanel(
@@ -27,7 +27,7 @@ tab_metabolites <- tabItem(
           plotlyOutput("heat_met", height = "600px") %>% withSpinner()
         )
       ),
-      helpText("The correlations of the metabolites used in our prediction models, you can chose the set of the mortality score or the one of MetaboAge/Surrogates"),
+      helpText("The correlations of the available metabolic features set for each metabolic score"),
       HTML('<hr style="border-color: #0088cc;">'),
     ),
     # Tab Panel for the missingness of the metabolite concentrations uploaded
@@ -41,12 +41,12 @@ tab_metabolites <- tabItem(
           # Metabolites selection of MetaboAge and the surrogates or the one of the Mortality score
           radioButtons(
             "MET56_14_nas",
-            "Metabolites selections:",
-            c("MetaboAge and surrogates selection" = "MET56",
-              "Mortality selection" = "MET14",
-              "COVID score metabolites"="MET_COVID",
-              "T2D score metabolites" = "MET_T2D",
-              "CVD score metabolites" = "MET_CVD")
+            "Metabolites:",
+            c("MetaboAge and surrogates" = "MET56",
+              "Mortality" = "MET14",
+              "COVID score "="MET_COVID",
+              "T2D score" = "MET_T2D",
+              "CVD score" = "MET_CVD")
           )
         ),
         mainPanel(
@@ -54,7 +54,7 @@ tab_metabolites <- tabItem(
           plotOutput("heat_na_metabo", height = "600px") %>% withSpinner()
         )
       ),
-      helpText("The missingness of the metabolites used in our prediction models, you can chose the set of the mortality score or the one of MetaboAge/Surrogates"),
+      helpText("The missingness in all the metabolites used for the scores"),
       HTML('<hr style="border-color: #0088cc;">')
     ),
     # Tab Panel for the histograms of the metabolite concentrations uploaded
@@ -80,7 +80,7 @@ tab_metabolites <- tabItem(
           label="Metabolites' histograms:",
           choices=c("Total lipids in medium VLDL (m_vldl_l)" = "m_vldl_l",
                     "Total lipids in small VLDL (s_vldl_l)" = "s_vldl_l",
-                    "Total lipids in very small VLDL ()" = "xs_vldl_l",
+                    "Total lipids in very small VLDL (xs_vldl_l)" = "xs_vldl_l",
                     "Total lipids in IDL (idl_l)" = "idl_l",
                     "Total cholesterol in IDL (idl_c)" = "idl_c",
                     "Total lipids in large LDL (l_ldl_l)" = "l_ldl_l",
@@ -177,7 +177,7 @@ tab_metabolites <- tabItem(
           label="Metabolites distributions:",
           choices=c("Total lipids in medium VLDL (m_vldl_l)" = "m_vldl_l",
                     "Total lipids in small VLDL (s_vldl_l)" = "s_vldl_l",
-                    "Total lipids in very small VLDL ()" = "xs_vldl_l",
+                    "Total lipids in very small VLDL (xs_vldl_l)" = "xs_vldl_l",
                     "Total lipids in IDL (idl_l)" = "idl_l",
                     "Total cholesterol in IDL (idl_c)" = "idl_c",
                     "Total lipids in large LDL (l_ldl_l)" = "l_ldl_l",

@@ -12,6 +12,8 @@ kapmeier_scores(predictors, pheno, score, Eventname = "Event")
 \item{pheno}{The data.frame containing the phenotypes}
 
 \item{score}{a character string indicating which predictor to use}
+
+\item{Eventname}{a character string with the name of the event to print on the plot}
 }
 \value{
 plotly with a Kaplan Meier for an Event of the predictor divided by its mean
