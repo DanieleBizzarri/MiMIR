@@ -14,6 +14,8 @@ if (!require("plyr")) install.packages("plyr")
 if (!require("stats")) install.packages("stats")
 if (!require("reshape2")) install.packages("reshape2")
 if (!require("caret")) install.packages("caret")
+if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if (!require("limma")) BiocManager::install("limma")
 
 #Imaging libraries
 if (!require("pheatmap")) install.packages("pheatmap")
@@ -22,4 +24,5 @@ if (!require("pROC")) install.packages("pROC")
 if (!require("plotly")) install.packages("plotly")
 if (!require("heatmaply")) install.packages("heatmaply")
 if (!require("ggplot2")) install.packages("ggplot2")
+
 
