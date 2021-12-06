@@ -35,7 +35,7 @@ surrogate clinical variables: unpublished
 <!-- end list -->
 
     library("MiMIR")
-    MetaboRiSc::launchApp()
+    MiMIR::startApp()
 
 ## Quick Start
 
