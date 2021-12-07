@@ -19,7 +19,6 @@
 #' @import survminer
 NULL
 
-
 ###################################
 ### DEFINITIONS / CONSTANTS #######
 ###################################
@@ -31,139 +30,6 @@ utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore",
                          "MET63", "MET56", "MET57", "MET62", "MET14", "MET_COVID", "MET_T2D", "MET_CVD",
                          "mort_betas", "Ahola_Olli_betas", "CVD_score_betas", 
                          "pheno_names", "out_list", "bin_names", "bin_surro", "c21"))
-
-# Metabolite markers often deemed to be more or less independent and not numerically derived from eachother:
-MET63 <- tolower(c("Ala","Gln","His","Phe","Tyr","Ile","Leu","Val","Glc","Lac","Pyr","Cit","Ace",
-                   "AcAce","bOHBut","Crea","Alb","Gp","XXL_VLDL_L","XL_VLDL_L","L_VLDL_L","M_VLDL_L",
-                   "S_VLDL_L","XS_VLDL_L","IDL_L","L_LDL_L","M_LDL_L","S_LDL_L","XL_HDL_L","L_HDL_L",
-                   "M_HDL_L","S_HDL_L","IDL_C","Serum_C","VLDL_C","LDL_C","HDL_C","HDL2_C","HDL3_C",
-                   "VLDL_D","LDL_D","HDL_D","Serum_TG","TotPG","PC","SM","TotCho","ApoA1","ApoB",
-                   "TotFA","DHA","LA","FAw3","FAw6","PUFA","MUFA","SFA","FAw3_FA","FAw6_FA","PUFA_FA",
-                   "MUFA_FA","SFA_FA","UnsatDeg"))
-
-# The final set of metabolites used by the surrogates
-MET56 <- tolower(c("Ala","Gln","His","Phe","Tyr","Ile","Leu","Val","Glc","Lac","Cit","Ace",
-                   "AcAce","Crea","Alb","Gp","M_VLDL_L",
-                   "S_VLDL_L","XS_VLDL_L","IDL_L","L_LDL_L","M_LDL_L","S_LDL_L",
-                   "M_HDL_L","S_HDL_L","IDL_C","Serum_C","VLDL_C","LDL_C","HDL_C","HDL2_C","HDL3_C",
-                   "VLDL_D","LDL_D","HDL_D","Serum_TG","TotPG","PC","SM","TotCho","ApoA1","ApoB",
-                   "TotFA","DHA","LA","FAw3","FAw6","PUFA","MUFA","SFA","FAw3_FA","FAw6_FA","PUFA_FA",
-                   "MUFA_FA","SFA_FA","UnsatDeg"))
-
-# The final set of metabolites used by the models (metaboAge,surro and mortality score)
-MET57 <- tolower(c("Ala","Gln","His","Phe","Tyr","Ile","Leu","Val","Glc","Lac","Cit","Ace",
-                   "AcAce","Crea","Alb","Gp","M_VLDL_L",
-                   "S_VLDL_L","XS_VLDL_L","IDL_L","L_LDL_L","M_LDL_L","S_LDL_L",
-                   "M_HDL_L","S_HDL_L","IDL_C","Serum_C","VLDL_C","LDL_C","HDL_C","HDL2_C","HDL3_C",
-                   "VLDL_D","LDL_D","HDL_D","Serum_TG","TotPG","PC","SM","TotCho","ApoA1","ApoB",
-                   "TotFA","DHA","LA","FAw3","FAw6","PUFA","MUFA","SFA","FAw3_FA","FAw6_FA","PUFA_FA",
-                   "MUFA_FA","SFA_FA","UnsatDeg","XXL_VLDL_L"))
-
-MET62 <- tolower(c("Ala","Gln","His","Phe","Tyr","Ile","Leu","Val","Glc","Lac","Cit","Ace",
-                   "AcAce","Crea","Alb","Gp","M_VLDL_L",
-                   "S_VLDL_L","XS_VLDL_L","IDL_L","L_LDL_L","M_LDL_L","S_LDL_L",
-                   "M_HDL_L","S_HDL_L","IDL_C","Serum_C","VLDL_C","LDL_C","HDL_C","HDL2_C","HDL3_C",
-                   "VLDL_D","LDL_D","HDL_D","Serum_TG","TotPG","PC","SM","TotCho","ApoA1","ApoB",
-                   "TotFA","DHA","LA","FAw3","FAw6","PUFA","MUFA","SFA","FAw3_FA","FAw6_FA","PUFA_FA",
-                   "MUFA_FA","SFA_FA","UnsatDeg","XXL_VLDL_L", "l_vldl_ce_percentage", "l_hdl_fc", 
-                   "apob_apoa1", "faw6_faw3", "glycine"))
-
-#The final set of metabolites used by the mortality score
-MET14<-c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl_l","alb","phe","acace","ile","vldl_d",
-               "leu","val","his","lac")
-
-MET_COVID<-c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
-             "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
-             "alb","faw3","ldl_c","serum_tg")
-
-MET_T2D<-c("phe", "l_vldl_ce_percentage", "l_hdl_fc")
-
-MET_CVD<-c("phe","mufa_fa","faw6","dha")
-
-# Mortality score betas
-mort_betas <- data.frame(
-  Abbreviation=c("pufa_fa","gp","glc","s_hdl_l","xxl_vldl_l",
-                 "alb","phe","acace","ile","vldl_d",
-                 "leu","val","his","lac"),
-  Metabolite=c("Ratio of polyunsaturated fatty acids to total fatty acids (%)",
-               "Glycoprotein acetyls",
-               "Glucos",
-               "Total lipids in small HD",
-               "Total lipids in chylomicrons and extremely large VLDL",
-               "Albumin",
-               "Phenylalanine",
-               "Acetoacetate",
-               "Isoleucine",
-               "Mean diameter for VLDL particles",
-               "Leucine",
-               "Valine",
-               "Histidine",
-               "Lactate"),
-  Beta_value=c(-0.251264056,0.280179378,0.148392648,-0.141912413,-0.223685945,-0.113290967,
-               0.124227231,0.078704926,0.205706859,-0.160137595,-0.195741112,-0.143698197,
-               -0.069223326,0.062262328),
-  stringsAsFactors = FALSE)
-
-# Ahola Olli T2D score betas
-Ahola_Olli_betas<-data.frame(
-  Abbreviation=c("phe", "l_vldl_ce_percentage", "l_hdl_fc", "sex", "age", "BMI", "glucose"),
-  Metabolite=c("phenylanine","Cholesteryl esters to total lipids ratio in large VLDL", 
-               "free cholesterol in large HDL", "sex", "age", "BMI", "glucose"),
-  Beta_value=c(0.32,-0.474,-0.321, -0.364, 0.0286, 0.462, 0.640),
-  stringsAsFactors = FALSE)
-
-# CVD score betas
-CVD_score_betas<-data.frame(
-  Abbreviation=c("phe","mufa_fa","faw6","dha","sex","systolic_blood_pressure","current_smoking","diabetes",
-                 "blood_pressure_lowering_med","lipidmed","totchol","hdlchol"),
-  Metabolite=c("phenylanine","mufa ratio to total fatty acids", 
-               "omega6 fatty acids"," dha", "sex","systolic_blood_pressure","current_smoking","diabetes",
-               "blood_pressure_lowering_med","lipidmed","totchol","hdlchol"),
-  Beta_value=c(0.225,-0.145,-0.137,0.1,-0.613,0.145,0.379,0.665,0.103,0.295,0.247,-0.315),
-  stringsAsFactors = FALSE)
-
-covid_betas <- data.frame(
-  Abbreviation=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
-                 "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
-                 "alb","faw3","ldl_c","serum_tg"),
-  Metabolite=c("Glycoprotein acetyls", "docosahexaenoic acid", "creatinine","Monounsaturated fatty acids",
-               "Apolipoprotein B/ Apolipoprotein A1","Tyrosine","Isoleucine","Ratio of saturated fatty acids to total fatty acids",
-               "Glucose","Lactate","Ratio of omega-6 fatty acids to omega 3 fatty acids","Phenylanine", "Total cholesterol",
-               "Ratio of omega-6 fatty acids to total fatty acids","Alanine","Polyunsaturated fatty acids",
-               "Glycine","Histidine","Ratio of polyunsaturated fatty acids to total fatty acids",
-               "Valine","Leucine","Albumin","Omega-3 fatty acids","Total cholesterol in LDL","Serum total triglycerides"),
-  Beta_value=c(0.3713,0.2533, 0.2170, 0.1693, 0.1388, 0.1375, 0.1091, 0.0965, 0.0928,
-               0.0772, 0.0642, 0.0289, -0.0116, -0.0493, -0.0498, -0.0578, -0.0648,
-               -0.0987, -0.1404, -0.1812, -0.1844, -0.1914, -0.2208, -0.2466, -0.2652),
-  stringsAsFactors = FALSE)
-
-#Phenotypic variables names
-pheno_names<-c("sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking",
-               "metabolic_syndrome", "alcohol_consumption",
-               "age","BMI", "hscrp","waist_circumference","weight","height",
-               "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb",
-               "glucose", "systolic_blood_pressure", "Event", "EventAge")
-
-#Variables names related to each surrogate
-out_list<-c("sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking",
-            "metabolic_syndrome", "alcohol_consumption",
-            "age", "age","age","BMI", "hscrp",
-            "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb")
-out_surro<-paste0("s_",out_list)
-
-#Binarized variables names related to each surrogate
-bin_names<-c("sex","diabetes","lipidmed", "blood_pressure_lowering_med", "current_smoking",
-             "metabolic_syndrome","alcohol_consumption",
-             "high_age","middle_age","low_age","obesity", "high_hscrp",
-             "high_triglycerides","high_ldl_chol","low_hdlchol","high_totchol","low_eGFR","low_wbc","low_hgb")
-bin_surro<-paste0("s_",bin_names)
-
-#Set colors for the arrays of images
-c21<-c("#7FC97F", "#BEAED4", "#FDC086", "#386CB0", "#F0027F", "#BF5B17", 
-       "#666666", "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E",
-       "#E6AB02", "#A6761D", "#666666", "#A6CEE3", "#1F78B4", "#B2DF8A",
-       "#33A02C", "#FB9A99", "#E31A1C")
-names(c21)<-c("mortScore", "MetaboAge", bin_surro)
 
 ######################
 ## Upload functions ##
@@ -939,7 +805,7 @@ QCprep_surrogates<-function(mat,PARAM_surrogates,
 calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates, bin_names, Nmax_miss=1,Nmax_zero=1, post=TRUE, roc=FALSE,quiet=FALSE){
   bin_surro=paste0("s_",bin_names)
   #QC of the metabolites
-  metabo_measures<-QCprep_surrogates(as.matrix(met[,MET63]), PARAM_surrogates, quiet=quiet,Nmax_miss=Nmax_miss,Nmax_zero=Nmax_zero)
+  metabo_measures<-QCprep_surrogates(as.matrix(met[,metabolites_subsets$MET63]), PARAM_surrogates, quiet=quiet,Nmax_miss=Nmax_miss,Nmax_zero=Nmax_zero)
   
   if(roc){
     phenotypes<-pheno[which(rownames(pheno)%in%rownames(metabo_measures)),]
@@ -1611,19 +1477,19 @@ BBMRI_hist_plot<-function(dat, x_name, color=c21, scaled=FALSE, datatype="metabo
 model_coeff_heat<-function(mort_betas, metaboAge_betas, surrogates_betas, Ahola_Olli_betas, CVD_score_betas, COVID_score_betas){
   models_betas<-matrix(0, 24, 62)
   rownames(models_betas)<-c("mortScore","MetaboAge", rownames(surrogates_betas),"T2D-score","CVD_score", "COVID_score")
-  colnames(models_betas)<-MET62
+  colnames(models_betas)<-metabolites_subsets$MET62
   models_betas["mortScore",mort_betas$Abbreviation]<-mort_betas$Beta_value
   models_betas["MetaboAge", names(metaboAge_betas)[-1]]<-metaboAge_betas[-1]
   #surrogates
   for(x in rownames(surrogates_betas)){
     models_betas[x,colnames(surrogates_betas)[-1]]<-surrogates_betas[x,-1]
   }
-  met<-Ahola_Olli_betas$Abbreviation[which(Ahola_Olli_betas$Abbreviation %in% MET62)]
-  models_betas["T2D-score",met]<-Ahola_Olli_betas$Beta_value[which(Ahola_Olli_betas$Abbreviation %in% MET62)]
-  met<-CVD_score_betas$Abbreviation[which(CVD_score_betas$Abbreviation %in% MET62)]
-  models_betas["CVD_score",met]<-CVD_score_betas$Beta_value[which(CVD_score_betas$Abbreviation %in% MET62)]
-  met<-COVID_score_betas$Abbreviation[which(COVID_score_betas$Abbreviation %in% MET62)]
-  models_betas["COVID_score",met]<-COVID_score_betas$Beta_value[which(COVID_score_betas$Abbreviation %in% MET62)]
+  met<-Ahola_Olli_betas$Abbreviation[which(Ahola_Olli_betas$Abbreviation %in% metabolites_subsets$MET62)]
+  models_betas["T2D-score",met]<-Ahola_Olli_betas$Beta_value[which(Ahola_Olli_betas$Abbreviation %in% metabolites_subsets$MET62)]
+  met<-CVD_score_betas$Abbreviation[which(CVD_score_betas$Abbreviation %in% metabolites_subsets$MET62)]
+  models_betas["CVD_score",met]<-CVD_score_betas$Beta_value[which(CVD_score_betas$Abbreviation %in% metabolites_subsets$MET62)]
+  met<-COVID_score_betas$Abbreviation[which(COVID_score_betas$Abbreviation %in% metabolites_subsets$MET62)]
+  models_betas["COVID_score",met]<-COVID_score_betas$Beta_value[which(COVID_score_betas$Abbreviation %in% metabolites_subsets$MET62)]
   
   
   mat <-models_betas

@@ -170,7 +170,7 @@ phenotypes<-reactive({
 ##############################
 # Variable storing the selected phenotypes found in the uploaded file
 pheno_available <- reactive({
-  phen_names<-pheno_names[which(pheno_names %in% colnames(phenotypes()))]
+  phen_names<-pheno_names[which(phenotypes_names$pheno_names %in% colnames(phenotypes()))]
   colnames(phenotypes()[,phen_names])[which(colSums(is.na(phenotypes()[,phen_names]))<nrow(phenotypes()[,phen_names]))]
 })
 
@@ -196,7 +196,7 @@ bin_pheno_available <- reactive({
 
 # Variable TRUE/FALSE if all the metabolites names were found
 required<-reactive({
-  length(which(MET57 %in% colnames(metabo_measures())))==57
+  length(which(metabolites_subsets$MET57 %in% colnames(metabo_measures())))==57
 })
 
 ## Tables with variables found or not in the files
@@ -212,7 +212,7 @@ output$required_met <- renderText({
 output[["found_met"]] <- DT::renderDataTable({
   tryCatch({
     req(metabo_measures())
-    found_met<-data.frame(met=MET62, presence=(MET62 %in% colnames(metabo_measures())))
+    found_met<-data.frame(met=metabolites_subsets$MET62, presence=(metabolites_subsets$MET62 %in% colnames(metabo_measures())))
     found_met<-found_met[order(found_met$presence, decreasing = F),]
     if(found_met[which(found_met$met=="faw6_faw3"),"presence"]==F){
       found_met[which(found_met$met=="faw6_faw3"),"presence"]<-NA
@@ -234,7 +234,7 @@ output[["found_met"]] <- DT::renderDataTable({
 output[["found_phen"]] <- DT::renderDataTable({
   tryCatch({
     req(phenotypes())
-    found_phen<-data.frame(phen=pheno_names, presence=(pheno_names %in% colnames(phenotypes())))
+    found_phen<-data.frame(phen=phenotypes_names$pheno_names, presence=(phenotypes_names$pheno_names %in% colnames(phenotypes())))
     found_phen<-found_phen[order(found_phen$presence,decreasing = F),]
     
     DT::datatable(found_phen,rownames = F, options = list(pageLength = 10, scrollX = TRUE)) %>% 

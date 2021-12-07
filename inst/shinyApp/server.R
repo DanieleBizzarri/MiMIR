@@ -66,10 +66,10 @@ server <- function(input, output) {
         icon = icon("cogs")
       ),
       menuItem(
-        "Surrogates",
+        "Metabolomics Surrogates",
         icon = icon("folder"),
         menuItem(
-            "Metabolic surrogates",
+            "Metabolomics surrogates",
             tabName = "surro_tables",
             icon = icon("table")
             ),
@@ -90,10 +90,10 @@ server <- function(input, output) {
         )
       ),
       menuItem(
-        "Other Scores",
+        "Metabolomics Scores",
         icon = icon("folder"),
         menuItem(
-          "Metabolic scores",
+          "Metabolomics scores",
           tabName = "scores_tables",
           icon = icon("table")
         ),

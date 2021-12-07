@@ -54,12 +54,12 @@ output$Surrogates_settings <- renderUI({
 })
 
 # Output MetaboAge resulting dataset info
-output$QC_metaboAge_text <- renderPrint(result <- QCprep(as.matrix(metabo_measures()[,MET63]),
+output$QC_metaboAge_text <- renderPrint(result <- QCprep(as.matrix(metabo_measures()[,metabolites_subsets$MET63]),
                                                          PARAM,quiet=FALSE,
                                                          Nmax_miss=input$Nmax_miss_metaboAge,
                                                          Nmax_zero=input$Nmax_zero_metaboAge))
 # Output Surrogates resulting dataset info
-output$QC_surrogates_text <- renderPrint(result <- QCprep_surrogates(as.matrix(metabo_measures()[,MET63]),
+output$QC_surrogates_text <- renderPrint(result <- QCprep_surrogates(as.matrix(metabo_measures()[,metabolites_subsets$MET63]),
                                                                       PARAM_surrogates,quiet=FALSE,
                                                                       Nmax_miss=input$Nmax_miss_surrogates,
                                                                       Nmax_zero=input$Nmax_zero_surrogates))
@@ -73,7 +73,7 @@ mort_score <- reactive({
 
 # Calculate the MetaboAge
 MetaboAge <- reactive({
-  metabo_metaboage<-QCprep(as.matrix(metabo_measures()[,MET63]),
+  metabo_metaboage<-QCprep(as.matrix(metabo_measures()[,metabolites_subsets$MET63]),
                            PARAM,quiet=TRUE,
                            Nmax_miss=input$Nmax_miss_metaboAge,
                            Nmax_zero=input$Nmax_zero_metaboAge)
@@ -94,7 +94,7 @@ surrogates <- reactive({
   surro<-calculate_surrogate_scores(met=metabo_measures(), PARAM_surrogates = PARAM_surrogates,
                                     Nmax_miss=input$Nmax_miss_surrogates,
                                     Nmax_zero=input$Nmax_zero_surrogates,
-                                    bin_names = bin_names,
+                                    bin_names = phenotypes_names$bin_names,
                                     roc=F, quiet=T)
   surrogates<-surro$surrogates
   #rownames(surrogates)<-rownames(metabo_measures())
@@ -149,10 +149,10 @@ calibrations<-reactive({
   surro<-calculate_surrogate_scores(met=metabo_measures(), PARAM_surrogates = PARAM_surrogates,
                                     Nmax_miss=input$Nmax_miss_surrogates,
                                     Nmax_zero=input$Nmax_zero_surrogates,
-                                    bin_names = bin_names,
+                                    bin_names = phenotypes_names$bin_names,
                                     roc=F, quiet=T, post=F)
   surro<-surro$surrogates
   calib<-calibration_surro(bin_phenotypes=bin_phenotypes(), surrogates=surro, 
-                           bin_names=bin_names, bin_pheno_available=bin_pheno_available(), pl=FALSE)
+                           bin_names= phenotypes_names$bin_names, bin_pheno_available=bin_pheno_available(), pl=FALSE)
 })
 
