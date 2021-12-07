@@ -2051,9 +2051,9 @@ plattCalib_evaluation<-function(r, p, p.orig, name, nbins = 10, annot_x=c(1,1),a
   
   set.seed(222)
   train_ind<- caret::createDataPartition(r, p=0.8, list=FALSE)
-  r.calib<-as.numeric(r[train_ind])-1
+  r.calib<-as.numeric(r[train_ind])
   p.calib<-p[train_ind]
-  resp<-as.numeric(r[-train_ind])-1
+  resp<-as.numeric(r[-train_ind])
   pred<-p[-train_ind]
   pred.orig<-p.orig[-train_ind]
   
@@ -2161,7 +2161,7 @@ plattCalib_evaluation<-function(r, p, p.orig, name, nbins = 10, annot_x=c(1,1),a
 calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_available, pl=FALSE, nbins=10){
   bin_surro<-paste0("s_",bin_names)
   calib<-lapply(1:length(bin_surro), function(i){
-    orig<-as.numeric(bin_phenotypes[,bin_names[i]])-1
+    orig<-as.numeric(bin_phenotypes[,bin_names[i]])
     names(orig)<-rownames(bin_phenotypes)
     pred<-as.numeric(surrogates[,bin_surro[i]])
     names(pred)<-rownames(surrogates)

@@ -134,7 +134,7 @@ output$downloadData <- downloadHandler(
     temp <- setwd(tempdir())
     setwd(temp)
     files <- c("example_metabolic_dataset.csv", "example_phenotypic_dataset.csv")
-    
+
     write.csv(synthetic_metabolic_dataset, "example_metabolic_dataset.csv")
     write.csv(synthetic_phenotypic_dataset, "example_phenotypic_dataset.csv")
     zip(zipfile = fname, files = files)
@@ -151,9 +151,8 @@ metabo_measures<-reactive({
   }else if(!is.null(syn_met())){
     metabo_measures<-syn_met()
   }else{
-    metabo_measures<-NULL
+    metabo_measures<-as.data.frame(synthetic_metabolic_dataset)
   }
-
 })
 
 phenotypes<-reactive({
@@ -162,9 +161,10 @@ phenotypes<-reactive({
   }else if(!is.null(syn_met())){
     phenotypes<-syn_phen()
   }else{
-    phenotypes<-NULL
+    phenotypes<-data.frame()
   }
 })
+
 ##############################
 ## Check available features ##
 ##############################
@@ -176,7 +176,7 @@ pheno_available <- reactive({
 
 bin_pheno_names<-reactive({
   #colnames(phenotypes())
-  colnames(phenotypes())[apply(phenotypes(),2,function(x) { all(na.omit(x) %in% 0:1) })]
+  colnames(phenotypes())[apply(phenotypes(),2,function(x) {all(na.omit(x) %in% 0:1) })]
 })
 
 #Create the binarize phenotypes table
@@ -196,13 +196,16 @@ bin_pheno_available <- reactive({
 
 # Variable TRUE/FALSE if all the metabolites names were found
 required<-reactive({
-  length(which(metabolites_subsets$MET57 %in% colnames(metabo_measures())))==57
+  if(length(metabo_measures())>0){
+    length(which(metabolites_subsets$MET57 %in% colnames(metabo_measures())))==57
+  }else{FALSE}
 })
 
 ## Tables with variables found or not in the files
 output$required_met <- renderText({
-  req(required())
-  "All required metabolites were found!"
+  if(required()){
+    "All required metabolites were found!"
+  }else{"Some required metabolites were not found!"}
 })
 
 ############
