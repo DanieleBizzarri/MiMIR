@@ -1,77 +1,36 @@
+#####################
+### Libraries #######
+#####################
+#Import packages
+
+#' @importFrom purrr map_chr
+#' @importFrom purrr map_lgl
+#' @import foreach
+#' @importFrom caret createDataPartition
+#' @importFrom stats model.matrix
+#' @importFrom stats na.omit
+#' @importFrom matrixStats colMedians
+#' @importFrom matrixStats colSds
+#' @import dplyr
+#' @import shiny
+#' @import ggfortify
+#' @import survival
+#' @import limma
+#' @import survminer
+NULL
+
+
 ###################################
 ### DEFINITIONS / CONSTANTS #######
 ###################################
-# Metabolite markers names from Nightingale health
-METABO <- c(
-  "xxl_vldl_p", "xxl_vldl_l", "xxl_vldl_pl", "xxl_vldl_c", "xxl_vldl_ce", "xxl_vldl_fc", "xxl_vldl_tg", 
-  "xl_vldl_p",  "xl_vldl_l",  "xl_vldl_pl",  "xl_vldl_c",  "xl_vldl_ce",  "xl_vldl_fc",  "xl_vldl_tg", 
-  "l_vldl_p",   "l_vldl_l",   "l_vldl_pl",   "l_vldl_c",   "l_vldl_ce",   "l_vldl_fc",   "l_vldl_tg", 
-  "m_vldl_p",   "m_vldl_l",   "m_vldl_pl",   "m_vldl_c",   "m_vldl_ce",   "m_vldl_fc",   "m_vldl_tg", 
-  "s_vldl_p",   "s_vldl_l",   "s_vldl_pl",   "s_vldl_c",   "s_vldl_ce",   "s_vldl_fc",   "s_vldl_tg", 
-  "xs_vldl_p",  "xs_vldl_l",  "xs_vldl_pl",  "xs_vldl_c",  "xs_vldl_ce",  "xs_vldl_fc",  "xs_vldl_tg", 
-  "idl_p",      "idl_l",      "idl_pl",      "idl_c",      "idl_ce",      "idl_fc",      "idl_tg", 
-  "l_ldl_p",    "l_ldl_l",    "l_ldl_pl",    "l_ldl_c",    "l_ldl_ce",    "l_ldl_fc",    "l_ldl_tg", 
-  "m_ldl_p",    "m_ldl_l",    "m_ldl_pl",    "m_ldl_c",    "m_ldl_ce",    "m_ldl_fc",    "m_ldl_tg", 
-  "s_ldl_p",    "s_ldl_l",    "s_ldl_pl",    "s_ldl_c",    "s_ldl_ce",    "s_ldl_fc",    "s_ldl_tg", 
-  "xl_hdl_p",   "xl_hdl_l",   "xl_hdl_pl",   "xl_hdl_c",   "xl_hdl_ce",   "xl_hdl_fc",   "xl_hdl_tg", 
-  "l_hdl_p",    "l_hdl_l",    "l_hdl_pl",    "l_hdl_c",    "l_hdl_ce",    "l_hdl_fc",    "l_hdl_tg", 
-  "m_hdl_p",    "m_hdl_l",    "m_hdl_pl",    "m_hdl_c",    "m_hdl_ce",    "m_hdl_fc",    "m_hdl_tg", 
-  "s_hdl_p",    "s_hdl_l",    "s_hdl_pl",    "s_hdl_c",    "s_hdl_ce",    "s_hdl_fc",    "s_hdl_tg", 
-  "xxl_vldl_pl_percentage", "xxl_vldl_c_percentage", "xxl_vldl_ce_percentage", "xxl_vldl_fc_percentage", "xxl_vldl_tg_percentage", 
-  "xl_vldl_pl_percentage",  "xl_vldl_c_percentage",  "xl_vldl_ce_percentage",  "xl_vldl_fc_percentage",  "xl_vldl_tg_percentage", 
-  "l_vldl_pl_percentage",   "l_vldl_c_percentage",   "l_vldl_ce_percentage",   "l_vldl_fc_percentage",   "l_vldl_tg_percentage", 
-  "m_vldl_pl_percentage",   "m_vldl_c_percentage",   "m_vldl_ce_percentage",   "m_vldl_fc_percentage",   "m_vldl_tg_percentage", 
-  "s_vldl_pl_percentage",   "s_vldl_c_percentage",   "s_vldl_ce_percentage",   "s_vldl_fc_percentage",   "s_vldl_tg_percentage", 
-  "xs_vldl_pl_percentage",  "xs_vldl_c_percentage",  "xs_vldl_ce_percentage",  "xs_vldl_fc_percentage",  "xs_vldl_tg_percentage", 
-  "idl_pl_percentage",      "idl_c_percentage",      "idl_ce_percentage",      "idl_fc_percentage",      "idl_tg_percentage", 
-  "l_ldl_pl_percentage",    "l_ldl_c_percentage",    "l_ldl_ce_percentage",    "l_ldl_fc_percentage",    "l_ldl_tg_percentage", 
-  "m_ldl_pl_percentage",    "m_ldl_c_percentage",    "m_ldl_ce_percentage",    "m_ldl_fc_percentage",    "m_ldl_tg_percentage", 
-  "s_ldl_pl_percentage",    "s_ldl_c_percentage",    "s_ldl_ce_percentage",    "s_ldl_fc_percentage",    "s_ldl_tg_percentage", 
-  "xl_hdl_pl_percentage",   "xl_hdl_c_percentage",   "xl_hdl_ce_percentage",   "xl_hdl_fc_percentage",   "xl_hdl_tg_percentage", 
-  "l_hdl_pl_percentage",    "l_hdl_c_percentage",    "l_hdl_ce_percentage",    "l_hdl_fc_percentage",    "l_hdl_tg_percentage", 
-  "m_hdl_pl_percentage",    "m_hdl_c_percentage",    "m_hdl_ce_percentage",    "m_hdl_fc_percentage",    "m_hdl_tg_percentage", 
-  "s_hdl_pl_percentage",    "s_hdl_c_percentage",    "s_hdl_ce_percentage",    "s_hdl_fc_percentage",    "s_hdl_tg_percentage", 
-  "vldl_d", "ldl_d", "hdl_d", "serum_c", "vldl_c", "remnant_c", "ldl_c", "hdl_c", "hdl2_c", "hdl3_c", "estc", "freec", 
-  "serum_tg", "vldl_tg", "ldl_tg", "hdl_tg", "totpg", "tg_pg", "pc", "sm", "totcho", "apoa1", "apob", "apob_apoa1", "totfa", "unsatdeg", 
-  "dha", "la", "faw3", "faw6", "pufa", "mufa", "sfa", "dha_fa", "la_fa", "faw3_fa", "faw6_fa", "pufa_fa", "mufa_fa", 
-  "sfa_fa", "glc", "lac", "cit", "ala", "gln", "his", "ile", "leu", "val", "phe", "tyr", "ace", "acace", "bohbut", "crea", "alb", "gp",
-  "pyr", "glycerol", "glycine")
-
-
-BBMRI_METABO <- c("serum_c", "X","remnant_c", "vldl_c", "X","ldl_c", "hdl_c", "hdl2_c", "hdl3_c", "serum_tg", "vldl_tg", "ldl_tg", "hdl_tg",
-                  "X", "X", "X", "X", "estc", "X", "X","X", "freec", "X", "X","X", "X", "X", "X","X","X", "X", "X","X","vldl_d", "ldl_d", "hdl_d",
-                  "totpg", "tg_pg", "totcho", "pc", "sm", "apob", "apoa1", "apob_apoa1", "totfa", "unsatdeg","faw3", "faw6", 
-                  "pufa", "mufa", "sfa", "la", "dha", "faw3_fa", "faw6_fa",  "pufa_fa", "mufa_fa", "sfa_fa", "la_fa","dha_fa", 
-                  "X", "X", "ala", "gln", "glycine", "his", "X",  "ile", "leu", "val", "phe", "tyr", "glc", "lac", "pyr",
-                  "cit", "glycerol", "bohbut", "ace", "acace", "X", "crea", "alb", "gp",
-                  "xxl_vldl_p", "xxl_vldl_l", "xxl_vldl_pl", "xxl_vldl_c", "xxl_vldl_ce", "xxl_vldl_fc", "xxl_vldl_tg",
-                  "xl_vldl_p",  "xl_vldl_l",  "xl_vldl_pl",  "xl_vldl_c",  "xl_vldl_ce",  "xl_vldl_fc",  "xl_vldl_tg", 
-                  "l_vldl_p",   "l_vldl_l",   "l_vldl_pl",   "l_vldl_c",   "l_vldl_ce",   "l_vldl_fc",   "l_vldl_tg",
-                  "m_vldl_p",   "m_vldl_l",   "m_vldl_pl",   "m_vldl_c",   "m_vldl_ce",   "m_vldl_fc",   "m_vldl_tg",
-                  "s_vldl_p",   "s_vldl_l",   "s_vldl_pl",   "s_vldl_c",   "s_vldl_ce",   "s_vldl_fc",   "s_vldl_tg",
-                  "xs_vldl_p",  "xs_vldl_l",  "xs_vldl_pl",  "xs_vldl_c",  "xs_vldl_ce",  "xs_vldl_fc",  "xs_vldl_tg",
-                  "idl_p",      "idl_l",      "idl_pl",      "idl_c",      "idl_ce",      "idl_fc",      "idl_tg", 
-                  "l_ldl_p",    "l_ldl_l",    "l_ldl_pl",    "l_ldl_c",    "l_ldl_ce",    "l_ldl_fc",    "l_ldl_tg", 
-                  "m_ldl_p",    "m_ldl_l",    "m_ldl_pl",    "m_ldl_c",    "m_ldl_ce",    "m_ldl_fc",    "m_ldl_tg",
-                  "s_ldl_p",    "s_ldl_l",    "s_ldl_pl",    "s_ldl_c",    "s_ldl_ce",    "s_ldl_fc",    "s_ldl_tg",
-                  "xl_hdl_p",   "xl_hdl_l",   "xl_hdl_pl",   "xl_hdl_c",   "xl_hdl_ce",   "xl_hdl_fc",   "xl_hdl_tg", 
-                  "l_hdl_p",    "l_hdl_l",    "l_hdl_pl",    "l_hdl_c",    "l_hdl_ce",    "l_hdl_fc",    "l_hdl_tg", 
-                  "m_hdl_p",    "m_hdl_l",    "m_hdl_pl",    "m_hdl_c",    "m_hdl_ce",    "m_hdl_fc",    "m_hdl_tg", 
-                  "s_hdl_p",    "s_hdl_l",    "s_hdl_pl",    "s_hdl_c",    "s_hdl_ce",    "s_hdl_fc",    "s_hdl_tg",
-                  "xxl_vldl_pl_percentage", "xxl_vldl_c_percentage", "xxl_vldl_ce_percentage", "xxl_vldl_fc_percentage", "xxl_vldl_tg_percentage", 
-                  "xl_vldl_pl_percentage",  "xl_vldl_c_percentage",  "xl_vldl_ce_percentage",  "xl_vldl_fc_percentage",  "xl_vldl_tg_percentage", 
-                  "l_vldl_pl_percentage",   "l_vldl_c_percentage",   "l_vldl_ce_percentage",   "l_vldl_fc_percentage",   "l_vldl_tg_percentage", 
-                  "m_vldl_pl_percentage",   "m_vldl_c_percentage",   "m_vldl_ce_percentage",   "m_vldl_fc_percentage",   "m_vldl_tg_percentage", 
-                  "s_vldl_pl_percentage",   "s_vldl_c_percentage",   "s_vldl_ce_percentage",   "s_vldl_fc_percentage",   "s_vldl_tg_percentage", 
-                  "xs_vldl_pl_percentage",  "xs_vldl_c_percentage",  "xs_vldl_ce_percentage",  "xs_vldl_fc_percentage",  "xs_vldl_tg_percentage", 
-                  "idl_pl_percentage",      "idl_c_percentage",      "idl_ce_percentage",      "idl_fc_percentage",      "idl_tg_percentage", 
-                  "l_ldl_pl_percentage",    "l_ldl_c_percentage",    "l_ldl_ce_percentage",    "l_ldl_fc_percentage",    "l_ldl_tg_percentage", 
-                  "m_ldl_pl_percentage",    "m_ldl_c_percentage",    "m_ldl_ce_percentage",    "m_ldl_fc_percentage",    "m_ldl_tg_percentage", 
-                  "s_ldl_pl_percentage",    "s_ldl_c_percentage",    "s_ldl_ce_percentage",    "s_ldl_fc_percentage",    "s_ldl_tg_percentage",
-                  "xl_hdl_pl_percentage",   "xl_hdl_c_percentage",   "xl_hdl_ce_percentage",   "xl_hdl_fc_percentage",   "xl_hdl_tg_percentage", 
-                  "l_hdl_pl_percentage",    "l_hdl_c_percentage",    "l_hdl_ce_percentage",    "l_hdl_fc_percentage",    "l_hdl_tg_percentage", 
-                  "m_hdl_pl_percentage",    "m_hdl_c_percentage",    "m_hdl_ce_percentage",    "m_hdl_fc_percentage",    "m_hdl_tg_percentage", 
-                  "s_hdl_pl_percentage",    "s_hdl_c_percentage",    "s_hdl_ce_percentage",    "s_hdl_fc_percentage",    "s_hdl_tg_percentage")
+#Global variables
+utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore", 
+                         "surro","AUC","outcome", "Uploaded", "biobank",
+                         "BBMRI_hist_scaled","BBMRI_hist", "ord", "pval.adj",
+                         "met_name", "prepped_dat", "CVD_score", "metabo_names_translator",
+                         "MET63", "MET56", "MET57", "MET62", "MET14", "MET_COVID", "MET_T2D", "MET_CVD",
+                         "mort_betas", "Ahola_Olli_betas", "CVD_score_betas", 
+                         "pheno_names", "out_list", "bin_names", "bin_surro", "c21"))
 
 # Metabolite markers often deemed to be more or less independent and not numerically derived from eachother:
 MET63 <- tolower(c("Ala","Gln","His","Phe","Tyr","Ile","Leu","Val","Glc","Lac","Pyr","Cit","Ace",
@@ -205,30 +164,6 @@ c21<-c("#7FC97F", "#BEAED4", "#FDC086", "#386CB0", "#F0027F", "#BF5B17",
        "#E6AB02", "#A6761D", "#666666", "#A6CEE3", "#1F78B4", "#B2DF8A",
        "#33A02C", "#FB9A99", "#E31A1C")
 names(c21)<-c("mortScore", "MetaboAge", bin_surro)
-
-#Global variables
-utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore", 
-                         "surro","AUC","outcome", "Uploaded", "biobank",
-                         "BBMRI_hist_scaled","BBMRI_hist", "ord", "pval.adj",
-                         "met_name", "prepped_dat", "CVD_score", "metabo_names_translator"))
-
-#Import packages
-
-#' @importFrom purrr map_chr
-#' @importFrom purrr map_lgl
-#' @import foreach
-#' @importFrom caret createDataPartition
-#' @importFrom stats model.matrix
-#' @importFrom stats na.omit
-#' @importFrom matrixStats colMedians
-#' @importFrom matrixStats colSds
-#' @import dplyr
-#' @import shiny
-#' @import ggfortify
-#' @import survival
-#' @import limma
-#' @import survminer
-NULL
 
 ######################
 ## Upload functions ##
