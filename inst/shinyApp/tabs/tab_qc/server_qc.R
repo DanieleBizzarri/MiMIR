@@ -55,7 +55,7 @@ output$Surrogates_settings <- renderUI({
 
 # Output MetaboAge resulting dataset info
 output$QC_metaboAge_text <- renderPrint(result <- QCprep(as.matrix(metabo_measures()[,metabolites_subsets$MET63]),
-                                                         PARAM,quiet=FALSE,
+                                                         PARAM_metaboAge,quiet=FALSE,
                                                          Nmax_miss=input$Nmax_miss_metaboAge,
                                                          Nmax_zero=input$Nmax_zero_metaboAge))
 # Output Surrogates resulting dataset info
@@ -74,10 +74,10 @@ mort_score <- reactive({
 # Calculate the MetaboAge
 MetaboAge <- reactive({
   metabo_metaboage<-QCprep(as.matrix(metabo_measures()[,metabolites_subsets$MET63]),
-                           PARAM,quiet=TRUE,
+                           PARAM_metaboAge,quiet=TRUE,
                            Nmax_miss=input$Nmax_miss_metaboAge,
                            Nmax_zero=input$Nmax_zero_metaboAge)
-  metaboage<-apply.fit(metabo_metaboage,FIT=PARAM$FIT_COEF)
+  metaboage<-apply.fit(metabo_metaboage,FIT=PARAM_metaboAge$FIT_COEF)
   
   #rownames(metaboage)<-rownames(metabo_measures())
   if(!is.null(phenotypes()[,"age"])){
