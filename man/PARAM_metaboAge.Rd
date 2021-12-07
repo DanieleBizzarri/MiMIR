@@ -1,13 +1,13 @@
-\name{PARAM}
-\alias{PARAM}
+\name{PARAM_metaboAge}
+\alias{PARAM_metaboAge}
 \docType{data}
-\title{ 
+\title{
 Parameters to calculate MetaboAge
 }
 \description{
-This list contains all the informations to calculate the MetaboAge by van den Akker et all.
+This list contains all the informations to calculate the MetaboAge by van den Akker et al.
 }
-\usage{data("PARAM")}
+\usage{data("PARAM_metaboAge")}
 \format{
   The format is:
 List of 8
@@ -26,13 +26,13 @@ List of 8
   ..- attr(*, "names")= chr [1:57] "(Intercept)" "acace" "ace" "ala" ...
 }
 \details{
- MET=Metabolites that are necessary for the linear regression. Nmax_miss and Nmax_zero= the max number of missing and zeros raccommended for each sample. logMEAN = the  mean of each of the log transformed metabolites in BBMRI-NL. lodSD =the  standard deviation of each of the log transformed metabolites in BBMRI-NL. MEAN and SD= mean and standard deviation of each metabolites in BBMRI-NL. FIT_COEF= the coefficients for the pre-trained model
+ MET=Metabolites that are necessary for the logistic regression. Nmax_miss and Nmax_zero= the max number of missing and zeros raccommended for each sample. mean and sd= mean and standard deviation of each metabolites in BBMRI-NL. model_betas= a matrix with coefficients for the pre-trained models
 }
 \source{
-van den Akker Erik B. et al., ‘Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease’, Circ. Genomic Precis. Med., vol. 13, no. 5, pp. 541–547, Oct. 2020, doi: 10.1161/CIRCGEN.119.002610.
+https://www.ahajournals.org/doi/full/10.1161/CIRCGEN.119.002610
 }
 \examples{
-data(PARAM)
-## maybe str(PARAM) ; plot(PARAM) ...
+data(PARAM_metaboAge)
+## maybe str(PARAM_metaboAge) ; plot(PARAM_metaboAge) ...
 }
 \keyword{datasets}

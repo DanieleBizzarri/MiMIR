@@ -2,10 +2,10 @@
 \alias{metabolites_subsets}
 \docType{data}
 \title{
-%%   ~~ data name/kind ... ~~
+The subsets of the Nightingale metabolomics platform used in the application MiMIR
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+Subsets of the metabolites for the app
 }
 \usage{data("metabolites_subsets")}
 \format{
@@ -19,15 +19,6 @@ List of 8
  $ : chr [1:25] "gp" "dha" "crea" "mufa" ...
  $ : chr [1:3] "phe" "l_vldl_ce_percentage" "l_hdl_fc"
  $ : chr [1:4] "phe" "mufa_fa" "faw6" "dha"
-}
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
 }
 \examples{
 data(metabolites_subsets)

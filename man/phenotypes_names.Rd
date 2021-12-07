@@ -2,10 +2,10 @@
 \alias{phenotypes_names}
 \docType{data}
 \title{
-%%   ~~ data name/kind ... ~~
+Nomenclatures for the phenotypes used in the app MiMIR
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+Phenotypes, Binary phenotypes,...
 }
 \usage{data("phenotypes_names")}
 \format{
@@ -16,15 +16,6 @@ List of 5
  $ : chr [1:19] "sex" "diabetes" "lipidmed" "blood_pressure_lowering_med" ...
  $ : chr [1:19] "s_sex" "s_diabetes" "s_lipidmed" "s_blood_pressure_lowering_med" ...
  $ : chr [1:24] "sex" "diabetes" "lipidmed" "blood_pressure_lowering_med" ...
-}
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
 }
 \examples{
 data(phenotypes_names)

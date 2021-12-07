@@ -5,7 +5,7 @@
 Parameters to calculate the surrogate variables
 }
 \description{
-This list contains all the informations to calculate the surrogate clinical variables by Bizzarri et all.
+This list contains all the informations to calculate the surrogate clinical variables by Bizzarri et al.
 }
 \usage{data("PARAM_surrogates")}
 \format{
@@ -137,10 +137,7 @@ List of 6
  MET=Metabolites that are necessary for the logistic regression. Nmax_miss and Nmax_zero= the max number of missing and zeros raccommended for each sample. mean and sd= mean and standard deviation of each metabolites in BBMRI-NL. model_betas= a matrix with coefficients for the pre-trained models
 }
 \source{
-reference to a publication or URL from which the data were obtained
-}
-\references{
-possibly secondary sources and usages
+https://www.medrxiv.org/content/10.1101/2021.07.19.21258470v1.article-info
 }
 \examples{
 data(PARAM_surrogates)

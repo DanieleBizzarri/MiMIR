@@ -4,12 +4,12 @@
 \alias{QCprep}
 \title{Function to prepare the NH metabolomics dataset to compute MetaboAge by van den Akker et al.}
 \usage{
-QCprep(mat, PARAM, quiet = TRUE, Nmax_zero = 1, Nmax_miss = 1)
+QCprep(mat, PARAM_metaboAge, quiet = TRUE, Nmax_zero = 1, Nmax_miss = 1)
 }
 \arguments{
 \item{mat}{The NH-metabolomics matrix; it may contain a mixture of flags and metabolites in the columns.}
 
-\item{PARAM}{is a list holding the parameters to compute the metaboAge}
+\item{PARAM_metaboAge}{is a list holding the parameters to compute the metaboAge}
 
 \item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
 

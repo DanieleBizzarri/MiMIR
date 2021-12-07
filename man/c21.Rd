@@ -2,10 +2,10 @@
 \alias{c21}
 \docType{data}
 \title{
-%%   ~~ data name/kind ... ~~
+Colors related to each score
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+A data.frame containing colors related to the scores for the plots.
 }
 \usage{data("c21")}
 \format{
@@ -14,15 +14,6 @@
     \item{\code{x}}{a numeric vector}
     \item{\code{y}}{a numeric vector}
   }
-}
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
 }
 \examples{
 data(c21)

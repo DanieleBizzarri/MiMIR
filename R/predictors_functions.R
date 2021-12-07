@@ -27,8 +27,9 @@ utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore",
                          "surro","AUC","outcome", "Uploaded", "biobank",
                          "BBMRI_hist_scaled","BBMRI_hist", "ord", "pval.adj",
                          "met_name", "prepped_dat", "CVD_score", "metabo_names_translator",
+                         "PARAM_metaboAge","PARAM_surrogates",
                          "MET63", "MET56", "MET57", "MET62", "MET14", "MET_COVID", "MET_T2D", "MET_CVD",
-                         "mort_betas", "Ahola_Olli_betas", "CVD_score_betas", 
+                         "mort_betas", "Ahola_Olli_betas", "CVD_score_betas", "metabolites_subsets", "covid_betas",
                          "pheno_names", "out_list", "bin_names", "bin_surro", "c21"))
 
 ######################
@@ -315,28 +316,28 @@ comp_covid_score <- function(dat,betas=covid_betas ,quiet=FALSE){
 #' Function to prepare the NH metabolomics dataset to compute MetaboAge by van den Akker et al.
 #'
 #' @param mat The NH-metabolomics matrix; it may contain a mixture of flags and metabolites in the columns.
-#' @param PARAM is a list holding the parameters to compute the metaboAge
+#' @param PARAM_metaboAge is a list holding the parameters to compute the metaboAge
 #' @param quiet TRUE/FALSE if TRUE if will suppress all messages from the function
 #' @param Nmax_zero max number of zeros allowed per sample
 #' @param Nmax_miss max number of missing values allowed per sample
 #' @return The NH-metabolomics matrix after checking for zeros, missing values, samples>5SD from the BBMRI-mean, imputing the missing values and zscale metabolites concentrations
 #' @export
 #' 
-QCprep<-function(mat,PARAM,quiet=TRUE, Nmax_zero=1, Nmax_miss=1){
+QCprep<-function(mat,PARAM_metaboAge,quiet=TRUE, Nmax_zero=1, Nmax_miss=1){
   # 0. Start:
   if(!quiet){
     cat(report.dim(mat,header="Start"))
   }
   # 1. Subset required metabolites:
-  mat <- subset_metabolites_overlap(mat,metabos=PARAM$MET,quiet=quiet)
+  mat <- subset_metabolites_overlap(mat,metabos=PARAM_metaboAge$MET,quiet=quiet)
   # 2. Subset samples on missingness:
   mat <- subset_samples_miss(mat, Nmax=Nmax_miss, quiet=quiet)
   # 3. Subset samples on zeros:
   mat <- subset_samples_zero(mat, Nmax=Nmax_zero, quiet=quiet)
   # 4. Subset samples on SD:
-  mat <- subset_samples_sd(as.matrix(mat), MEAN=PARAM$logMEAN, SD=PARAM$logSD, quiet=quiet)
+  mat <- subset_samples_sd(as.matrix(mat), MEAN=PARAM_metaboAge$logMEAN, SD=PARAM_metaboAge$logSD, quiet=quiet)
   # 5. Perform scaling:
-  mat <- apply.scale(mat, MEAN=PARAM$MEAN, SD=PARAM$SD)
+  mat <- apply.scale(mat, MEAN=PARAM_metaboAge$MEAN, SD=PARAM_metaboAge$SD)
   if(!quiet){
     cat("| Performing scaling ... ")
     cat(" DONE!\n")

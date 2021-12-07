@@ -2,10 +2,10 @@
 \alias{CVD_score_betas}
 \docType{data}
 \title{
-%%   ~~ data name/kind ... ~~
+Parameters to calculate the Cardiovascular disease score
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+Abbreviatinos of the metabolites, metabolites and coefficients of the score
 }
 \usage{data("CVD_score_betas")}
 \format{
@@ -16,14 +16,8 @@
     \item{\code{Beta_value}}{a numeric vector}
   }
 }
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
 \source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
+https://pubmed.ncbi.nlm.nih.gov/25573147/
 }
 \examples{
 data(CVD_score_betas)
