@@ -60,7 +60,7 @@ R version: 3.6+
 
 ## Install packages
 
-If you have problems in installing the applicationn, you can try
+If you have problems in installing the application, you can try
 installing these packages manually:
 
     ## Shiny environment
