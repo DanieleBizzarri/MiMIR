@@ -61,7 +61,7 @@ output$downloadCSV_calib <- downloadHandler(
   },
   content = function(file) {
     write.table(
-      calibrations(),
+      calib_data_frame(calibrations(), metabo_measures(), bin_pheno_available()),
       file,
       row.names = TRUE,
       col.names = NA,
@@ -77,7 +77,7 @@ output$downloadTSV_calib <- downloadHandler(
   },
   content = function(file) {
     write.table(
-      calibrations(),
+      calib_data_frame(calibrations(), metabo_measures(), bin_pheno_available()),
       file,
       row.names = TRUE,
       col.names = NA,

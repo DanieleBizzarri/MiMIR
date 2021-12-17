@@ -82,7 +82,6 @@ upload_met <- reactive({
     if(length(which(colnames(metabo_measures)=="faw6_faw3"))==0){
       metabo_measures$faw6_faw3<-metabo_measures$faw6/metabo_measures$faw3
     }
-    
     metabo_measures
     })
 

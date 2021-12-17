@@ -49,7 +49,7 @@ output$heat_na_metabo <- renderPlot({
   })
 })
 
-#Creates the plotly histogram of the selected metabolites
+#Creates the plot-ly histogram of the selected metabolites
 output$hist_metabolites <- renderPlotly({
   tryCatch({
     req(required())
@@ -61,7 +61,7 @@ output$hist_metabolites <- renderPlotly({
   })
 })
 
-#Creates the plotly histogram of the selected metabolites
+#Creates the plot-ly histogram of the selected metabolites
 output$hist_BBMRI <- renderPlotly({
   tryCatch({
     req(required())
@@ -72,9 +72,9 @@ output$hist_BBMRI <- renderPlotly({
   })
 })
 
-#Creates the plotly histogram of the selected metabolites
+#Creates the plot-ly histogram of the selected metabolites
 output$models_coef_heat <- renderPlotly({
-  model_coeff_heat(mort_betas=mort_betas,metaboAge_betas=PARAM$FIT_COEF, surrogates_betas=PARAM_surrogates$models_betas,
+  model_coeff_heat(mort_betas=mort_betas,metaboAge_betas=PARAM_metaboAge$FIT_COEF, surrogates_betas=PARAM_surrogates$models_betas,
                   Ahola_Olli_betas= Ahola_Olli_betas, CVD_score_betas= CVD_score_betas, COVID_score_betas= covid_betas)
 })
 
