@@ -26,7 +26,7 @@ ui <- dashboardPage(
     #         tags$style(".navbar {min-height:20px !important}"),
             
     #title = span(tagList(icon("laptop-medical"), "MiMIR")),
-    title = span(tagList(img(src ="MiMIR_logo_colored_30.jpeg"), "MiMIR")),
+    title = span(tagList(img(src ="scaled_mimir_logo.svg", height="85", width="85"), "MiMIR")),
                  
     #titlePanel(title=div(img(src="picture.jpg"), "My Title"))
     titleWidth = 350,
