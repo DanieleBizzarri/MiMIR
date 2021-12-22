@@ -1,7 +1,6 @@
 # MiMIR
 
-![image](./inst/shinyApp/www/scaled_mimir_logo.svg)
-<img src="./inst/shinyApp/www/scaled_mimir_logo.svg" width="100" height="100"/>
+<img src="./inst/shinyApp/www/scaled_mimir_logo.svg" width="250" height="250"/>
 
 This package contains an Rshiny webtool developed to allow the
 calculation of the metabolic predictorsdeveloped by the groups of MOLEPI
