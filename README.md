@@ -1,5 +1,7 @@
 # MiMIR
 
+<img src="./inst/shinyApp/www/scaled_mimir_logo.svg" width="250" height="250" align="right">
+
 This package contains an Rshiny webtool developed to allow the
 calculation of the metabolic predictorsdeveloped by the groups of MOLEPI
 and LCBC (LUMC), from raw Nightingale Health 1H-NMR metabolomics data.
@@ -54,7 +56,11 @@ be named.
 
 ## Requirements
 
-R version: 3.6+
+•	Install R		v4.1
+•	R-studio		preferable
+•	A web browser	Google Chrome preferably
+
+[WARNING] The application is not granted to work with previous versions of R.
 
 ## Install packages
 
