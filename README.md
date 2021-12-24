@@ -56,7 +56,11 @@ be named.
 
 ## Requirements
 
-R version: 3.6+
+•	Install R		v4.1
+•	R-studio		preferable
+•	A web browser	Google Chrome preferably
+
+[WARNING] The application is not granted to work with previous versions of R.
 
 ## Install packages
 
