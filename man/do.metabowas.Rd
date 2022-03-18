@@ -2,14 +2,14 @@
 % Please edit documentation in R/predictors_functions.R
 \name{do.metabowas}
 \alias{do.metabowas}
-\title{Helper function to do a MetaboWAS}
+\title{Function to compute MetaboWASs}
 \usage{
 \method{do}{metabowas}(
   phen,
   dat,
   test_variable = "age",
   covariates = c("sex"),
-  PC = NULL,
+  adj_method = "BH",
   quiet = T
 )
 }
@@ -22,7 +22,7 @@
 
 \item{covariates}{the covariates that you want to add}
 
-\item{PC}{the number of Principal compontents that represent the 90\% of the variance, in case you want to correct for this number (instead of Bonferroni/BH)}
+\item{adj_method}{correction method.}
 
 \item{quiet}{if FALSE it will plot the amount of people avaialble}
 }
@@ -30,5 +30,5 @@
 results= the results of the MetaboWAS (estimate, tstatistics, pvalue, BH corrected pvalue)
 }
 \description{
-Helper function to do a MetaboWAS
+This helper function is called when doing Metabolites wide association analysis.It reports the results of linear regression models to study the association of a test variable to each metabolites individually and corrected for the covariates indicated.
 }

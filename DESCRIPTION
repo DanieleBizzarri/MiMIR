@@ -1,5 +1,5 @@
 Package: MiMIR
-Title: What the Package Does (One Line, Title Case)
+Title: Metabolomics-based Models for Imputing Risk
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Daniele",
@@ -10,38 +10,35 @@ Authors@R:
 Description: This R-shiny webtool  was made to calculate the metabolic predictors from raw Nightingale Health 1H-NMR metabolomics data, developed by the groups of Molecular Epidemiology and LCBC (LUMC).
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1.0)
 Imports: 
-    stats,
-    shiny,
-    shinydashboard,
-    shinyWidgets,
-    shinycssloaders,
-    shinyjs,
+    caret,
+    dplyr,
     DT,
     foreach,
-    glmnet,
-    matrixStats,
-    plyr,
-    pheatmap,
-    RColorBrewer,
-    pROC,
-    plotly,
-    heatmaply,
-    dplyr,
-    ggplot2,
-    reshape2,
-    caret,
     ggfortify,
-    limma,
+    ggplot2,
+    glmnet,
+    heatmaply,
+    knitr,
+    matrixStats,
+    pheatmap,
+    pkgload,
+    plotly,
+    plyr,
+    pROC,
     purrr,
+    RColorBrewer,
+    reshape2,
+    rmarkdown,
+    shiny,
+    shinycssloaders,
+    shinydashboard,
+    shinyjs,
+    shinyWidgets,
+    stats,
     survival,
     survminer
-Suggests: 
-    rmarkdown,
-    knitr
-VignetteBuilder: knitr

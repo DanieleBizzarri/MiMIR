@@ -15,8 +15,10 @@
 #' @import shiny
 #' @import ggfortify
 #' @import survival
-#' @import limma
 #' @import survminer
+#' @importFrom stats as.formula  
+#' @importFrom stats coefficients
+#' @importFrom stats p.adjust
 NULL
 
 ###################################
@@ -24,7 +26,7 @@ NULL
 ###################################
 #Global variables
 utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore", 
-                         "surro","AUC","outcome", "Uploaded", "biobank",
+                         "surro","AUC","outcome", "Uploaded", "biobank","BBMRI_translator",
                          "BBMRI_hist_scaled","BBMRI_hist", "ord", "pval.adj",
                          "met_name", "prepped_dat", "CVD_score", "metabo_names_translator",
                          "PARAM_metaboAge","PARAM_surrogates",
@@ -40,19 +42,19 @@ utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore",
 #' @param names The NH-metabolomics names
 #' @return The uploaded names and the BBMRI names of the metabolites available in BBMRI.
 #' @export
-
+#' 
 find_BBMRI_names<-function(names){
   new_names <- names %>% purrr::map_chr(function(id) {
     # Look through the alternative_ids
     hits <-
       purrr::map_lgl(
-        metabo_names_translator$alternative_names,
+        BBMRI_translator$alternative_names,
         ~ id %in% .
       )
     
     # If one unambiguous hit, return it.
     if (sum(hits) == 1L) {
-      return(metabo_names_translator$BBMRI_names[hits])
+      return(BBMRI_translator$BBMRI_names[hits])
       # If not found, give a warning and pass through the input.
     } else {
       warning("Biomarker not found: ", id, call. = FALSE)
@@ -60,9 +62,9 @@ find_BBMRI_names<-function(names){
     } 
   })
   n<-data.frame(uploaded=names,BBMRI_names=new_names)
-  #n<-n[which(n$BBMRI_names %in% metabo_names_translator$BBMRI_names),]
   return(n)
 }
+
 
 ###############################
 ## Mortality Score functions ##
@@ -1288,23 +1290,6 @@ scatterplot_predictions <- function(x, p, title, xname, yname) {
 }
 
 
-# metabo_barplots<-function(metabo_measures,color){
-#   par(mfrow = c(3, 4))
-#   for (i in 1:56) { # Loop over loop.vector
-#     hist(na.omit(metabo_measures[,i]), # histogram
-#          border="black",
-#          prob = TRUE, # show densities instead of frequencies
-#          breaks = 1000,
-#          xlab="",
-#          main = colnames(metabo_measures)[i])
-#     lines(density(na.omit(metabo_measures[,i])), # density plot
-#           lwd = 3, # thickness of line
-#           col = color)
-#   }
-#   
-# }
-
-
 #' Function to plot the histograms for all the variables in dat
 #'
 #' @param dat data.frame or matrix with the variables to plot
@@ -2403,18 +2388,20 @@ MetaboWAS<-function(met, pheno, test_variable, covariates, img=T){
 }
 
 
-#' Helper function to do a MetaboWAS
+#' Function to compute MetaboWASs
+#' 
+#' This helper function is called when doing Metabolites wide association analysis.It reports the results of linear regression models to study the association of a test variable to each metabolites individually and corrected for the covariates indicated.
 #'
 #' @param phen phenotypes data.frame
 #' @param dat metabolites data.frame
 #' @param test_variable the variable to be investigated 
 #' @param covariates the covariates that you want to add
+#' @param adj_method correction method.
 #' @param quiet if FALSE it will plot the amount of people avaialble
-#' @param PC the number of Principal compontents that represent the 90% of the variance, in case you want to correct for this number (instead of Bonferroni/BH)
 #' @return results= the results of the MetaboWAS (estimate, tstatistics, pvalue, BH corrected pvalue)
 #' @export
 #'
-do.metabowas<-function(phen,dat,test_variable="age",covariates=c("sex"), PC=NULL, quiet=T){
+do.metabowas<-function(phen, dat, test_variable="age", covariates=c("sex"), adj_method="BH", quiet=T){
   if(!is.null(covariates)){
     vars <- phen[, c(test_variable, covariates)]
   }else{
@@ -2426,17 +2413,21 @@ do.metabowas<-function(phen,dat,test_variable="age",covariates=c("sex"), PC=NULL
   if(!quiet){
     print(paste("The number of samples is:",dim(vars)[1]))
   }
-  dat <- dat[, match(rownames(vars), colnames(dat))]
-  design <- stats:: model.matrix(~ ., vars)
-  fit <- lmFit(dat, design)
-  fit <- eBayes(fit)
-  result <- limma::topTable(fit, coef=2, number=Inf)
-  colnames(result) <- c("estimate","AveEpr","tstat","pval","pval.adj")
-  result <- result[,c("estimate","tstat","pval","pval.adj")]
-  if(!is.null(PC)){
-    result$PC.adj<-(result$pval * PC)
+  dat <- dat[match(rownames(vars), rownames(dat)),]
+  allmisscols <- sapply(dat, function(x)all(is.na(x)))
+  dat<-dat[,-which(allmisscols==T)]
+  data<-merge(vars,dat,by=0)
+  rownames(data)<-data$Row.names
+  data<-data[,-1]
+  fit<-foreach::foreach(i=colnames(dat), .combine="rbind") %do% {
+    res <-data.frame(stats::coefficients(summary(stats::lm(stats::as.formula(paste0(test_variable,"~",paste(covariates,collapse="+"),"+",i)), data))))
+    colnames(res) <- c("estimate","stdErr","tstat","pval")
+    res<-res[,c("estimate","tstat","pval")]
+    return(res[i,])
   }
-  return(result)
+  fit$pval.adj<-stats::p.adjust(fit$pval, method = adj_method)
+  fit<-fit[order(fit$pval.adj, decreasing = F),]
+  return(fit)
 }
 
 
