@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{prep_data_COVID_score}
 \alias{prep_data_COVID_score}
-\title{Function to prepare the metabolites data for the COVID score}
+\title{prep_data_COVID_score}
 \usage{
 prep_data_COVID_score(
   dat,
@@ -13,15 +13,33 @@ prep_data_COVID_score(
 )
 }
 \arguments{
-\item{dat}{The NH-metabolomics matrix}
+\item{dat}{numeric data-frame with Nightingale-metabolomics}
 
-\item{featID}{String vector with the names of metabolic features used}
+\item{featID}{vector of strings with the names of metabolic features included in the COVID-score}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The NH-metabolomics matrix after checking for zeros and zscale the log metabolites concentrations
+The Nightingale-metabolomics data-frame after pre-processing (checked for zeros, z-scaled and log-transformed) according to what has been done by the authors of the original papers.
 }
 \description{
-Function to prepare the metabolites data for the COVID score
+Helper function to pre-process the Nightingale Health metabolomics data-set before applying the COVID score.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Prepare the metabolic features fo the mortality score
+prepped_met <- prep_data_COVID_score(dat=metabolic_measures)
+}
+
+}
+\references{
+This function is constructed to be able to follow the pre-processing steps described in:
+Nightingale Health UK Biobank Initiative et al. (2021) Metabolic biomarker profiling for identification of susceptibility to severe pneumonia and COVID-19 in the general population. eLife, 10, e63033, doi: 10.7554/eLife.63033
+}
+\seealso{
+prep_met_for_scores, covid_betas, comp_covid_score
 }

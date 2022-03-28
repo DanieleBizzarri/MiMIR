@@ -2,7 +2,7 @@
 % Please edit documentation in R/launchApp.R
 \name{startApp}
 \alias{startApp}
-\title{Start metaboRiSc application.}
+\title{Start MiMIR application.}
 \usage{
 startApp(launch.browser = TRUE)
 }
@@ -13,5 +13,5 @@ startApp(launch.browser = TRUE)
 Opens application. If \code{launch.browser}=TRUE in default web browser
 }
 \description{
-Start metaboRiSc application.
+Start MiMIR application.
 }

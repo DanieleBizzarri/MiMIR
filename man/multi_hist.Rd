@@ -4,7 +4,7 @@
 \alias{multi_hist}
 \title{Function to plot the histograms for all the variables in dat}
 \usage{
-multi_hist(dat, color = c21, scaled = FALSE)
+multi_hist(dat, color = MiMIR::c21, scaled = FALSE)
 }
 \arguments{
 \item{dat}{data.frame or matrix with the variables to plot}

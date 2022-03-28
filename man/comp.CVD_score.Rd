@@ -2,22 +2,49 @@
 % Please edit documentation in R/predictors_functions.R
 \name{comp.CVD_score}
 \alias{comp.CVD_score}
-\title{Function to compute CVD score by Peter Wurtz on metabolite data.}
+\title{comp.CVD_score}
 \usage{
-comp.CVD_score(met, phen, betas = CVD_score_betas, quiet = FALSE)
+comp.CVD_score(met, phen, betas = MiMIR::CVD_score_betas, quiet = FALSE)
 }
 \arguments{
-\item{met}{The NH-metabolomics matrix of the samples}
+\item{met}{numeric data-frame with Nightingale-metabolomics}
 
-\item{phen}{phenotypic information of the samples}
+\item{phen}{data-frame containing phenotypic information of the samples (specifically: sex, systolic_blood_pressure, current_smoking, diabetes, blood_pressure_lowering_med, lipidmed, totchol, and hdlchol)}
 
-\item{betas}{The betas of the linear regression composing the score}
+\item{betas}{The betas of the linear regression composing the CVD-score}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The CVD score by Peter Wurtz
+data-frame containing the value of the CVD-score on the uploaded data-set
 }
 \description{
-Function to compute CVD score by Peter Wurtz on metabolite data.
+Function to compute CVD-score made by Peter Wurtz et al. made by Deelen et al. on Nightingale metabolomics data-set.
+}
+\details{
+This multivariate model predicts all-cause mortality at 5 or 10 years better than clinical variables normally associated with mortality.
+It is constituted of 14 metabolic features quantified by Nightingale Health.
+It was originally trained using a stepwise Cox regression analysis in a meta-analysis on 12 cohorts composed by 44,168 individuals.
+A multi biomarker score indicating cardiovascular risk and build by Würtz et al.
+It is calculated using information on sex, systolic blood pressure, current smoking, prevalent diabetes, antihypertensive medication, lipid lowering medication, total cholesterol, hdl cholesterol,
+together with phe, mufa_fa,faw6, and dha quantified by Nightingale. It was trained using a Cox proportional hazard regression model.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Prepare the metabolic features fo the mortality score
+T2Dscore<-comp.CVD_score(met= metabolic_measures, phen=phenotypes, quiet=TRUE)
+}
+
+}
+\references{
+This function is constructed to be able to apply the CVD-score as described in:
+Würtz,P. et al. (2015) Metabolite profiling and cardiovascular event risk: a prospective study of 3 population-based cohorts. Circulation, 131, 774–785, doi: 10.1161/CIRCULATIONAHA.114.013116
+}
+\seealso{
+prep_met_for_scores, CVD_score_betas, comp.T2D_Ahola_Olli, comp.mort_score
 }

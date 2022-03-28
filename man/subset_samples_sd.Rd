@@ -2,24 +2,40 @@
 % Please edit documentation in R/predictors_functions.R
 \name{subset_samples_sd}
 \alias{subset_samples_sd}
-\title{Function created that subsets the NH-metabolomics matrix samples to the ones for which the metabolites
-included in MetaboAge for which the log of the metabolic concentrations are not more than 5SD away from their mean}
+\title{subset_samples_sd}
 \usage{
 subset_samples_sd(x, MEAN, SD, quiet = FALSE)
 }
 \arguments{
-\item{x}{The NH-metabolomics matrix}
+\item{x}{numeric data-frame with Nightingale-metabolomics}
 
 \item{MEAN}{numeric vector indicating the mean of the metabolites in x}
 
 \item{SD}{numeric vector indicating the standard deviations of the metabolites in x}
 
-\item{quiet}{TRUE/FALSE. if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The NH-metabolomics matrix with the selected samples
+matrix with the samples with limited amount of outliers in the Nightingale-metabolomics dataset
 }
 \description{
-Function created that subsets the NH-metabolomics matrix samples to the ones for which the metabolites
-included in MetaboAge for which the log of the metabolic concentrations are not more than 5SD away from their mean
+Helper function that subsets the NH-metabolomics matrix to the samples with limited numbers of outliers
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Select the samples with low outliers
+mat <- subset_samples_sd(x=metabolic_measures, Nmax=1)
+}
+
+}
+\references{
+This function is constructed to be able to apply the metaboAge as described in:
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+}
+\seealso{
+QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, impute.miss, apply.scale, and report.dim
 }

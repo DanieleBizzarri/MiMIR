@@ -1,6 +1,6 @@
 ## ----- START THE APPLICATION -----
 
-#' Start metaboRiSc application.
+#' Start MiMIR application.
 #' 
 #' @param launch.browser TRUE/FALSE
 #' @return Opens application. If \code{launch.browser}=TRUE in default web browser

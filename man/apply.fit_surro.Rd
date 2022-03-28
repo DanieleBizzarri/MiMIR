@@ -2,20 +2,55 @@
 % Please edit documentation in R/predictors_functions.R
 \name{apply.fit_surro}
 \alias{apply.fit_surro}
-\title{Function that apply on of the surrogates models to the NH-metabolomics concentrations}
+\title{apply.fit_surro}
 \usage{
 apply.fit_surro(mat, FIT, post = TRUE)
 }
 \arguments{
-\item{mat}{The NH-metabolomics matrix}
+\item{mat}{numeric data-frame with Nightingale-metabolomics}
 
 \item{FIT}{The betas of the logistic regressions composing the surrogates by Bizzarri et al.}
 
-\item{post}{True if you want to obtain posterior probabilities}
+\item{post}{logical to obtain posterior probabilities}
 }
 \value{
-The surrogates by Bizzarri et al.
+numeric data.frame with the metabolomics-based surrogates by Bizzarri et al.
 }
 \description{
 Function that apply on of the surrogates models to the NH-metabolomics concentrations
+}
+\details{
+Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual.
+The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
+current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
+high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+# Do the pre-processing steps to the metabolic measures
+metabolic_measures<-QCprep_surrogates(as.matrix(metabolic_measures), PARAM_surrogates, quiet=quiet,Nmax_miss=Nmax_miss,Nmax_zero=Nmax_zero)
+
+#load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Calculating the binarized surrogates
+bin_pheno<-binarize_all_pheno(phenotypes)
+
+#Apply the surrogate models
+surrogates<-foreach::foreach(i=MiMIR::phenotypes_names$out_surro, .combine="cbind") \%do\% {
+pred<-apply.fit_surro(as.matrix(metabo_measures), 
+PARAM_surrogates$models_betas[i,])}
+
+}
+
+}
+\references{
+This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+}
+\seealso{
+QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, predictions_surrogates
 }

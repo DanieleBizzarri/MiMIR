@@ -61,7 +61,9 @@ tab_upload <- tabItem(
       ),
       br(),
       div(
-        downloadButton('downloadData', 'Download Example dataset'),
+        shinySaveButton("downloadData", "Download Example dataset", "Save file as...", 
+                        filetype = list(zip = ".zip"), filename = paste0("metabolic_predictors_example_dataset"),
+                        viewtype = "icon"),
       ),
       br(),
     ),

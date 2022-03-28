@@ -7,7 +7,7 @@
 BBMRI_hist_plot(
   dat,
   x_name,
-  color = c21,
+  color = MiMIR::c21,
   scaled = FALSE,
   datatype = "metabolite",
   main = "Comparison with the metabolites measures in BBMRI"

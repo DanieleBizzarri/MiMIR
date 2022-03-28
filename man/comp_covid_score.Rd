@@ -2,20 +2,42 @@
 % Please edit documentation in R/predictors_functions.R
 \name{comp_covid_score}
 \alias{comp_covid_score}
-\title{Function to compute COVID score by Nightingale Health from the metabolite data.}
+\title{comp_covid_score}
 \usage{
-comp_covid_score(dat, betas = covid_betas, quiet = FALSE)
+comp_covid_score(dat, betas = MiMIR::covid_betas, quiet = FALSE)
 }
 \arguments{
-\item{dat}{The NH-metabolomics matrix}
+\item{dat}{numeric data-frame with Nightingale-metabolomics}
 
-\item{betas}{The betas of the linear regression composing the score}
+\item{betas}{data.frame containing the coefficients used for the regression of the COVID-score}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The COVID score by Nightingale Health
+data-frame containing the value of the COVID-score on the uploaded data-set
 }
 \description{
-Function to compute COVID score by Nightingale Health from the metabolite data.
+Function to compute the COVID severity score made by Nightingale Health UK Biobank Initiative et al. on Nightingale metabolomics data-set.
+}
+\details{
+Multivariate model predicting the risk of severe COVID-19 infection.
+It is based on 37 metabolic features and trained using LASSO regression on 52,573 samples from the UK-biobanks.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Prepare the metabolic features fo the mortality score
+mortScore<-comp_covid_score(dat=metabolic_measures, quiet=TRUE)
+}
+
+}
+\references{
+This function is constructed to be able to apply the COVID-score as described in:
+Nightingale Health UK Biobank Initiative et al. (2021) Metabolic biomarker profiling for identification of susceptibility to severe pneumonia and COVID-19 in the general population. eLife, 10, e63033, doi: 10.7554/eLife.63033
+}
+\seealso{
+prep_data_COVID_score, covid_betas, comp.mort_score
 }

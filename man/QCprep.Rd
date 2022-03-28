@@ -2,24 +2,48 @@
 % Please edit documentation in R/predictors_functions.R
 \name{QCprep}
 \alias{QCprep}
-\title{Function to prepare the NH metabolomics dataset to compute MetaboAge by van den Akker et al.}
+\title{QCprep}
 \usage{
-QCprep(mat, PARAM_metaboAge, quiet = TRUE, Nmax_zero = 1, Nmax_miss = 1)
+QCprep(
+  mat,
+  PARAM_metaboAge = PARAM_metaboAge,
+  quiet = TRUE,
+  Nmax_zero = 1,
+  Nmax_miss = 1
+)
 }
 \arguments{
-\item{mat}{The NH-metabolomics matrix; it may contain a mixture of flags and metabolites in the columns.}
+\item{mat}{numeric data-frame NH-metabolomics matrix.}
 
-\item{PARAM_metaboAge}{is a list holding the parameters to compute the metaboAge}
+\item{PARAM_metaboAge}{list containing all the parameters to compute the metaboAge (metabolic features list,BBMRI-nl means and SDs of the metabolic features, and coefficients)}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 
-\item{Nmax_zero}{max number of zeros allowed per sample}
+\item{Nmax_zero}{numberic value indicating the maximum number of zeros allowed per sample (Number suggested=1)}
 
-\item{Nmax_miss}{max number of missing values allowed per sample}
+\item{Nmax_miss}{numberic value indicating the maximum number of missing values allowed per sample (Number suggested=1)}
 }
 \value{
-The NH-metabolomics matrix after checking for zeros, missing values, samples>5SD from the BBMRI-mean, imputing the missing values and zscale metabolites concentrations
+Nightingale-metabolomics data-frame after pre-processing (checked for zeros, missing values, samples>5SD from the BBMRI-mean, imputing the missing values and z-scaled)
 }
 \description{
-Function to prepare the NH metabolomics dataset to compute MetaboAge by van den Akker et al.
+Helper function to pre-process the Nightingale Health metabolomics data-set before applying the MetaboAge score by van den Akker et al.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Pre-process the metabolic features
+prepped_met<-QCprep(as.matrix(metabolic_measures), PARAM_metaboAge)
+}
+
+}
+\references{
+This function is constructed to be able to follow the pre-processing steps described in:
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+}
+\seealso{
+apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale,report.dim
 }

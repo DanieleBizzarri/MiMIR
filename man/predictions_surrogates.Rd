@@ -2,22 +2,57 @@
 % Please edit documentation in R/predictors_functions.R
 \name{predictions_surrogates}
 \alias{predictions_surrogates}
-\title{Function that calculates one of the surrogate and creates figures with their accuracy}
+\title{apply.fit_surro}
 \usage{
 predictions_surrogates(FIT, data, title_img = FALSE, plot = TRUE)
 }
 \arguments{
-\item{FIT}{The betas of the logistic regressions composing the surrogates by Bizzarri et al.}
+\item{FIT}{numeric vector with betas of the logistic regressions composing the surrogates by Bizzarri et al.}
 
-\item{data}{The NH-metabolomics matrix}
+\item{data}{numeric data-frame with Nightingale-metabolomics and the binarized phenotype to predict}
 
-\item{title_img}{string with title}
+\item{title_img}{string with title of the image}
 
-\item{plot}{TRUE/FALSE. If TRUE it calculates the roc curve}
+\item{plot}{logical to obtain the ROC curve}
 }
 \value{
 If plot==T The surrogate predictions and the roc curve. If plot==F only the surrogate predictions
 }
 \description{
-Function that calculates one of the surrogate and creates figures with their accuracy
+Helper function that apply a surrogate model and plot a ROC curve the accuracy
+}
+\details{
+Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual.
+The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
+current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
+high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+# Do the pre-processing steps to the metabolic measures
+metabolic_measures<-QCprep_surrogates(as.matrix(metabolic_measures), PARAM_surrogates, quiet=quiet,Nmax_miss=Nmax_miss,Nmax_zero=Nmax_zero)
+
+#load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Calculating the binarized surrogates
+bin_pheno<-binarize_all_pheno(phenotypes)
+
+#Apply a surrogate models and plot the ROC curve
+data<-data.frame(out=factor(phenotypes_names$bin_names[,1]), metabo_measures)
+colnames(data)[1]<-"out"
+pred<-predictions_surrogates(PARAM_surrogates$models_betas[paste0("s_",phenotypes_names$bin_names[,1]),], data=data, title_img=phenotypes_names$bin_names[,1])
+
+}
+
+}
+\references{
+This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+}
+\seealso{
+QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, apply.fit_surro
 }

@@ -2,12 +2,12 @@
 calibration_plot<-reactive({
   bin<-as.character(input$surro_cal)
   sur<-paste0("s_",bin)
-  ind<-which(phenotypes_names$bin_surro == sur)
+  ind<-which(MiMIR::phenotypes_names$bin_surro == sur)
   
-  surro<-calculate_surrogate_scores(met=metabo_measures(), PARAM_surrogates = PARAM_surrogates,
+  surro<-calculate_surrogate_scores(met=metabo_measures(), PARAM_surrogates = MiMIR::PARAM_surrogates,
                                     Nmax_miss=input$Nmax_miss_surrogates,
                                     Nmax_zero=input$Nmax_zero_surrogates,
-                                    bin_names = phenotypes_names$bin_names,
+                                    bin_names = MiMIR::phenotypes_names$bin_names,
                                     roc=F, quiet=T, post=F)
   surro<-surro$surrogates
   if(is.null(calibrations()[[ind]])){

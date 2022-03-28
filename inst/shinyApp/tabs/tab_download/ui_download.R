@@ -3,33 +3,28 @@ tab_download <- tabItem(
   align = "center",
   
   HTML('<hr style="border-color: #0088cc;">'),
-  h1("Download files"),
+  h1("Download predictors tables"),
+  shinySaveButton("download_pred", "Save predictors table", "Save file as...", 
+                  filetype = list(csv = ".csv"), filename = paste0("metabolic_predictors_", Sys.Date()),
+                  viewtype = "icon"),
   br(),
   br(),
-  #input for the name of the predictors table
-  textInput("downloadname", "Input a name for the predictors table", value = paste0("metabolic_predictors_", Sys.Date())),
-  br(),
-  #Download the table in CSV or TSV
-  downloadButton("downloadCSV", label = "Download predictors as CSV"),
-  downloadButton("downloadTSV", label = "Download predictors as TSV"),
-  br(),
-  #input for the name of the calibrated surrogates
-  textInput("downloadname_calib", "Input a name for the calibrated surrogates table", value = paste0("metabolic_calibrated_surrogates_", Sys.Date())),
-  br(),
-  #Download the table in CSV or TSV
-  downloadButton("downloadCSV_calib", label = "Download calibrated surrogates as CSV"),
-  downloadButton("downloadTSV_calib", label = "Download calibrated surrogates as TSV"),
-  br(),
-  br(),
+  shinySaveButton("download_calib", "Save calibrated surrogates", "Save file as...", 
+                  filetype = list(csv = ".csv"), filename = paste0("metabolic_calibrated_surrogates_", Sys.Date()),
+                  viewtype = "icon"),
   HTML('<hr style="border-color: #0088cc;">'),
-  h2("Download R Markdown analysis"),
+  h2("Download Report of the analyses computed"),
   br(),
   #Download the Rmarkdown if the user loaded the phenotypic file
-  downloadButton("download_html", label = "Download Analysis Report with accuracy analyses"),
+  shinySaveButton("download_html", "Download Analysis Report with accuracies", "Save file as...", 
+                  filetype = list(html = ".html"), filename = paste0("MiMIR_metabolic_predictors_report_", Sys.Date()),
+                  viewtype = "icon"),
   br(),
   br(),
   #Download the Rmarkdown if the user didn't load the phenotypic file
-  downloadButton("download_html_no_pheno", label = "Download Analysis Report without accuracy analyses"),
+  shinySaveButton("download_html_no_pheno", "Download Analysis Report with accuracies without accuracy analyses", "Save file as...", 
+                  filetype = list(html = ".html"), filename = paste0("MiMIR_metabolic_predictors_report_", Sys.Date()),
+                  viewtype = "icon"),
   br(),
   br(),
   HTML('<hr style="border-color: #0088cc;">')

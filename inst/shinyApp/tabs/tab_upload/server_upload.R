@@ -75,7 +75,7 @@ upload_met <- reactive({
     
     #Looking for alternative names
     nam<-find_BBMRI_names(colnames(metabo_measures))
-    i<-which(nam$BBMRI_names %in% metabo_names_translator$BBMRI_names)
+    i<-which(nam$BBMRI_names %in% MiMIR::metabo_names_translator$BBMRI_names)
     metabo_measures<-metabo_measures[,i]
     colnames(metabo_measures)<-nam$BBMRI_names[i]
     
@@ -102,11 +102,6 @@ upload_phen <- reactive({
     )
   }
   
-  # if(!is.null(metabo_measures())){
-  #   ind<-order(match(rownames(phenotypes()), rownames(metabo_measures())))
-  #   predictors<-predictors[ind,]
-  # }
-  
   if(!is.null(metabo_measures())){
     phenotypes<-phenotypes[rownames(metabo_measures()),]
   }
@@ -118,27 +113,32 @@ upload_phen <- reactive({
 ## Synthetic Data ##
 ####################
 syn_met<-eventReactive(input$load_synth_data,{
-  metabo_measures<-as.data.frame(synthetic_metabolic_dataset)
+  metabo_measures<-as.data.frame(MiMIR::synthetic_metabolic_dataset)
 })
 
 syn_phen<-eventReactive(input$load_synth_data,{
-  phenotypes<-synthetic_phenotypic_dataset
+  phenotypes<-MiMIR::synthetic_phenotypic_dataset
 })
 
-output$downloadData <- downloadHandler(
-  filename = function() {
-    paste("metabolic_predictors_example_dataset", "zip", sep=".")
-  },
-  content = function(fname) {
-    temp <- setwd(tempdir())
-    setwd(temp)
-    files <- c("example_metabolic_dataset.csv", "example_phenotypic_dataset.csv")
-
-    write.csv(synthetic_metabolic_dataset, "example_metabolic_dataset.csv")
-    write.csv(synthetic_phenotypic_dataset, "example_phenotypic_dataset.csv")
-    zip(zipfile = fname, files = files)
-  },
-  contentType = "application/zip"
+# Download the example synthetic dataset
+shiny::observeEvent(
+  eventExpr = input$downloadData,
+  handlerExpr = {
+    volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), shinyFiles::getVolumes()())
+    session = getDefaultReactiveDomain()
+    shinyFiles::shinyFileSave(input = input,id = "downloadData",roots = volumes,session = session,
+                              restrictions = system.file(package = "base"))
+    fileinfo <- shinyFiles::parseSavePath(roots = volumes, selection = input$downloadData)
+    if (nrow(fileinfo) > 0){
+      temp <- setwd(tempdir())
+      setwd(temp)
+      files <- c("example_metabolic_dataset.csv", "example_phenotypic_dataset.csv")
+      
+      write.csv(MiMIR::synthetic_metabolic_dataset, "example_metabolic_dataset.csv")
+      write.csv(MiMIR::synthetic_phenotypic_dataset, "example_phenotypic_dataset.csv")
+      zip(zipfile = fileinfo$datapath, files = files)
+    }
+  }
 )
 
 ####################################
@@ -150,7 +150,7 @@ metabo_measures<-reactive({
   }else if(!is.null(syn_met())){
     metabo_measures<-syn_met()
   }else{
-    metabo_measures<-as.data.frame(synthetic_metabolic_dataset)
+    metabo_measures<-as.data.frame(MiMIR::synthetic_metabolic_dataset)
   }
 })
 
@@ -196,7 +196,7 @@ bin_pheno_available <- reactive({
 # Variable TRUE/FALSE if all the metabolites names were found
 required<-reactive({
   if(length(metabo_measures())>0){
-    length(which(metabolites_subsets$MET57 %in% colnames(metabo_measures())))==57
+    length(which(MiMIR::metabolites_subsets$MET57 %in% colnames(metabo_measures())))==57
   }else{FALSE}
 })
 
@@ -214,7 +214,7 @@ output$required_met <- renderText({
 output[["found_met"]] <- DT::renderDataTable({
   tryCatch({
     req(metabo_measures())
-    found_met<-data.frame(met=metabolites_subsets$MET62, presence=(metabolites_subsets$MET62 %in% colnames(metabo_measures())))
+    found_met<-data.frame(met=MiMIR::metabolites_subsets$MET62, presence=(MiMIR::metabolites_subsets$MET62 %in% colnames(metabo_measures())))
     found_met<-found_met[order(found_met$presence, decreasing = F),]
     if(found_met[which(found_met$met=="faw6_faw3"),"presence"]==F){
       found_met[which(found_met$met=="faw6_faw3"),"presence"]<-NA
@@ -236,7 +236,7 @@ output[["found_met"]] <- DT::renderDataTable({
 output[["found_phen"]] <- DT::renderDataTable({
   tryCatch({
     req(phenotypes())
-    found_phen<-data.frame(phen=phenotypes_names$pheno_names, presence=(phenotypes_names$pheno_names %in% colnames(phenotypes())))
+    found_phen<-data.frame(phen=MiMIR::phenotypes_names$pheno_names, presence=(MiMIR::phenotypes_names$pheno_names %in% colnames(phenotypes())))
     found_phen<-found_phen[order(found_phen$presence,decreasing = F),]
     
     DT::datatable(found_phen,rownames = F, options = list(pageLength = 10, scrollX = TRUE)) %>% 

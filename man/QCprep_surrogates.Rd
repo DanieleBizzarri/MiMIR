@@ -2,31 +2,54 @@
 % Please edit documentation in R/predictors_functions.R
 \name{QCprep_surrogates}
 \alias{QCprep_surrogates}
-\title{Function to prepare the metabolomics dataset to compute the surrogates by Bizzarri et al.}
+\title{QCprep}
 \usage{
 QCprep_surrogates(
   mat,
-  PARAM_surrogates,
+  PARAM_surrogates = MiMIR::PARAM_surrogates,
   Nmax_miss = 1,
   Nmax_zero = 1,
   quiet = FALSE
 )
 }
 \arguments{
-\item{mat}{The NH-metabolomics matrix; it may contain a mixture of flags and metabolites in the columns.}
+\item{mat}{numeric data-frame Nightingale metabolomics matrix.}
 
 \item{PARAM_surrogates}{is a list holding the parameters to compute the surrogates}
 
-\item{Nmax_miss}{max number of missing values allowed per sample}
+\item{Nmax_miss}{numeric value indicating the maximum number of missing values allowed per sample (Number suggested=1)}
 
-\item{Nmax_zero}{max number of zeros allowed per sample}
+\item{Nmax_zero}{numeric value indicating the maximum number of zeros allowed per sample (Number suggested=1)}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The NH-metabolomics matrix after checking for zeros, missing values, samples>5SD from the BBMRI-mean,
-imputing the missing values and zscale metabolites concentrations
+Nightingale-metabolomics data-frame after pre-processing (checked for zeros, missing values, samples>5SD from the BBMRI-mean, imputing the missing values and z-scaled)
 }
 \description{
-Function to prepare the metabolomics dataset to compute the surrogates by Bizzarri et al.
+Helper function to pre-process the Nightingale Health metabolomics data-set before applying metabolomics-based surrogates by Bizzarri et al.
+}
+\details{
+Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual.
+The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
+current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
+high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Pre-process the metabolic features
+prepped_met<-QCprep_surrogates(as.matrix(metabolic_measures))
+}
+
+}
+\references{
+This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+}
+\seealso{
+binarize_all_pheno
 }

@@ -2,22 +2,47 @@
 % Please edit documentation in R/predictors_functions.R
 \name{comp.T2D_Ahola_Olli}
 \alias{comp.T2D_Ahola_Olli}
-\title{Function to compute T2D score by Ahola Olli mortality score on metabolite data.}
+\title{comp.T2D_Ahola_Olli}
 \usage{
-comp.T2D_Ahola_Olli(met, phen, betas = Ahola_Olli_betas, quiet = FALSE)
+comp.T2D_Ahola_Olli(met, phen, betas = MiMIR::Ahola_Olli_betas, quiet = FALSE)
 }
 \arguments{
-\item{met}{The NH-metabolomics matrix of the samples}
+\item{met}{numeric data-frame with Nightingale-metabolomics}
 
-\item{phen}{phenotypic information of the sampels}
+\item{phen}{data-frame containing phenotypic information of the samples (in particular: sex, age, BMI and the clinically measured glucose)}
 
-\item{betas}{The betas of the linear regression composing the mortality score}
+\item{betas}{The betas of the linear regression composing the T2D-score}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The T2D by Ahola Olli
+data-frame containing the value of the T2D-score on the uploaded data-set
 }
 \description{
-Function to compute T2D score by Ahola Olli mortality score on metabolite data.
+Function to compute the T2D score made by Ahola Olli et al. on Nightingale metabolomics data-set.
+}
+\details{
+This metabolomics-based score is associated with incident Type 2 Diabetes, made by Ahola-Olli et al.
+It is constructed using phe, l_vldl_ce_percentage and l_hdl_fc quantified by Nightingale Health,
+and some phenotypic information: sex, age, BMI, fasting glucose.
+It was trained using a stepwise logistic regression on 3 cohorts.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Prepare the metabolic features fo the mortality score
+T2Dscore<-comp.T2D_Ahola_Olli(met= metabolic_measures, phen=phenotypes, quiet=TRUE)
+}
+
+}
+\references{
+This function is constructed to be able to apply the T2D-score as described in:
+Ahola-Olli,A.V. et al. (2019) Circulating metabolites and the risk of type 2 diabetes: a prospective study of 11,896 young adults from four Finnish cohorts. Diabetologia, 62, 2298–2309, doi: 10.1007/s00125-019-05001-w
+}
+\seealso{
+prep_met_for_scores, Ahola_Olli_betas, comp.mort_score, comp.CVD_score
 }

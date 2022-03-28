@@ -2,20 +2,43 @@
 % Please edit documentation in R/predictors_functions.R
 \name{comp.mort_score}
 \alias{comp.mort_score}
-\title{Function to compute Deelen et al. mortality score on metabolite data.}
+\title{comp.mort_score}
 \usage{
 comp.mort_score(dat, betas = mort_betas, quiet = FALSE)
 }
 \arguments{
-\item{dat}{The NH-metabolomics matrix}
+\item{dat}{numeric data-frame with Nightingale-metabolomics}
 
-\item{betas}{The betas of the linear regression composing the mortality score}
+\item{betas}{data.frame containing the coefficients used for the regression of the mortality score}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The mortality score by Deelen et al.
+data-frame containing the value of the mortality score on the uploaded data-set
 }
 \description{
-Function to compute Deelen et al. mortality score on metabolite data.
+Function to compute the mortality score made by Deelen et al. on Nightingale metabolomics data-set.
+}
+\details{
+This multivariate model predicts all-cause mortality at 5 or 10 years better than clinical variables normally associated with mortality.
+It is constituted of 14 metabolic features quantified by Nightingale Health.
+It was originally trained using a stepwise Cox regression analysis in a meta-analysis on 12 cohorts composed by 44,168 individuals.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Prepare the metabolic features fo the mortality score
+mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
+}
+
+}
+\references{
+This function is constructed to be able to apply the mortality score as described in:
+Deelen,J. et al. (2019) A metabolic profile of all-cause mortality risk identified in an observational study of 44,168 individuals. Nature Communications, 10, 1–8, doi: 10.1038/s41467-019-11311-9.
+}
+\seealso{
+prep_met_for_scores, mort_betas, comp.T2D_Ahola_Olli, comp.CVD_score
 }

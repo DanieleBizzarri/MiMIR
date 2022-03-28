@@ -2,26 +2,48 @@
 % Please edit documentation in R/predictors_functions.R
 \name{subset_samples_sd_surrogates}
 \alias{subset_samples_sd_surrogates}
-\title{Function created that subsets the NH-metabolomics matrix samples to the ones for which the metabolites
-included in the surrogates calculations for which the metabolic concentrations are not more than 5SD away from their mean in BBMRI-NL}
+\title{subset_samples_sd_surrogates}
 \usage{
 subset_samples_sd_surrogates(x, MEAN, SD, N = 5, quiet = FALSE)
 }
 \arguments{
-\item{x}{The NH-metabolomics matrix}
+\item{x}{numeric data-frame with Nightingale-metabolomics}
 
 \item{MEAN}{numeric vector indicating the mean of the metabolites in x}
 
 \item{SD}{numeric vector indicating the standard deviations of the metabolites in x}
 
-\item{N}{number of standard deviations away from the mean}
+\item{N}{numeric vector indicating the amount of standard deviations away from the mean after which we consider an outlier (N suggested=5)}
 
-\item{quiet}{TRUE/FALSE. if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The NH-metabolomics matrix with the selected samples
+matrix with the samples with limited amount of outliers in the Nightingale-metabolomics dataset
 }
 \description{
-Function created that subsets the NH-metabolomics matrix samples to the ones for which the metabolites
-included in the surrogates calculations for which the metabolic concentrations are not more than 5SD away from their mean in BBMRI-NL
+Helper function that subsets the NH-metabolomics matrix to the samples with limited numbers of outliers
+}
+\details{
+Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual.
+The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
+current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
+high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Select the samples with low outliers
+mat <- subset_samples_sd_surrogates(x=metabolic_measures, Nmax=1)
+}
+
+}
+\references{
+This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+}
+\seealso{
+QCprep_surrogates, calculate_surrogate_scores, apply.fit_surro
 }

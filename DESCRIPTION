@@ -16,10 +16,8 @@ Depends:
     R (>= 4.1.0)
 Imports: 
     caret,
-    dplyr,
     DT,
     foreach,
-    ggfortify,
     ggplot2,
     glmnet,
     heatmaply,
@@ -31,14 +29,15 @@ Imports:
     plyr,
     pROC,
     purrr,
-    RColorBrewer,
-    reshape2,
     rmarkdown,
     shiny,
     shinycssloaders,
+    shinyFiles,
     shinydashboard,
     shinyjs,
     shinyWidgets,
     stats,
     survival,
-    survminer
+    survminer,
+    dplyr
+LazyData: true

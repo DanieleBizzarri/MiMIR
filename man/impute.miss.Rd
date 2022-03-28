@@ -2,16 +2,38 @@
 % Please edit documentation in R/predictors_functions.R
 \name{impute.miss}
 \alias{impute.miss}
-\title{Function that serves at imputing the missing values with zeros}
+\title{impute.miss}
 \usage{
 impute.miss(x)
 }
 \arguments{
-\item{x}{The matrix}
+\item{x}{numeric data-frame with Nightingale-metabolomics}
 }
 \value{
-The matrix with missing values imputed to zero
+matrix of the Nightingale-metabolomics dataset with missing values imputed to zero
 }
 \description{
-Function that serves at imputing the missing values with zeros
+Helper function that subsets the NH-metabolomics matrix to the samples with less than Nmax zeros
+}
+\details{
+Function created that subsets the NH-metabolomics matrix samples to the ones for which the metabolites
+included in MetaboAge for which the log of the metabolic concentrations are not more than 5SD away from their mean
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Imputing missing values
+mat <- impute.miss(metabolic_measures)
+}
+
+}
+\references{
+This function is constructed to be able to apply the metaboAge as described in:
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+}
+\seealso{
+QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, apply.scale, and report.dim
 }

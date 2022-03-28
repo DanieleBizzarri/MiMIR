@@ -7,7 +7,7 @@
 hist_plots(
   dat,
   x_name,
-  color = c21,
+  color = MiMIR::c21,
   scaled = FALSE,
   datatype = "metabolic score",
   main = "Predictors Distributions"

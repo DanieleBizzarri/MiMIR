@@ -2,20 +2,39 @@
 % Please edit documentation in R/predictors_functions.R
 \name{subset_samples_zero}
 \alias{subset_samples_zero}
-\title{Function that subsets the NH-metabolomics matrix samples to the ones with less than Nmax zeros}
+\title{subset_samples_miss}
 \usage{
 subset_samples_zero(x, Nmax = 1, quiet = FALSE)
 }
 \arguments{
-\item{x}{The NH-metabolomics matrix}
+\item{x}{numeric data-frame with Nightingale-metabolomics}
 
-\item{Nmax}{integer indicating  the max number of zeros allowed per sample}
+\item{Nmax}{integer indicating  the max number of missing values allowed per sample (N suggested= 1)}
 
-\item{quiet}{TRUE/FALSE. if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The NH-metabolomics matrix with the selected samples
+matrix with the samples with limited amount of zeros in the Nightingale-metabolomics dataset
 }
 \description{
-Function that subsets the NH-metabolomics matrix samples to the ones with less than Nmax zeros
+Helper function that subsets the NH-metabolomics matrix to the samples with less than Nmax zeros
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Select samples with only 1 zero
+mat <- subset_samples_zero(x=metabolic_measures, Nmax=1)
+
+}
+
+}
+\references{
+This function is constructed to be able to apply the metaboAge as described in:
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+}
+\seealso{
+QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_sd, impute.miss, apply.scale, and report.dim
 }

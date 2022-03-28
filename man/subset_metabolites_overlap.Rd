@@ -2,20 +2,38 @@
 % Please edit documentation in R/predictors_functions.R
 \name{subset_metabolites_overlap}
 \alias{subset_metabolites_overlap}
-\title{Function that subsets the NH-metabolomics matrix features to the selection in metabos}
+\title{subset_metabolites_overlap}
 \usage{
 subset_metabolites_overlap(x, metabos, quiet = FALSE)
 }
 \arguments{
-\item{x}{The NH-metabolomics matrix}
+\item{x}{numeric data-frame with Nightingale-metabolomics}
 
-\item{metabos}{String vector containing the metabolites concentration names to be selected}
+\item{metabos}{vector of strings containing the names of the metabolic features to be selected}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The NH-metabolomics matrix with the selected metabolites
+matrix with the selected Nightingale-metabolomics features
 }
 \description{
-Function that subsets the NH-metabolomics matrix features to the selection in metabos
+Helper function that subsets the NH-metabolomics matrix features to the selection in metabolites needed for the metabolic score
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Select the metabolic features
+mat <- subset_metabolites_overlap(x=metabolic_measures,metabos=PARAM_metaboAge$MET)
+}
+
+}
+\references{
+This function is constructed to be able to apply the metaboAge as described in:
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+}
+\seealso{
+QCprep, apply.fit, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale, and report.dim
 }

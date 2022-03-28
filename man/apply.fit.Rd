@@ -2,18 +2,42 @@
 % Please edit documentation in R/predictors_functions.R
 \name{apply.fit}
 \alias{apply.fit}
-\title{Function that apply the MetaboAge model to the NH-metabolomics concentrations}
+\title{apply.fit}
 \usage{
 apply.fit(mat, FIT)
 }
 \arguments{
-\item{mat}{The NH-metabolomics matrix}
+\item{mat}{numeric data-frame with Nightingale-metabolomics}
 
 \item{FIT}{The betas of the linear regression composing the MetaboAge by van den Akker et al.}
 }
 \value{
-The MetaboAge by van den Akker et al.
+data-frame containing the value of the MetaboAge by van den Akker et al.
 }
 \description{
-Function that apply the MetaboAge model to the NH-metabolomics concentrations
+Function to compute the MetaboAge score made by van den Akker et al. on Nightingale metabolomics data-set.
+}
+\details{
+Multivariate model indicating the biological age of an individual, based on 56 metabolic features.
+It was trained using a linear regression in BBMRI-nl, a Consortium of 28 cohorts comprising ~25,000 individuals.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Pre-process the metabolic features
+prepped_met<-QCprep(as.matrix(metabolic_measures, PARAM_metaboAge)
+#Apply the metaboAge
+metaboAge<-apply.fit(prepped_met, FIT=PARAM_metaboAge$FIT_COEF)
+}
+
+}
+\references{
+This function is constructed to be able to apply the metaboAge as described in:
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+}
+\seealso{
+QCprep, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale,report.dim
 }

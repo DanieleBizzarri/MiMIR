@@ -121,7 +121,7 @@ server <- function(input, output) {
       menuItem("References",startExpanded = TRUE,
                tabName = "references",
                icon = icon("book-open"),
-               menuSubItem(text = "Surrogate scores", href = "https://www.medrxiv.org/content/10.1101/2021.07.19.21258470v1"),
+               menuSubItem(text = "Surrogate scores", href = "https://www.thelancet.com/journals/ebiom/article/PIIS2352-3964(21)00558-2/fulltext"),
                menuSubItem(text = "MetaboAge", href = "https://www.ahajournals.org/doi/full/10.1161/CIRCGEN.119.002610"),
                menuSubItem(text = "Mortality score", href = "https://www.nature.com/articles/s41467-019-11311-9"),
                menuSubItem(text = "T2D score", href = "https://link.springer.com/article/10.1007/s00125-019-05001-w"),

@@ -2,21 +2,43 @@
 % Please edit documentation in R/predictors_functions.R
 \name{binarize_all_pheno}
 \alias{binarize_all_pheno}
-\title{Function created to binarize all the phenotypes supplied using the threshold defined
-in the surrogates by Bizzarri et al.}
+\title{binarize_all_pheno}
 \usage{
 binarize_all_pheno(data)
 }
 \arguments{
-\item{data}{phenotypes data.frame containing some of the following variables (with the same namings):
+\item{data}{phenotypes data.frame containing some of the following variables (with the same namenclature):
 "sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking",
 "metabolic_syndrome", "alcohol_consumption", "age","BMI", "ln_hscrp","waist_circumference",
 "weight","height", "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb"}
 }
 \value{
-The phenotypic variables binarized following the thresholds in in the surrogates by Bizzarri et al.
+The phenotypic variables binarized following the thresholds in in the metabolomics surrogates made by by Bizzarri et al.
 }
 \description{
-Function created to binarize all the phenotypes supplied using the threshold defined
-in the surrogates by Bizzarri et al.
+Helper function created to binarize the phenotypes used to calculate the metabolomics based surrogate made by Bizzarri et al.
+}
+\details{
+Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual.
+The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
+current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
+high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the phenotypes dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Calculate BMI, LDL cholesterol and eGFR
+binarized_phenotypes<-binarize_all_pheno(phenotypes)
+}
+
+}
+\references{
+This function was made to binarize the variables following the same rules indicated in the article:
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+}
+\seealso{
+pheno_barplots
 }

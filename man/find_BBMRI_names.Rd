@@ -2,16 +2,32 @@
 % Please edit documentation in R/predictors_functions.R
 \name{find_BBMRI_names}
 \alias{find_BBMRI_names}
-\title{Function to translate metabolites names alternatives to the BBMRI names}
+\title{find_BBMRI_names}
 \usage{
 find_BBMRI_names(names)
 }
 \arguments{
-\item{names}{The NH-metabolomics names}
+\item{names}{vector of strings with the metabolic features names to be translated}
 }
 \value{
-The uploaded names and the BBMRI names of the metabolites available in BBMRI.
+data.frame with the uploaded metabolites names on the first column and the BBMRI names on the second column.
 }
 \description{
-Function to translate metabolites names alternatives to the BBMRI names
+Function to translate Nightingale metabolomics alternative metabolite names to the ones used in BBMRI-nl
+}
+\examples{
+\dontrun{
+library(MiMIR)
+library(purrr)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Find the metabolites names used in BBMRI-nl
+nam<-find_BBMRI_names(colnames(metabolic_measures)) 
+}
+
+}
+\references{
+This is a function originally created for the package ggforestplot and modified ad hoc for our package
+(https://nightingalehealth.github.io/ggforestplot/articles/index.html).
 }

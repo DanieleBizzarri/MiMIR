@@ -2,22 +2,40 @@
 % Please edit documentation in R/predictors_functions.R
 \name{apply.scale}
 \alias{apply.scale}
-\title{Function created to scale the NH-metabolomics matrix samples}
+\title{apply.scale}
 \usage{
 apply.scale(dat, MEAN, SD, quiet = TRUE)
 }
 \arguments{
-\item{dat}{The matrix}
+\item{dat}{numeric data-frame with Nightingale-metabolomics}
 
 \item{MEAN}{numeric vector indicating the mean of the metabolites present in dat}
 
 \item{SD}{numeric vector indicating the standard deviations of the metabolites present in dat}
 
-\item{quiet}{TRUE/FALSE. if TRUE if will suppress all messages from the function}
+\item{quiet}{Tlogical to suppress the messages in the console}
 }
 \value{
-The matrix z-scaled using the means and sds given
+The matrix z-scaling the Nightingale-metabolomics dataset using the given Means and SDs
 }
 \description{
-Function created to scale the NH-metabolomics matrix samples
+Helper function created to scale the NH-metabolomics matrix samples
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Apply the scaling to the metabolic features
+mat <- apply.scale(metabolic_measures, MEAN=PARAM_metaboAge$MEAN, SD=PARAM_metaboAge$SD)
+}
+
+}
+\references{
+This function is constructed to be able to apply the metaboAge as described in:
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+}
+\seealso{
+QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, and report.dim
 }

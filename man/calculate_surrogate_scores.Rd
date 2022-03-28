@@ -2,12 +2,12 @@
 % Please edit documentation in R/predictors_functions.R
 \name{calculate_surrogate_scores}
 \alias{calculate_surrogate_scores}
-\title{Function created to calculate the surrogate scores by Bizzarri et al. from  the NH-metabolomics matrix}
+\title{calculate_surrogate_scores}
 \usage{
 calculate_surrogate_scores(
   met,
   pheno,
-  PARAM_surrogates,
+  PARAM_surrogates = MiMIR::PARAM_surrogates,
   bin_names,
   Nmax_miss = 1,
   Nmax_zero = 1,
@@ -17,31 +17,58 @@ calculate_surrogate_scores(
 )
 }
 \arguments{
-\item{met}{The NH-metabolomics matrix}
+\item{met}{numeric data-frame with Nightingale-metabolomics}
 
-\item{pheno}{The phenotypic matrix including this clinical variables: "sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking",
+\item{pheno}{phenotypic data.frame including this clinical variables (with the same nomenclature): "sex","diabetes", "lipidmed",  "blood_pressure_lowering_med", "current_smoking",
 "metabolic_syndrome", "alcohol_consumption", "age","BMI", "ln_hscrp","waist_circumference",
 "weight","height", "triglycerides", "ldl_chol", "hdlchol", "totchol", "eGFR","wbc","hgb"}
 
-\item{PARAM_surrogates}{is a list holding the parameters to compute the surrogates}
+\item{PARAM_surrogates}{list containing the parameters to compute the metabolomics-based surrogates}
 
-\item{bin_names}{string vector indicating the names of the binary variables obtained}
+\item{bin_names}{vector of strings containing the names of the binary variables}
 
-\item{Nmax_miss}{max number of missing values allowed per sample}
+\item{Nmax_miss}{numeric value indicating the maximum number of missing values allowed per sample (Number suggested=1)}
 
-\item{Nmax_zero}{max number of zeros allowed per sample}
+\item{Nmax_zero}{numeric value indicating the maximum number of zeros allowed per sample (Number suggested=1)}
 
-\item{post}{TRUE/FALSE. If TRUE it will calculate the posterior probabilities}
+\item{post}{logical to indicate if the function should calculate the posterior probabilities}
 
-\item{roc}{TRUE/FALSE. If TRUE it will produce an image with all the roc curves
-for the surrogate with the avialable phenotypes in the current dataset}
+\item{roc}{logical to plot ROC curves for the metabolomics surrogate (available only for the phenotypes included)}
 
-\item{quiet}{TRUE/FALSE. if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-if pheno is not available: a list with the surrogates and the NH metabolomics matrix after QC.
-if pheno is available: a list with the surrogates, the roc curves, the phenotypes, the binarized phenotypes and the NH metabolomics matrix after QC,
+if pheno is not available: list with the surrogates and the Nightingale metabolomics matrix after QC.
+if pheno is available: list with the surrogates, ROC curves, phenotypes, binarized phenotypes and the Nightingale metabolomics matrix after QC,
 }
 \description{
-Function created to calculate the surrogate scores by Bizzarri et al. from  the NH-metabolomics matrix
+Function to compute the surrogate scores by Bizzarri et al. from  the Nightingale metabolomics matrix
+}
+\details{
+Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual.
+The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
+current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
+high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+library(foreach)
+library(pROC)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Apply the metaboAge
+surro<-calculate_surrogate_scores(met=metabo_measures, pheno=phenotypes, Nmax_miss=1, Nmax_zero=1, roc=T, quiet=F)
+}
+
+}
+\references{
+This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+}
+\seealso{
+QCprep_surrogates, subset_samples_sd_surrogates, apply.fit_surro
 }

@@ -2,22 +2,44 @@
 % Please edit documentation in R/predictors_functions.R
 \name{prep_met_for_scores}
 \alias{prep_met_for_scores}
-\title{Function to prepare the metabolites data for the mortality, T2D and CVD scores.}
+\title{prep_met_for_scores}
 \usage{
 prep_met_for_scores(dat, featID, plusone = F, quiet = FALSE)
 }
 \arguments{
-\item{dat}{The NH-metabolomics matrix}
+\item{dat}{numeric data-frame with Nightingale-metabolomics}
 
-\item{featID}{String vector with the names of metabolic features used}
+\item{featID}{vector of strings with the names of metabolic features included in the score selected}
 
-\item{plusone}{TRUE or FALSe if 1.0 should be  added to all metabolites to calculate the score}
+\item{plusone}{logical to determine if a value of 1.0 should be added to all metabolic features (TRUE) or only to the ones featuring zeros before log-transforming (FALSE)}
 
-\item{quiet}{TRUE/FALSE if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
-The NH-metabolomics matrix after checking for zeros and zscale the log metabolites concentrations
+The Nightingale-metabolomics data-frame after pre-processing (checked for zeros, zscale and log-transformed) according to what has been done by the authors of the original papers.
 }
 \description{
-Function to prepare the metabolites data for the mortality, T2D and CVD scores.
+Helper function to pre-process the Nightingale Health metabolomics data-set before applying the mortality, Type-2-diabetes and CVD scores.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the Nightignale metabolomics dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Prepare the metabolic features fo the mortality score
+prepped_met <- prep_met_for_scores(metabolic_measures,featID=MiMIR::mort_betas$Abbreviation)
+}
+
+}
+\references{
+This function is constructed to be able to follow the pre-processing steps described in:
+Deelen,J. et al. (2019) A metabolic profile of all-cause mortality risk identified in an observational study of 44,168 individuals. Nature Communications, 10, 1–8, doi: 10.1038/s41467-019-11311-9.
+
+Ahola-Olli,A.V. et al. (2019) Circulating metabolites and the risk of type 2 diabetes: a prospective study of 11,896 young adults from four Finnish cohorts. Diabetologia, 62, 2298–2309, doi: 10.1007/s00125-019-05001-w
+
+Würtz,P. et al. (2015) Metabolite profiling and cardiovascular event risk: a prospective study of 3 population-based cohorts. Circulation, 131, 774–785, doi: 10.1161/CIRCULATIONAHA.114.013116
+}
+\seealso{
+comp.mort_score, mort_betas, comp.T2D_Ahola_Olli, comp.CVD_score
 }

@@ -2,24 +2,40 @@
 % Please edit documentation in R/predictors_functions.R
 \name{BMI_LDL_eGFR}
 \alias{BMI_LDL_eGFR}
-\title{Function created to calculate:
-the BMI using height and weight;
-the LDL cholesterol using HDL cholesterol, triglycerides, totchol;
-eGFR using creatinine, sex and age.}
+\title{BMI_LDL_eGFR}
 \usage{
 BMI_LDL_eGFR(phenotypes, metabo_measures)
 }
 \arguments{
 \item{phenotypes}{data.frame containing height and weight, HDL cholesterol, triglycerides, totchol, sex and age}
 
-\item{metabo_measures}{NH-metabolomics matrix containing creatinine (crea)}
+\item{metabo_measures}{numeric data-frame with Nightingale metabolomics quantifications containing creatinine levels (crea)}
 }
 \value{
-The phenotypes data.frame with the addition of BMI, LDL cholesterol and eGFR
+phenotypes data.frame with the addition of BMI, LDL cholesterol and eGFR
 }
 \description{
-Function created to calculate:
-the BMI using height and weight;
-the LDL cholesterol using HDL cholesterol, triglycerides, totchol;
-eGFR using creatinine, sex and age.
+#' Function created to calculate: 1) BMI using height and weight; 2) LDL cholesterol using HDL cholesterol, triglycerides, totchol;
+3) eGFR creatinine levels, sex and age.
+}
+\examples{
+\dontrun{
+library(MiMIR)
+
+#load the dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Calculate BMI, LDL cholesterol and eGFR
+phenotypes<-BMI_LDL_eGFR(phenotypes, metabolic_measures)
+}
+
+}
+\references{
+This function is constructed to calculate BMI, LDL cholesterol and eGFR as in the following papers:
+
+BMI: Flint AJ, Rexrode KM, Hu FB, Glynn RJ, Caspard H, Manson JE et al. Body mass index, waist circumference, and risk of coronary heart disease: a prospective study among men and women. Obes Res Clin Pract 2010; 4: e171–e181, doi: 10.1016/j.orcp.2010.01.001
+
+LDL-cholesterol: Friedewald WT, Levy RI, Fredrickson DS. Estimation of the Concentration of Low-Density Lipoprotein Cholesterol in Plasma, Without Use of the Preparative Ultracentrifuge. Clin Chem 1972; 18: 499–502, doi: https://doi.org/10.1093/clinchem/18.6.499
+
+eGFR: Carrero Juan Jesus, Andersson Franko Mikael, Obergfell Achim, Gabrielsen Anders, Jernberg Tomas. hsCRP Level and the Risk of Death or Recurrent Cardiovascular Events in Patients With Myocardial Infarction: a Healthcare‐Based Study. J Am Heart Assoc 2019; 8: e012638, doi: 10.1161/JAHA.119.012638
 }
