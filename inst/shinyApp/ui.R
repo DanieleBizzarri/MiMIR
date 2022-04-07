@@ -19,22 +19,11 @@ ui <- dashboardPage(
   title = "MiMIR",
   
   dashboardHeader(
-    # tags$li(class = "dropdown",
-    #         tags$style(".main-header {max-height: 20px}"),
-    #         tags$style(".main-header .logo {height: 20px;}"),
-    #         tags$style(".sidebar-toggle {height: 20px; padding-top: 1px !important;}"),
-    #         tags$style(".navbar {min-height:20px !important}"),
-            
-    #title = span(tagList(icon("laptop-medical"), "MiMIR")),
+    #title of the application
     title = span(tagList(img(src ="scaled_mimir_logo.svg", height="85", width="85"), "MiMIR")),
-                 
-    #titlePanel(title=div(img(src="picture.jpg"), "My Title"))
     titleWidth = 350,
     
-    
     dropdownMenuOutput("messageMenu"),
-    # text with the current tab
-    #tags$li(class = "dropdown", tags$a(textOutput("current_page"))),
     #Links to our sites
     tags$li(a(href = 'https://www.lumc.nl/',
               tags$img(src = 'lumc-logo.jpg', height="60", width="60",

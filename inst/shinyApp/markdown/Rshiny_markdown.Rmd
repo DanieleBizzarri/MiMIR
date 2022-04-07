@@ -8,6 +8,7 @@ output:
       collapsed: false
     theme: paper
 always_allow_html: true
+abstract: "This is a report of the analyses the user performed using MiMIR (Metabolomics-based Models for Imputing Risk), a toolbox enabling data exploration and easy projection of the pre-trained metabolic models developed using Nightingale Health 1H-NMR metabolomics data. With this report you will be able to easily retrieve the pre-processing steps followed and the most useful evaluations of the application. You chose the report with information about the accuracies of the scores on the uploaded dataset."
 params:
   metabo_measures: metabo_measures
   phenotypes: phenotypes
@@ -25,9 +26,8 @@ params:
   Nmax_zero_surrogates:  Nmax_zero_surrogates
 ---
 
-# Reading packages and variables
-Required packages are loaded and the input variables are set. The used input settings are shown.
-```{r setup}
+```{r setup, echo=FALSE}
+# Required packages to load
 if (!require("knitr")) install.packages("knitr")
 if (!require("tidyr")) install.packages("tidyr")
 if (!require("plotly")) install.packages("plotly")
@@ -53,19 +53,21 @@ Nmax_zero_surrogates<-params$Nmax_miss_metaboAge
 ```
 
 # Dataset Characteristics
-### Dimensions of the files
+Dimensions of the uploaded dataset:
 ```{r showVariables, echo=FALSE}
 cat(paste0("Metabolites file dimensions: \nRows= ", dim(metabo_measures)[1], ", Columns= ", dim(metabo_measures)[2]),"\nAll the necessary metabolites were found available!",
     "\n\nPhenotypes file dimensions: \nRows= ", dim(phenotypes)[1], ", Columns= ", dim(phenotypes)[2])
 ```
 
-## Metabolites
-### Missingness of the metabolites
+### Metabolites
+The following plot reports the missing values found in the features necessary to calculate the scores. This tab contains a heatmap indicating the available values in grey and missing in white. It also includes two bar plots on the sides: one to show the missingness per sample and the other to show the missing values per metabolite.
+Generally, Nightingale Health reports very low missing values in their quantification, but the missingness in the features can affect the values of the scores calculated. For instance, missing values in the 14 metabolites included in the mortality score will cause missingness in the mortality score, while this doesn't happen in MetaboAge thanks to the imputation techniques used.
 ```{r missing metabolites, echo=FALSE}
-plot_na_heatmap(t(metabo_measures[,MiMIR::metabolites_subsets$MET57]))
+plot_na_heatmap(t(metabo_measures[,MiMIR::metabolites_subsets$MET63]))
 ```
 
-### Correlation of the metabolites 
+### Correlation
+Nightingale Health measures are mostly constituted by lipids and are often correlated to one another. Here we report the Pearson correlations of the metabolites needed to calculate each metabolomics-based score. High correlations are indicated in red and low correlations in blue. This plot can help the user to understand the relations between the metabolic features and divide the features in highly correlated groups.
 ```{r corr metabolites, echo=FALSE}
   res<-cor_assoc(metabo_measures,metabo_measures, MiMIR::metabolites_subsets$MET57, MiMIR::metabolites_subsets$MET57)
   plot_corply(res, main="Metabolites' Correlations", reorder.x=TRUE, abs=F, 
@@ -73,25 +75,35 @@ plot_na_heatmap(t(metabo_measures[,MiMIR::metabolites_subsets$MET57]))
 ```
 
 ### Histogram metabolites
+This interactive bar plot shows the distributions of the metabolic features used in the metabolomics-based scores within the uploaded data-set in three batches to allow better visibility of the plots.
 ```{r histograms metabolites, echo=FALSE, out.width="150%", out.height="600%"}
-multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET57])
+multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[1:20]])
+multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[21:40]])
+multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[41:63]])
 ```
 
 ## Binary Phenotypes
+The surrogates models were trained to predict binary variables that were obtained using thresholds for “at risk” levels of generally used clinical variables. MiMIR calculates the binary variables from the file that the user uploaded. In this section you can evaluate the binary phenotype values.
+
 ### Missingness of the binarized phenotypes
+The following plot reports the missing values found in the binarized phenotypic features. Like for the metabolites missing plot, this tab contains a heatmap and two bar plots on the sides.
 ```{r missing binarized phenotypes, echo=FALSE}
   plot_na_heatmap(t(bin_phenotypes))
 ```
 
-### Correlation of the binarized phenotypes
+### Correlation
+Also an heatmap representing the Pearson's correlations between the binarized phenotypic variables. 
 ```{r corr pheno, echo=FALSE}
   res<-cor_assoc(data.matrix(bin_phenotypes),data.matrix(bin_phenotypes), bin_pheno_available, bin_pheno_available)
   plot_corply(res, main="Binarized phenotypes correlations", reorder.x=TRUE, abs=F, 
                       resort_on_p= TRUE,reorder_dend=F)
 ```
 
-# Predicted variables
+# Predicted scores
+In this section we include the results of the metabolomics-based scores in the uploaded data set.
+
 ### Quality Control for the predicted values calculated
+The selected pre-processing settings for the MetaboAge and the surrogate models, brought to these sample selections:
 ```{r quality control, echo=FALSE}
 cat("The quality control settings chosen for MetaboAge are:\n")
 a<-QCprep(as.matrix(metabo_measures[,MiMIR::metabolites_subsets$MET63]),
@@ -104,39 +116,53 @@ b<- QCprep_surrogates(as.matrix(metabo_measures[,MiMIR::metabolites_subsets$MET6
                        MiMIR::PARAM_surrogates,quiet=FALSE,
                        Nmax_miss=Nmax_miss_surrogates,
                        Nmax_zero=Nmax_zero_surrogates)
-
 ```
 
 ### Missingness of the predicted values
+As for the other tables we report the missingness of the metabolomics-based scores.
+The missingness reported in this figure is closely related to the one seen in the metabolites features, because the metabolomics-scores are derived from those variables.
 ```{r missing predicted values, echo=FALSE}
   plot_na_heatmap(t(predictors[,-1]))
 ```
 
 ### Histogram predictors
+This interactive bar plot shows the distributions of the metabolomics-based scores within the uploaded data-set in two batches to allow better visibility of the plots.
 ```{r histograms predicted scores, echo=FALSE, out.width="130%", out.height="400%"}
- multi_hist(predictors[,-1])
+ multi_hist(predictors[,2:10])
+ multi_hist(predictors[,11:dim(predictors)[2]])
 ```
 
-## Correlations of the predictors
+### Correlations of the predictors
+As for the other tables we report the Pearson's correlations of the metabolomics-based scores. This plot can be used to verify that the scores represent biological markers which correlate to each other accordingly to their original variables' correlations.
 ```{r corr predictors, echo=FALSE}
 res<-cor_assoc(predictors, predictors, colnames(predictors)[-1],colnames(predictors)[-1])
 plot_corply(res, main="Correlations of the Metabolic scores", reorder.x=TRUE, abs=F,
                     resort_on_p= TRUE,reorder_dend=F)
 ```
 
-# Accuracy
-## ROC curves surrogates
+# Accuracy evaluations
+Since you have chosen this Report file, we suppose you uploaded the phenotypic information and therefore we evaluate also the accuracy of the metabolomic-based models.
+### ROC curves surrogates
+The ROC curves are graphical tools to illustrates the accuracy of binary classifiers. We make these plots available for the surrogate models for which the correct phenotype is available.
 ```{r roc surrogates, echo=FALSE, out.width="150%", out.height="200%"}
     suppressWarnings(roc_surro_subplots(surrogates, bin_phenotypes))
 
 ```
 
-## Surrogates t-test
+### Surrogates t-test
+This Figure shows paired boxplots with the surrogate values split between the TRUE/FALSE (0 in blue, 1 in red) in the original values of the clinical variables.It will also produce t-tests to show how different the 2 distributions are.
 ```{r t-test surrogates, echo=FALSE}
    ttest_surrogates(surrogates = surrogates, bin_phenotypes = bin_phenotypes)
 ```
 
-## Scatterplot MetaboAge
+### LOBOV surrogates
+Therefore, we included the results of the LOBOV analysis done in the paper by Bizzarri et al. These accuracies can be used to compare the accuracies achieved in the uploaded dataset (in blue) compared to the accuracies in the single cohorts of BBMRI.nl (in red).
+```{r lobov surrogates, echo=FALSE}
+   LOBOV_accuracies(surrogates= surrogates, bin_phenotypes= bin_phenotypes, bin_pheno_available = bin_pheno_available, acc_LOBOV= MiMIR::acc_LOBOV)
+```
+
+### Scatterplot MetaboAge
+This scatterplot presents on the x-axis the chronological age of the individuals (uploaded in the phenotypes file) and on the y-axis MetaboAge. It also shows some accuracy measures useful to evaluate continuous variable predictions: R, R^2 and the median error. 
 ```{r metaboage scatterplot, echo=FALSE}
   x<-data.frame(phenotypes$age)
   rownames(x)<-rownames(phenotypes)
@@ -146,13 +172,10 @@ plot_corply(res, main="Correlations of the Metabolic scores", reorder.x=TRUE, ab
                           yname="MetaboAge")
 ```
 
-## Mortality Histogram divided in age ranges
-```{r mort-age, echo=FALSE}
-  hist_plots_mortality(mort_score,phenotypes)
-```
-
 # Calibration of the surrogates
-## Reliability plots
+### Reliability plots
+The reliability diagrams are visual inspection tools for the calibrations of each of the metabolomics surrogate models. The reliability diagrams plots the mean predicted value within a certain range of posterior probabilities, against the fraction of accurately predicted values.  A perfectly calibrated model will have the calibration line to fall near the diagonal line. The second plot shows the distributions of the calibrated and non-calibrated surrogate.
+Finally, we also report accuracy measures for the calibrations: the ECE, MCE and the Log-Loss. If the ECE, MCE and Log-Loss are lowered, it means that the calibration was successful.
 ```{r calibration, echo=FALSE, message=FALSE}
 htmltools::tagList(lapply(bin_pheno_available, function(i){
     if(is.null(calibrations[[i]])){
@@ -174,7 +197,8 @@ htmltools::tagList(lapply(bin_pheno_available, function(i){
 
 ```
 
-## Correlations of the calibrated surrogates
+### Correlations of the calibrated surrogates
+As for the other tables we report the Pearson's correlations of the metabolomics surrogates after calibration.
 ```{r calibrations corr, echo=FALSE}
   calib<-calib_data_frame(calibrations, metabo_measures, bin_pheno_available)
   colnames(calib)<-paste0("s_",colnames(calib))
@@ -185,6 +209,7 @@ htmltools::tagList(lapply(bin_pheno_available, function(i){
 
 
 ### Missingness of the calibrated surrogates
+As for the other tables we report the missingness of the calibrated metabolic surrogates.
 ```{r missing calibrated, echo=FALSE}
   calib<-calib_data_frame(calibrations, metabo_measures, bin_pheno_available)
   plot_na_heatmap(t(calib))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{hist_plots}
 \alias{hist_plots}
-\title{Function to plot the histogram of the selected variables}
+\title{hist_plots}
 \usage{
 hist_plots(
   dat,
@@ -20,7 +20,7 @@ hist_plots(
 
 \item{color}{colors selected for all the variables}
 
-\item{scaled}{TRUE/FALSE. If TRUE the variables will be z-scaled before plotting them}
+\item{scaled}{logical to z-scale the variables}
 
 \item{datatype}{a character vector indicating what data type is beeing plotted}
 
@@ -30,5 +30,19 @@ hist_plots(
 plotly image with the histograms of the selected variables
 }
 \description{
-Function to plot the histogram of the selected variables
+#' Function to plot the histograms for all the variables in dat
+}
+\examples{
+\dontrun{
+require(MiMIR)
+require(plotly)
+require(matrixStats)
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Apply a surrogate models and plot the ROC curve
+surrogates<-calculate_surrogate_scores(met=metabo_measures,Nmax_miss=1,Nmax_zero=1,roc=F)
+#Plot the histogram of the surrogate sex values scaled 
+hist_plots(surrogates, x_name="s_sex", scaled=T)
+}
+
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{ttest_scores}
 \alias{ttest_scores}
-\title{Function that creates a boxplot with a continuous variable split using the binary variable}
+\title{ttest_scores}
 \usage{
 ttest_scores(dat, pred, pheno)
 }
@@ -17,5 +17,26 @@ ttest_scores(dat, pred, pheno)
 plotly boxplot with the continuous variable split using the binary variable
 }
 \description{
-Function that creates a boxplot with a continuous variable split using the binary variable
+#' Function that creates a boxplot with a continuous variable split using the binary variable
+}
+\examples{
+\dontrun{
+library(MiMIR)
+library(plotly)
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+
+#Compute the mortality score
+mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
+
+pred<-as.character(input$pred_choices2)
+pheno<-as.character(input$pheno_chosen2)
+dat<-data.frame(mortScore, sex=phenotypes$sex)
+
+ttest_scores(dat = dat, pred= "mortScore", pheno="sex")
+
+}
+
 }

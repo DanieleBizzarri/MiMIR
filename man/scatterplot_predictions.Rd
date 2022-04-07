@@ -2,24 +2,41 @@
 % Please edit documentation in R/predictors_functions.R
 \name{scatterplot_predictions}
 \alias{scatterplot_predictions}
-\title{Function that creates a scatterplot with the real values and predicted values}
+\title{scatterplot_predictions}
 \usage{
 scatterplot_predictions(x, p, title, xname, yname)
 }
 \arguments{
-\item{x}{numeric vector with the real values}
+\item{x}{numeric vector}
 
-\item{p}{numeric vector with the predicted values}
+\item{p}{second numeric vector}
 
-\item{title}{string with the title}
+\item{title}{string vector with the title}
 
-\item{xname}{string with the name of the variable on the x axis}
+\item{xname}{string vector with the name of the variable on the x axis}
 
-\item{yname}{string with the name of the variable on the y axis}
+\item{yname}{string vector with the name of the variable on the y axis}
 }
 \value{
-plotly image with the scatterplot of a real vs predicted variable
+plotly image with the scatterplot
 }
 \description{
-Function that creates a scatterplot with the real values and predicted values
+Function to visualize a scatter-plot comparing two variables
+}
+\examples{
+\dontrun{
+library(plotly)
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+
+#Pre-process the metabolic features
+prepped_met<-QCprep(as.matrix(metabolic_measures, PARAM_metaboAge)
+#Apply the metaboAge
+metaboAge<-apply.fit(prepped_met, FIT=PARAM_metaboAge$FIT_COEF)
+
+scatterplot_predictions(phenotypes$age, metaboAge, title="Chronological Age vs MetaboAge")
+}
+
 }

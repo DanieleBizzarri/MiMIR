@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{cor_assoc}
 \alias{cor_assoc}
-\title{SubFunction for plotting data1 x data2 associations on basis of (partial) correlations:}
+\title{cor_assoc}
 \usage{
 cor_assoc(dat1, dat2, feat1, feat2, method = "pearson", quiet = FALSE)
 }
@@ -11,17 +11,33 @@ cor_assoc(dat1, dat2, feat1, feat2, method = "pearson", quiet = FALSE)
 
 \item{dat2}{matrix 2}
 
-\item{feat1}{string with the names of the selected variables in dat}
+\item{feat1}{vector of strings with the names of the selected variables in dat}
 
-\item{feat2}{string with the names of the selected variables in dat2}
+\item{feat2}{vector if strings with the names of the selected variables in dat2}
 
-\item{method}{indicates which methods of the correlation to use (look at cor.test)}
+\item{method}{indicates which methods of the correlation to use}
 
-\item{quiet}{TRUE/FALSE. if TRUE if will suppress all messages from the function}
+\item{quiet}{logical to suppress the messages in the console}
 }
 \value{
 correlations of the selected variables in the 2 martrices
 }
 \description{
-SubFunction for plotting data1 x data2 associations on basis of (partial) correlations:
+Function to calulate the correlation between 2 matrices
+}
+\examples{
+\dontrun{
+library(stats)
+
+#load the metabolites dataset
+metabolites <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+
+#Compute the pearson correlation of all the variables in the data.frame metabolic_measures
+cors<-cor_assoc(metabolites, metabolites, colnames(metabolites ),colnames(metabolites))
+
+}
+
+}
+\seealso{
+plot_corply
 }

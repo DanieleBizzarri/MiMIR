@@ -7,32 +7,33 @@ output[["qc_intro"]] <- renderUI({
     tagList(
       div(
         span(
-          "The mortality score, MetaboAge and the surrogate clinical values were built in different moments
-          and with different strategies, therefore they have a different Quality Control Protocol.
-          In this page we go through the QC for each of the methods.
+          "The metabolomics-based scores were built using different pre-processing strategies. 
+          The Quality Control steps are, for the most part already fixed by the original authors of the scores. 
+          This process generally consists in scaling the metabolic features, to selecting samples that were correctly measured and eventually impute the missing values.
+          This tab gives the option to make the user able to have freedom, if possible, over some Steps in some metabolomics-bases scores.
           ",
           style = "text-align: justify; display: block; width: 90%"
         ),
         br(),
         span(
-          paste("The mortality score has a fixed QC, which  consists in the log transform of the z-scaled metabolites done separately for each study.
-          It doesn't involve  any imputation, therefore the missingness in your dataset relative to the 14 metabolites present in the score will cause
-          the missingness of the mortality score values.
+          paste("Mortality, COVID, T2D and CVD scores have a fixed QC, which  consists in log transforming the z-scaled metabolites.
+          It doesn't involve  any imputation, therefore the missingness in your dataset will cause missingness in the scores.
           "),
           style = "text-align: justify; display: block; width: 90%"
         ),
         br(),
         span(
-          "For the MetaboAge and the surrogates scores instead we z-scale the metabolites and impute with zero the missing values.
-          We allow the samples that don't have metabolites measures going over 5 times the standard deviation we measured in BBMRI-NL,
-          and we allow by default: 1 missing value per sample (Nmax_miss) and 1 zeros per sample (Nmax_zero).
-          We reccomend to use this values, but feel free to change the values of Nmax_miss and Nmax_zero separately for MetaboAge and the surrogates.
-          
+          "MetaboAge and the surrogates scores: We select samples with limited number of zeros, missing values and exclude samples with outliers (based on the means and standard deviations in BBMRI-NL),
+          MiMIR calculates the scores automatically with maximum 1 missing value (Nmax_miss), 1 zeros (Nmax_zero) per sample.
+          The user can to change the values of Nmax_miss and Nmax_zero accordingly to his/her needs.
+          Finally, the metabolites are z-scaled and imputed with zero the missing values.
           ",
           style = "text-align: justify; display: block; width: 90%"
         ),
+        br(),
         span(
-          "When you decided the best for you, press the button \"Run Analysis!\" at the bottom of the page!",
+          "Please look at the MANUAL for a complete description of the Pre-processing steps in all the scores.
+          ",
           style = "text-align: justify; display: block; width: 90%"
         )
       )

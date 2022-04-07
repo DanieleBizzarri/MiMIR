@@ -1,41 +1,61 @@
-# MiMIR
 
-[![R-CMD-check](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml)
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="./inst/shinyApp/www/scaled_mimir_logo.svg" width="250" height="250" align="right">
+# MetaboRiSc
 
-This package contains an Rshiny webtool developed to allow the calculation of the metabolic predictorsdeveloped by the groups of MOLEPI and LCBC (LUMC), from raw Nightingale Health 1H-NMR metabolomics data.
-To have a detail description of all the possible analyses available in MiMIR, please take a look at the Manual:https://github.com/DanieleBizzarri/MiMIR/blob/main/man/MANUAL.pdf
-Please refer to our manuscripts when using these metabolic biomarkers in your works:
-- mortality score: J. Deelen et al., ‘A metabolic profile of all-cause mortality risk identified in an observational study of 44,168 individuals’, Nat. Commun., vol. 10, no. 1, pp. 1–8, Aug. 2019, doi: 10.1038/s41467-019-11311-9
-- MetaboAge: van den Akker Erik B. et al., ‘Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease’, Circ. Genomic Precis. Med., vol. 13, no. 5, pp. 541–547, Oct. 2020, doi: 10.1161/CIRCGEN.119.002610.
-- surrogate clinical variables: D. Bizzarri, M. J. T. Reinders, M. Beekman, P. E. Slagboom, Bbmri-nl, and E. B. van den Akker, ‘1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints’, EBioMedicine, vol. 75, p. 103764, Jan. 2022, doi: 10.1016/j.ebiom.2021.103764.
-- COVID-severity score: Nightingale Health UK Biobank Initiative, H. Julkunen, A. Cichońska, P. E. Slagboom, and P. Würtz, ‘Metabolic biomarker profiling for identification of susceptibility to severe pneumonia and COVID-19 in the general population’, eLife, vol. 10, p. e63033, May 2021, doi: 10.7554/eLife.63033.
-- Type-2 diabetes score: A. V. Ahola-Olli et al., ‘Circulating metabolites and the risk of type 2 diabetes: a prospective study of 11,896 young adults from four Finnish cohorts’, Diabetologia, vol. 62, no. 12, pp. 2298–2309, 2019, doi: 10.1007/s00125-019-05001-w.
-- Cardiovascular event risk score: P. Würtz et al., ‘Metabolite profiling and cardiovascular event risk: a prospective study of 3 population-based cohorts’, Circulation, vol. 131, no. 9, pp. 774–785, Mar. 2015, doi: 10.1161/CIRCULATIONAHA.114.013116.
-
+This package contains an Rshiny webtool developed to allow the
+calculation of the metabolic predictorsdeveloped by the groups of MOLEPI
+and LCBC (LUMC), from raw Nightingale Health 1H-NMR metabolomics data.
+To have a detail description of all the possible analyses available in
+MiMIR, please take a look at the
+Manual:<https://github.com/DanieleBizzarri/MiMIR/blob/main/man/MANUAL.pdf>
+Please refer to our manuscripts when using these metabolic biomarkers in
+your works: - mortality score: J. Deelen et al., ‘A metabolic profile of
+all-cause mortality risk identified in an observational study of 44,168
+individuals’, Nat. Commun., vol. 10, no. 1, pp. 1–8, Aug. 2019, doi:
+10.1038/s41467-019-11311-9 - MetaboAge: van den Akker Erik B. et al.,
+‘Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as
+Biomarker of Age-related Disease’, Circ. Genomic Precis. Med., vol. 13,
+no. 5, pp. 541–547, Oct. 2020, doi: 10.1161/CIRCGEN.119.002610. -
+surrogate clinical variables: D. Bizzarri, M. J. T. Reinders, M.
+Beekman, P. E. Slagboom, Bbmri-nl, and E. B. van den Akker, ‘1H-NMR
+metabolomics-based surrogates to impute common clinical risk factors and
+endpoints’, EBioMedicine, vol. 75, p. 103764, Jan. 2022, doi:
+10.1016/j.ebiom.2021.103764. - COVID-severity score: Nightingale Health
+UK Biobank Initiative, H. Julkunen, A. Cichońska, P. E. Slagboom, and P.
+Würtz, ‘Metabolic biomarker profiling for identification of
+susceptibility to severe pneumonia and COVID-19 in the general
+population’, eLife, vol. 10, p. e63033, May 2021, doi:
+10.7554/eLife.63033. - Type-2 diabetes score: A. V. Ahola-Olli et al.,
+‘Circulating metabolites and the risk of type 2 diabetes: a prospective
+study of 11,896 young adults from four Finnish cohorts’, Diabetologia,
+vol. 62, no. 12, pp. 2298–2309, 2019, doi: 10.1007/s00125-019-05001-w. -
+Cardiovascular event risk score: P. Würtz et al., ‘Metabolite profiling
+and cardiovascular event risk: a prospective study of 3 population-based
+cohorts’, Circulation, vol. 131, no. 9, pp. 774–785, Mar. 2015, doi:
+10.1161/CIRCULATIONAHA.114.013116.
 
 ## Intalling
 
 1.  Install the “devtools” package (if not already done):  
 
-<!-- end list -->
+<!-- -->
 
     install.packages("devtools")
 
-2.  Install the “MiMIR” package:
+2.  Install the “MetaboRiSc” package:
 
-<!-- end list -->
+<!-- -->
 
     library("devtools")
-    devtools::install_github("DanieleBizzarri/MiMIR")
+    devtools::install_github("DanieleBizzarri/MetaboRiSc")
 
 3.  Launch the application:
 
-<!-- end list -->
+<!-- -->
 
-    library("MiMIR")
-    MiMIR::startApp()
+    library("MetaboRiSc")
+    MetaboRiSc::launchApp()
 
 ## Quick Start
 
@@ -56,15 +76,11 @@ be named.
 
 ## Requirements
 
-•	Install R		v4.1
-•	R-studio		preferable
-•	A web browser	Google Chrome preferably
-
-[WARNING] The application is not granted to work with previous versions of R.
+R version: 3.6+
 
 ## Install packages
 
-If you have problems in installing the application, you can try
+If you have problems in installing the applicationn, you can try
 installing these packages manually:
 
     ## Shiny environment
@@ -74,7 +90,7 @@ installing these packages manually:
     if (!require("shinycssloaders")) install.packages("shinycssloaders")
     if (!require("shinyjs")) install.packages("shinyjs")
 
-    #Statistics libraries
+    ## Statistics libraries
     if (!require("DT")) install.packages("DT")
     if (!require("foreach")) install.packages("foreach")
     if (!require("glmnet")) install.packages("glmnet")
@@ -83,8 +99,6 @@ installing these packages manually:
     if (!require("stats")) install.packages("stats")
     if (!require("reshape2")) install.packages("reshape2")
     if (!require("caret")) install.packages("caret")
-    if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-    if (!require("limma")) BiocManager::install("limma")
     if (!require("purrr")) install.packages("purrr")
     if (!require("dplyr")) install.packages("dplyr")
     if (!require("rmarkdown")) install.packages("rmarkdown")

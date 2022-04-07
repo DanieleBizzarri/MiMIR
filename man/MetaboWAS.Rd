@@ -2,24 +2,59 @@
 % Please edit documentation in R/predictors_functions.R
 \name{MetaboWAS}
 \alias{MetaboWAS}
-\title{Function that produces a MetaboWAS}
+\title{MetaboWAS}
 \usage{
-MetaboWAS(met, pheno, test_variable, covariates, img = T)
+MetaboWAS(met, pheno, test_variable, covariates, img = T, adj_method = "BH")
 }
 \arguments{
-\item{met}{metabolites data.frame}
+\item{met}{numeric data.frame with the metabolomics features}
 
-\item{pheno}{phenotypes data.frame}
+\item{pheno}{data.frame containing the phenotype of interest}
 
-\item{test_variable}{the variable to be investigated}
+\item{test_variable}{string vector with the name of the phenotype of interest}
 
-\item{covariates}{the covariates that you want to add}
+\item{covariates}{string vector with the name of the variables to be added as a covariate}
 
-\item{img}{TRUE to plot a Manhattan plot}
+\item{img}{logical indicating if the function should plot a Manhattan plot}
+
+\item{adj_method}{multiple testing correction method}
 }
 \value{
-res= the results of the MetaboWAS, manhplot= the Manhattan plot, N_hits= the number of significant hits
+res= the results of the MetaboWAS, manhplot= the Manhattan plot made with plotly, N_hits= the number of significant hits
 }
 \description{
-Function that produces a MetaboWAS
+Function to calculate a Metabolome Wide Association study
+}
+\details{
+This is a function to compute linear associations individually for each variable in the first data.frame
+with the test variable and corrected for the selected covariates.
+This function to computes linear regression modelindividually for each variable in the first data.frame
+with the test variable and adjusted for potential confounders.
+False Discovery Rate (FDR) is applied to account for multiple testing correction.
+The user has the faculty to select the test variable and the potential covariates within the pool of variables in the phenotypic file input.
+The results of the associations are reported in a Manhattan plot
+
+The p-value of the association is then corrected using Benjamini Hochberg.
+Finally we use plotly to plot a Manhattan Plot, which reports on the x-axis the list of metabolites reported in the Nightingale Health,
+divided in groups, and on the y-axis the -log (adjusted p-value).
+}
+\examples{
+\dontrun{
+require(MiMIR)
+require(plotly)
+require(ggplot2)
+
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the phenotypic dataset containing age and sex
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+
+#Computing a MetaboWAS for age corrected by sex
+MetaboWAS(met=metabo_measures, pheno=phenotypes, test_variable="age", covariates= "sex", img=T)
+}
+
+}
+\references{
+This method is also described and used in:
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
 }

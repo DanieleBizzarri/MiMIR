@@ -27,7 +27,8 @@ Helper function to pre-process the Nightingale Health metabolomics data-set befo
 }
 \examples{
 \dontrun{
-library(MiMIR)
+require(MiMIR)
+require(matrixStats)
 
 #load the Nightignale metabolomics dataset
 metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)

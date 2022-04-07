@@ -52,16 +52,17 @@ high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, lo
 }
 \examples{
 \dontrun{
-library(MiMIR)
-library(foreach)
-library(pROC)
+require(MiMIR)
+require(foreach)
+require(pROC)
+require(foreach)
 
 #load the Nightignale metabolomics dataset
 metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #load the phenotypic dataset
 phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
 #Apply the metaboAge
-surro<-calculate_surrogate_scores(met=metabo_measures, pheno=phenotypes, Nmax_miss=1, Nmax_zero=1, roc=T, quiet=F)
+surro<-calculate_surrogate_scores(met=metabo_measures, pheno=phenotypes, Nmax_miss=1, Nmax_zero=1)
 }
 
 }
@@ -70,5 +71,5 @@ This function was made to vidualize the binarized variables calculated following
 Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
 }
 \seealso{
-QCprep_surrogates, subset_samples_sd_surrogates, apply.fit_surro
+QCprep_surrogates
 }

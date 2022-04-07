@@ -3,6 +3,8 @@
 #####################
 #Import packages
 #' @import foreach
+#' @importFrom purrr map_chr
+#' @importFrom purrr map_lgl
 #' @importFrom caret createDataPartition
 #' @importFrom stats model.matrix
 #' @importFrom stats na.omit
@@ -36,8 +38,6 @@ utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore",
 #' 
 #' Function to translate Nightingale metabolomics alternative metabolite names to the ones used in BBMRI-nl
 #'
-#' @importFrom purrr map_chr
-#' @importFrom purrr map_lgl
 #' @param names vector of strings with the metabolic features names to be translated
 #' @return data.frame with the uploaded metabolites names on the first column and the BBMRI names on the second column.
 #' 
@@ -81,7 +81,6 @@ find_BBMRI_names<-function(names){
   return(n)
 }
 
-
 ########################################
 ## Metabolomics-based score functions ##
 ########################################
@@ -117,6 +116,7 @@ find_BBMRI_names<-function(names){
 #' comp.mort_score, mort_betas, comp.T2D_Ahola_Olli, comp.CVD_score
 #' 
 #' @export
+#' 
 prep_met_for_scores <- function(dat, featID, plusone=F, quiet=FALSE){
   if(!quiet){
     cat("|| Preparing data ... \n")
@@ -140,7 +140,6 @@ prep_met_for_scores <- function(dat, featID, plusone=F, quiet=FALSE){
       }
     }
   }
-  
   ## 2. Scale:
   dat[,featID] <- scale(log(dat[,featID]),center=TRUE,scale=TRUE)
   if(!quiet){
@@ -358,7 +357,8 @@ comp.CVD_score <- function(met,phen,betas=MiMIR::CVD_score_betas,quiet=FALSE){
 #' 
 #' @examples
 #' \dontrun{
-#' library(MiMIR)
+#' require(MiMIR)
+#' require(matrixStats)
 #' 
 #' #load the Nightignale metabolomics dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
@@ -395,7 +395,7 @@ prep_data_COVID_score <- function(dat,featID=c("gp","dha","crea","mufa", "apob_a
   ## 2. Scale:
   dat[,featID] <- scale(dat[,featID],center=TRUE,scale=TRUE)
   if(!quiet){
-    cat("| Perform log transform & scaling to zero mean and unity sd .. ")
+    cat("| z-scaling to zero mean and unity sd .. ")
   }
   
   if(!quiet){
@@ -420,7 +420,7 @@ prep_data_COVID_score <- function(dat,featID=c("gp","dha","crea","mufa", "apob_a
 #' 
 #' #load the Nightignale metabolomics dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Prepare the metabolic features fo the mortality score
+#' #Compute the mortality score
 #' mortScore<-comp_covid_score(dat=metabolic_measures, quiet=TRUE)
 #' }
 #' 
@@ -505,7 +505,7 @@ comp_covid_score <- function(dat,betas=MiMIR::covid_betas ,quiet=FALSE){
 #' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
 #' 
 #' @seealso 
-#' apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale,report.dim
+#' apply.fit
 #' 
 #' @export
 #'
@@ -568,6 +568,8 @@ QCprep<-function(mat,PARAM_metaboAge=PARAM_metaboAge,quiet=TRUE, Nmax_zero=1, Nm
 #' @seealso 
 #' QCprep, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale,report.dim
 #'  
+#' @keywords internal
+#'  
 #' @export
 #' 
 apply.fit<-function(mat,FIT){
@@ -579,276 +581,6 @@ apply.fit<-function(mat,FIT){
   rownames(AGE)<-rownames(mat)
   return(AGE)
 }
-
-#' subset_metabolites_overlap
-#' 
-#' Helper function that subsets the NH-metabolomics matrix features to the selection in metabolites needed for the metabolic score
-#'
-#' @param x numeric data-frame with Nightingale-metabolomics
-#' @param metabos vector of strings containing the names of the metabolic features to be selected
-#' @param quiet logical to suppress the messages in the console
-#' @return matrix with the selected Nightingale-metabolomics features 
-#'
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Select the metabolic features
-#' mat <- subset_metabolites_overlap(x=metabolic_measures,metabos=PARAM_metaboAge$MET)
-#' }
-#' 
-#' @references 
-#' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
-#' 
-#' @seealso 
-#' QCprep, apply.fit, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale, and report.dim
-#'  
-#' @export
-#' 
-subset_metabolites_overlap<-function(x,metabos,quiet=FALSE){
-  x <- x[,intersect(colnames(x),metabos),drop=FALSE]
-  if(!quiet){
-    cat(report.dim(x,header="Selecting metabolites"))
-  }
-  return(invisible(x))
-}
-
-#' subset_samples_miss
-#' 
-#' Helper function that subsets the NH-metabolomics matrix to the samples with less than Nmax missing values
-#'
-#' @param x numeric data-frame with Nightingale-metabolomics
-#' @param Nmax integer indicating  the max number of missing values allowed per sample (N suggested= 1)
-#' @param quiet logical to suppress the messages in the console
-#' @return matrix with the samples with limited amount of missing values in the Nightingale-metabolomics dataset
-#'
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Select the samples with only 1 missing value
-#' mat <- subset_samples_miss(x=metabolic_measures, Nmax=1)
-#' 
-#' }
-#' 
-#' @references 
-#' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
-#' 
-#' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale, and report.dim
-#'  
-#' @export
-#' 
-subset_samples_miss<-function(x,Nmax=1,quiet=FALSE){
-  MISS <- colSums(is.na(t(x)))
-  x <- x[which(MISS<=Nmax),,drop=FALSE]
-  if(!quiet){
-    cat(report.dim(x,header=paste0("Pruning samples on missing values [Nmax>=",Nmax,"]")))
-  }
-  return(invisible(x))
-}
-
-#' subset_samples_miss
-#' 
-#' Helper function that subsets the NH-metabolomics matrix to the samples with less than Nmax zeros
-
-#' @param x numeric data-frame with Nightingale-metabolomics
-#' @param Nmax integer indicating  the max number of missing values allowed per sample (N suggested= 1)
-#' @param quiet logical to suppress the messages in the console
-#' @return matrix with the samples with limited amount of zeros in the Nightingale-metabolomics dataset
-#'
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Select samples with only 1 zero
-#' mat <- subset_samples_zero(x=metabolic_measures, Nmax=1)
-#' 
-#' }
-#' 
-#' @references 
-#' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
-#' 
-#' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_sd, impute.miss, apply.scale, and report.dim
-#'  
-#' @export
-#' 
-subset_samples_zero<-function(x,Nmax=1,quiet=FALSE){
-  ZERO <- colSums(t(x==0),na.rm=TRUE)
-  x <- x[which(ZERO<=Nmax),,drop=FALSE]
-  if(!quiet){
-    cat(report.dim(x,header=paste0("Pruning samples on zero values [Nmax>=",Nmax,"]")))
-  }
-  return(invisible(x))
-}
-
-#' subset_samples_sd
-#' 
-#' Helper function that subsets the NH-metabolomics matrix to the samples with limited numbers of outliers
-#'
-#' @param x numeric data-frame with Nightingale-metabolomics
-#' @param MEAN numeric vector indicating the mean of the metabolites in x
-#' @param SD numeric vector indicating the standard deviations of the metabolites in x
-#' @param quiet logical to suppress the messages in the console
-#' @return matrix with the samples with limited amount of outliers in the Nightingale-metabolomics dataset
-#' 
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Select the samples with low outliers
-#' mat <- subset_samples_sd(x=metabolic_measures, Nmax=1)
-#' }
-#' 
-#' @references 
-#' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
-#' 
-#' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, impute.miss, apply.scale, and report.dim
-#'  
-#' @export
-#'
-subset_samples_sd<-function(x,MEAN,SD,quiet=FALSE){
-  MEAN <- MEAN[colnames(x)]
-  SD <- SD[colnames(x)]
-  Dummi <- log(x)
-  Dummi[which(Dummi==-Inf)] <- NA
-  # Exclude persons being an outlier:
-  outl_samp <- rownames(Dummi)[unique(which(((Dummi > t(replicate(nrow(Dummi),MEAN)) + 5*t(replicate(nrow(Dummi),SD))) | (Dummi < t(replicate(nrow(Dummi),MEAN)) - 5*t(replicate(nrow(Dummi),SD)))),arr.ind=TRUE)[,"row"])]
-  if(!is.null(outl_samp)){
-    sample_names <- setdiff(rownames(Dummi),outl_samp)
-    x <- x[sample_names,,drop=FALSE]
-  }
-  if(!quiet){
-    cat(report.dim(x,header=paste0("Pruning samples on 5SD")))
-  }
-  return(invisible(x))
-}
-
-#' impute.miss
-#' 
-#' Helper function that subsets the NH-metabolomics matrix to the samples with less than Nmax zeros
-#' 
-#' Function created that subsets the NH-metabolomics matrix samples to the ones for which the metabolites
-#' included in MetaboAge for which the log of the metabolic concentrations are not more than 5SD away from their mean
-#'
-#' @param x numeric data-frame with Nightingale-metabolomics
-#' @return matrix of the Nightingale-metabolomics dataset with missing values imputed to zero
-#' 
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Imputing missing values
-#' mat <- impute.miss(metabolic_measures)
-#' }
-#' 
-#' @references 
-#' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
-#' 
-#' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, apply.scale, and report.dim
-#'  
-#' @export
-#'
-impute.miss<-function(x){
-  ## This is an boiler-plate solution :)
-  x[which(is.na(x))] <- 0
-  return(x)
-}
-
-
-#' apply.scale
-#' 
-#' Helper function created to scale the NH-metabolomics matrix samples
-#'
-#' @param dat numeric data-frame with Nightingale-metabolomics
-#' @param MEAN numeric vector indicating the mean of the metabolites present in dat
-#' @param SD numeric vector indicating the standard deviations of the metabolites present in dat
-#' @param quiet Tlogical to suppress the messages in the console
-#' @return The matrix z-scaling the Nightingale-metabolomics dataset using the given Means and SDs
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Apply the scaling to the metabolic features
-#' mat <- apply.scale(metabolic_measures, MEAN=PARAM_metaboAge$MEAN, SD=PARAM_metaboAge$SD)
-#' }
-#' 
-#' @references 
-#' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
-#' 
-#' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, and report.dim
-#'  
-#' @export
-#'
-apply.scale <- function(dat,MEAN,SD,quiet=TRUE){
-  if(!quiet){
-    cat("| Apply scaling ... ")
-  }
-  COLNAMES <- colnames(dat)
-  #names(SD)<-COLNAMES
-  dat <- sapply(COLNAMES,function(x) (dat[,x]-MEAN[x])/SD[x])
-  if(!quiet){
-    cat("Done! \n")
-  }
-  return(dat)
-}
-
-#' report.dim
-#' 
-#' Helper function to report on the console the dimension of the NH metabolomics matrix
-#'
-#' @param x numeric data-frame with Nightingale-metabolomics
-#' @param header string describing the sub-sampling of the NH-metabolomics matrix
-#' @param trailing number of digits to show
-#' @return The report of the NH-metabolomics matrix dimension
-#'
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Apply the scaling to the metabolic features
-#' cat(report.dim(x, header=paste0("Pruning samples on 5SD")))
-#' }
-#' 
-#' @references 
-#' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
-#' 
-#' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, and apply.scale
-#'  
-#' @export
-#'
-report.dim<-function(x,header,trailing="0"){
-  return(paste0(sprintf(paste0("%-",trailing,"s"),paste0("| ",header,":\n")),sprintf("%4s",ncol(x))," metabolites x ",sprintf("%4s",nrow(x))," samples \n"))
-}
-
 ######################################
 ## Metabolomics-Surrogate functions ##
 ######################################
@@ -1118,7 +850,7 @@ binarize_all_pheno<-function(data){
   return(binarized_phenotypes)
 }
 
-#' QCprep
+#' QCprep_surrogates
 #' 
 #' Helper function to pre-process the Nightingale Health metabolomics data-set before applying metabolomics-based surrogates by Bizzarri et al.
 #'
@@ -1211,16 +943,17 @@ QCprep_surrogates<-function(mat,PARAM_surrogates= MiMIR::PARAM_surrogates,
 #' 
 #' @examples
 #' \dontrun{
-#' library(MiMIR)
-#' library(foreach)
-#' library(pROC)
+#' require(MiMIR)
+#' require(foreach)
+#' require(pROC)
+#' require(foreach)
 #' 
 #' #load the Nightignale metabolomics dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #' #load the phenotypic dataset
 #' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
 #' #Apply the metaboAge
-#' surro<-calculate_surrogate_scores(met=metabo_measures, pheno=phenotypes, Nmax_miss=1, Nmax_zero=1, roc=T, quiet=F)
+#' surro<-calculate_surrogate_scores(met=metabo_measures, pheno=phenotypes, Nmax_miss=1, Nmax_zero=1)
 #' }
 #' 
 #' @details 
@@ -1234,7 +967,7 @@ QCprep_surrogates<-function(mat,PARAM_surrogates= MiMIR::PARAM_surrogates,
 #' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
 #' 
 #' @seealso 
-#' QCprep_surrogates, subset_samples_sd_surrogates, apply.fit_surro
+#' QCprep_surrogates
 #'  
 #' @export
 #' 
@@ -1282,185 +1015,6 @@ calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates= MiMIR::PARA
   }
 }
 
-
-#' subset_samples_sd_surrogates
-#' 
-#' Helper function that subsets the NH-metabolomics matrix to the samples with limited numbers of outliers
-#'
-#' @param x numeric data-frame with Nightingale-metabolomics
-#' @param MEAN numeric vector indicating the mean of the metabolites in x
-#' @param SD numeric vector indicating the standard deviations of the metabolites in x
-#' @param N numeric vector indicating the amount of standard deviations away from the mean after which we consider an outlier (N suggested=5)
-#' @param quiet logical to suppress the messages in the console
-#' @return matrix with the samples with limited amount of outliers in the Nightingale-metabolomics dataset
-#' 
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #Select the samples with low outliers
-#' mat <- subset_samples_sd_surrogates(x=metabolic_measures, Nmax=1)
-#' }
-#' 
-#' @details 
-#' Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual. 
-#' The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
-#' current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
-#' high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
-#' 
-#' @references 
-#' This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
-#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
-#' 
-#' @seealso 
-#' QCprep_surrogates, calculate_surrogate_scores, apply.fit_surro
-#'  
-#' @export
-#'
-subset_samples_sd_surrogates<-function(x,MEAN,SD, N=5, quiet=FALSE){
-  MEAN <- MEAN[colnames(x)]
-  SD <- SD[colnames(x)]
-  Dummi <- x
-  # Exclude persons being an outlier:
-  outl_samp <- rownames(Dummi)[unique(which(((Dummi > t(replicate(nrow(Dummi),MEAN)) + N*t(replicate(nrow(Dummi),SD))) | (Dummi < t(replicate(nrow(Dummi),MEAN)) - 5*t(replicate(nrow(Dummi),SD)))),arr.ind=TRUE)[,"row"])]
-  if(!is.null(outl_samp)){
-    sample_names <- setdiff(rownames(Dummi),outl_samp)
-    x <- x[sample_names,,drop=FALSE]
-  }
-  if(!quiet){
-    cat(report.dim(x,header=paste0("Pruning samples on", N, "SD")))
-  }
-  return(invisible(x))
-}
-
-
-#' apply.fit_surro
-#' 
-#' Function that apply on of the surrogates models to the NH-metabolomics concentrations
-#'
-#' @param mat numeric data-frame with Nightingale-metabolomics
-#' @param FIT The betas of the logistic regressions composing the surrogates by Bizzarri et al.
-#' @param post logical to obtain posterior probabilities
-#' @return numeric data.frame with the metabolomics-based surrogates by Bizzarri et al.
-#' 
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' # Do the pre-processing steps to the metabolic measures
-#' metabolic_measures<-QCprep_surrogates(as.matrix(metabolic_measures), PARAM_surrogates, quiet=quiet,Nmax_miss=Nmax_miss,Nmax_zero=Nmax_zero)
-#' 
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
-#' #Calculating the binarized surrogates
-#' bin_pheno<-binarize_all_pheno(phenotypes)
-#' 
-#' #Apply the surrogate models
-#' surrogates<-foreach::foreach(i=MiMIR::phenotypes_names$out_surro, .combine="cbind") %do% {
-#' pred<-apply.fit_surro(as.matrix(metabo_measures), 
-#' PARAM_surrogates$models_betas[i,])}
-#' 
-#' }
-#' 
-#' @details 
-#' Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual. 
-#' The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
-#' current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
-#' high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
-#' 
-#' @references 
-#' This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
-#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
-#' 
-#' @seealso 
-#' QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, predictions_surrogates
-#'  
-#' @export
-#'
-apply.fit_surro<-function(mat, FIT, post=TRUE){
-  # Resort:
-  BETA <- FIT[colnames(mat)]
-  INTC <- FIT[1]
-  if(post){
-    # Predict surrogate:
-    p<-as.numeric(1/(1+exp(-1 * (INTC+ rowSums(mat %*% BETA)))))
-  }else{
-    p <- as.numeric(as.vector(mat %*% BETA) + as.vector(INTC),stringsAsFactors=FALSE)
-  }
-  
-  names(p)<-rownames(mat)
-  return(p)
-}
-
-
-#' apply.fit_surro
-#' 
-#' Helper function that apply a surrogate model and plot a ROC curve the accuracy
-#'
-#' @param FIT numeric vector with betas of the logistic regressions composing the surrogates by Bizzarri et al.
-#' @param data numeric data-frame with Nightingale-metabolomics and the binarized phenotype to predict
-#' @param title_img string with title of the image
-#' @param plot logical to obtain the ROC curve
-#' @return If plot==T The surrogate predictions and the roc curve. If plot==F only the surrogate predictions
-#'
-#' @examples
-#' \dontrun{
-#' library(MiMIR)
-#' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' # Do the pre-processing steps to the metabolic measures
-#' metabolic_measures<-QCprep_surrogates(as.matrix(metabolic_measures), PARAM_surrogates, quiet=quiet,Nmax_miss=Nmax_miss,Nmax_zero=Nmax_zero)
-#' 
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
-#' #Calculating the binarized surrogates
-#' bin_pheno<-binarize_all_pheno(phenotypes)
-#' 
-#' #Apply a surrogate models and plot the ROC curve
-#' data<-data.frame(out=factor(phenotypes_names$bin_names[,1]), metabo_measures)
-#' colnames(data)[1]<-"out"
-#' pred<-predictions_surrogates(PARAM_surrogates$models_betas[paste0("s_",phenotypes_names$bin_names[,1]),], data=data, title_img=phenotypes_names$bin_names[,1])
-#' 
-#' }
-#' 
-#' @details 
-#' Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual. 
-#' The binary variables are: sex, diabetes status, metabolic syndrome status, lipid medication usage, blood pressure lowering medication,
-#' current smoking, alcohol consumption, high age, middle age, low age, high hsCRP, high triglycerides, high ldl cholesterol,
-#' high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
-#' 
-#' @references 
-#' This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
-#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
-#' 
-#' @seealso 
-#' QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, apply.fit_surro
-#'  
-#' @export
-#'
-predictions_surrogates<- function(FIT, data, title_img=FALSE, plot=TRUE){
-  
-  pred<-apply.fit_surro(as.matrix(data[,-1]),FIT)
-  
-  all(rownames(pred) == rownames(data))
-  
-  if(plot){
-    #Evaluation of the predictions
-    pred_eval<-pROC::roc(data[,"out"], pred, plot=T, col="#377eb8", quiet = T,
-                   lwd=4, print.auc=TRUE, main = title_img, xaxs="i", yaxs="i", grid=TRUE, asp=NA) #AUC
-    
-    res<-list(predictions=pred, predictions_eval=pred_eval)
-  }else{
-    res<-list(predictions=pred)
-  }
-  return(res)
-}
-
 ####################
 ## Plot functions ##
 ####################
@@ -1476,7 +1030,8 @@ predictions_surrogates<- function(FIT, data, title_img=FALSE, plot=TRUE){
 #' 
 #' @examples
 #' \dontrun{
-#' library(MiMIR)
+#' require(MiMIR)
+#' require(foreach)
 #' 
 #' #load the phenotypes dataset
 #' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
@@ -1521,7 +1076,7 @@ pheno_barplots<-function(bin_phenotypes){
 
 #' plot_na_heatmap
 #' 
-#' Function indicating missing & zero values in an heatmap
+#' Function plotting information about missing & zero values on the indicated matrix.
 #'
 #' @param dat The matrix or data.frame
 #' @return Plot with a central heatmap and two histogram on the sides
@@ -1531,7 +1086,7 @@ pheno_barplots<-function(bin_phenotypes){
 #' library(graphics)
 #' library(MiMIR)
 #' 
-#' #load the phenotypes dataset
+#' #load the metabolites dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #' #Plot the missing values in the metabolomics matrix
 #' plot_na_heatmap(metabolic_measures)
@@ -1583,7 +1138,7 @@ plot_na_heatmap  <- function(dat){
 
 #' roc_surro
 #' 
-#' #' Function that creates a plotly image of the selected surrogates
+#' Function that creates a ROC curve of the selected metabolic surrogates as a plotly image
 #'
 #' @param surrogates numeric data.frame of metabolomics-based surrogate values by Bizzarri et al.
 #' @param bin_phenotypes logic data.frame of binarized phenotypes
@@ -1592,12 +1147,12 @@ plot_na_heatmap  <- function(dat){
 #' 
 #' @examples
 #' \dontrun{
-#' library(pROC)
-#' library(plotly)
-#' library(foreach)
-#' library(MiMIR)
+#' require(pROC)
+#' require(plotly)
+#' require(foreach)
+#' require(MiMIR)
 #' 
-#' #load the phenotypes dataset
+#' #load the metabolites dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #' 
 #' #load the phenotypic dataset
@@ -1609,7 +1164,6 @@ plot_na_heatmap  <- function(dat){
 #' colnames(data)[1]<-"out"
 #' s_diabetes<-predictions_surrogates(PARAM_surrogates$models_betas["s_diabetes",], data=data)
 #' roc_surro(s_diabetes, bin_phenotypes, "diabetes")
-#' 
 #' }
 #' 
 #' @export
@@ -1699,7 +1253,7 @@ roc_surro<-function(surrogates, bin_phenotypes, x_name){
 
 #' roc_surro_subplots
 #' 
-#' #' Function that creates a plotly image with the subplots with ROCs of the surrogates of the available variables 
+#' Function that plots the ROCs of the surrogates of all the available surrogate models as plotly sub-plots
 #'
 #' @param surrogates numeric data.frame containing the surrogate values by Bizzarri et al.
 #' @param bin_phenotypes numeric data.frame with the binarized phenotypes output of binarize_all_pheno
@@ -1711,7 +1265,7 @@ roc_surro<-function(surrogates, bin_phenotypes, x_name){
 #' library(plotly)
 #' library(MiMIR)
 #' 
-#' #load the phenotypes dataset
+#' #load the metabolites dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #' #load the phenotypic dataset
 #' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
@@ -1787,11 +1341,12 @@ roc_surro_subplots<-function(surrogates, bin_phenotypes){
 #' 
 #' @examples
 #' \dontrun{
-#' library(pROC)
-#' library(plotly)
-#' library(MiMIR)
+#' require(pROC)
+#' require(plotly)
+#' require(MiMIR)
+#' require(foreach)
 #' 
-#' #load the phenotypes dataset
+#' #load the metatolites dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #' #load the phenotypic dataset
 #' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
@@ -1858,9 +1413,9 @@ ttest_surrogates<-function(surrogates,bin_phenotypes){
   return(pl_surro)
 }
 
-#' ttest_surrogates
+#' LOBOV_accuracies
 #' 
-#' #' Function created to visualize the accuracies in the current dataset compared to the
+#' Function created to visualize the accuracies in the current dataset compared to the
 #' accuracies in the Leave One Biobank Out Validation in Bizzarri et al.
 #'
 #' @param surrogates numeric data.frame containing the surrogate values by Bizzarri et al.
@@ -1871,11 +1426,13 @@ ttest_surrogates<-function(surrogates,bin_phenotypes){
 #' 
 #' @examples
 #' \dontrun{
-#' library(pROC)
-#' library(plotly)
-#' library(MiMIR)
+#' require(pROC)
+#' require(plotly)
+#' require(MiMIR)
+#' require(foreach)
+#' require(ggplot2)
 #' 
-#' #load the phenotypes dataset
+#' #load the metabolites dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #' #load the phenotypic dataset
 #' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
@@ -1939,14 +1496,35 @@ LOBOV_accuracies<-function(surrogates, bin_phenotypes, bin_pheno_available, acc_
   return(fig)
 }
 
-#' Function that creates a scatterplot with the real values and predicted values
+
+
+#' scatterplot_predictions
+#' 
+#' Function to visualize a scatter-plot comparing two variables
 #'
-#' @param x numeric vector with the real values
-#' @param p numeric vector with the predicted values
-#' @param title string with the title
-#' @param xname string with the name of the variable on the x axis
-#' @param yname string with the name of the variable on the y axis
-#' @return plotly image with the scatterplot of a real vs predicted variable
+#' @param x numeric vector
+#' @param p second numeric vector
+#' @param title string vector with the title
+#' @param xname string vector with the name of the variable on the x axis
+#' @param yname string vector with the name of the variable on the y axis
+#' @return plotly image with the scatterplot
+#' 
+#' @examples
+#' \dontrun{
+#' library(plotly)
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the phenotypic dataset
+#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' 
+#' #Pre-process the metabolic features
+#' prepped_met<-QCprep(as.matrix(metabolic_measures, PARAM_metaboAge)
+#' #Apply the metaboAge
+#' metaboAge<-apply.fit(prepped_met, FIT=PARAM_metaboAge$FIT_COEF)
+#' 
+#' scatterplot_predictions(phenotypes$age, metaboAge, title="Chronological Age vs MetaboAge")
+#' }
+#' 
 #' @export
 #'
 scatterplot_predictions <- function(x, p, title, xname, yname) {
@@ -1995,13 +1573,30 @@ scatterplot_predictions <- function(x, p, title, xname, yname) {
 }
 
 
-#' Function to plot the histograms for all the variables in dat
+
+#' multi_hist
+#' 
+#' #' Function to plot the histograms for all the variables in dat
 #'
 #' @param dat data.frame or matrix with the variables to plot
 #' @param color colors selected for all the variables
-#' @param scaled TRUE/FALSE. If TRUE the variables will be z-scaled
+#' @param scaled logical to z-scale the variables
 #' @return plotly image with the histograms for all the variables in dat
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(plotly)
+#' library(MiMIR)
+#' 
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' 
+#' multi_hist(metabolic_measures, scaled=T)
+#' }
+#' 
+#' @export
+#'
 #'
 multi_hist<-function(dat, color=MiMIR::c21, scaled=FALSE){
   
@@ -2041,15 +1636,31 @@ multi_hist<-function(dat, color=MiMIR::c21, scaled=FALSE){
   return(plotly::subplot(hist_images, nrows = 5, shareX = F,shareY = F, titleX = F, titleY = F, which_layout = 1))
 }
 
-#' Function to plot the histogram of the selected variables
+#' hist_plots
+#' 
+#' #' Function to plot the histograms for all the variables in dat
 #'
 #' @param dat data.frame or matrix with the variables to plot
 #' @param x_name string with the names of the selected variables in dat
 #' @param color colors selected for all the variables
-#' @param scaled TRUE/FALSE. If TRUE the variables will be z-scaled before plotting them
+#' @param scaled logical to z-scale the variables
 #' @param datatype a character vector indicating what data type is beeing plotted
 #' @param main title of the plot
 #' @return plotly image with the histograms of the selected variables
+#'
+#' @examples
+#' \dontrun{
+#' require(MiMIR)
+#' require(plotly)
+#' require(matrixStats)
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #Apply a surrogate models and plot the ROC curve
+#' surrogates<-calculate_surrogate_scores(met=metabo_measures,Nmax_miss=1,Nmax_zero=1,roc=F)
+#' #Plot the histogram of the surrogate sex values scaled 
+#' hist_plots(surrogates, x_name="s_sex", scaled=T)
+#' }
+#'
 #' @export
 #'
 hist_plots<-function(dat, x_name, color=MiMIR::c21, scaled=FALSE, datatype="metabolic score", main="Predictors Distributions"){
@@ -2098,15 +1709,43 @@ hist_plots<-function(dat, x_name, color=MiMIR::c21, scaled=FALSE, datatype="meta
   print(plot)
 }
   
-#' Function to plot the 57 selected metabolites to their distributions in BBMRI-nl
+
+#' multi_hist
+#' 
+#' Function to plot the ~60 metabolites used for the metabolomics-based scores and compare them to to their distributions in BBMRI-nl
 #'
 #' @param dat data.frame or matrix with the metabolites
 #' @param x_name string with the name of the selected variable
 #' @param color colors selected for all the variables
-#' @param scaled TRUE/FALSE. If TRUE the variables will be z-scaled before plotting them
-#' @param datatype a character vector indicating what data type is beeing plotted
+#' @param scaled logical to z-scale the variables
+#' @param datatype a character vector indicating what data type is being plotted
 #' @param main title of the plot
 #' @return plotly image with the histogram of the selected variable compared to the distributions in BBMRI-nl
+#'
+#'
+#' @examples
+#' \dontrun{
+#' library(plotly)
+#' library(MiMIR)
+#' 
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' 
+#' BBMRI_hist_plot(metabolic_measures, x_name="glc", scaled=T)
+#' }
+#' 
+#' @details 
+#' This function plots the distribution of a metabolic feature in the uploaded dataset, compared to their distributions in BBMRI-nl.
+#' The selection of features available is done following the metabolic scores features.
+#' 
+#' @references 
+#' The selection of metabolic features available is the one selected by the papers:
+#' Deelen,J. et al. (2019) A metabolic profile of all-cause mortality risk identified in an observational study of 44,168 individuals. Nature Communications, 10, 1–8, doi: 10.1038/s41467-019-11311-9.
+#' Ahola-Olli,A.V. et al. (2019) Circulating metabolites and the risk of type 2 diabetes: a prospective study of 11,896 young adults from four Finnish cohorts. Diabetologia, 62, 2298–2309, doi: 10.1007/s00125-019-05001-w
+#' Würtz,P. et al. (2015) Metabolite profiling and cardiovascular event risk: a prospective study of 3 population-based cohorts. Circulation, 131, 774–785, doi: 10.1161/CIRCULATIONAHA.114.013116
+#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+#' 
 #' @export
 #'
 BBMRI_hist_plot<-function(dat, x_name, color=MiMIR::c21, scaled=FALSE, datatype="metabolite", main="Comparison with the metabolites measures in BBMRI"){
@@ -2154,53 +1793,29 @@ BBMRI_hist_plot<-function(dat, x_name, color=MiMIR::c21, scaled=FALSE, datatype=
 }
 
 
-#' Function to plot the scaled coefficients of the metabolic scores
+#' hist_plots_mortality
+#' 
+#' #' Function to plot the histogram of the mortality score separated for different age ranges as a plotly image
 #'
-#' @param mort_betas dataframe withthe coefficients of the mortality score
-#' @param metaboAge_betas dataframe with the coefficients of the metaboAge
-#' @param surrogates_betas dataframe with the coefficients of the surrogates
-#' @param Ahola_Olli_betas dataframe with the coefficients of the T2D score
-#' @param CVD_score_betas dataframe with the coefficients of the CVD score
-#' @param COVID_score_betas ataframe with the coefficients of the COVID_score
-#' @return heatmapply with the scaled coefficients of the metabolic scores
-#' @export
+#' @param mort_score data.frame containing the mortality score
+#' @param phenotypes data.frame containing age
+#' @return plotly image with the histogram of the mortality score separated in 3 age ranges
+#' 
+#' @examples
+#' \dontrun{
+#' library(MiMIR)
+#' library(plotly)
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #' #load the phenotypic dataset
+#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' 
+#' #Compute the mortality score
+#' mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
+#' #Plot the mortality score histogram at different ages
+#' hist_plots_mortality(mortScore, phenotypes)
+#' }
 #'
-model_coeff_heat<-function(mort_betas, metaboAge_betas, surrogates_betas, Ahola_Olli_betas, CVD_score_betas, COVID_score_betas){
-  models_betas<-matrix(0, 24, 62)
-  rownames(models_betas)<-c("mortScore","MetaboAge", rownames(surrogates_betas),"T2D-score","CVD_score", "COVID_score")
-  colnames(models_betas)<-MiMIR::metabolites_subsets$MET62
-  models_betas["mortScore",mort_betas$Abbreviation]<-mort_betas$Beta_value
-  models_betas["MetaboAge", names(metaboAge_betas)[-1]]<-metaboAge_betas[-1]
-  #surrogates
-  for(x in rownames(surrogates_betas)){
-    models_betas[x,colnames(surrogates_betas)[-1]]<-surrogates_betas[x,-1]
-  }
-  met<-Ahola_Olli_betas$Abbreviation[which(Ahola_Olli_betas$Abbreviation %in% MiMIR::metabolites_subsets$MET62)]
-  models_betas["T2D-score",met]<-Ahola_Olli_betas$Beta_value[which(Ahola_Olli_betas$Abbreviation %in% MiMIR::metabolites_subsets$MET62)]
-  met<-CVD_score_betas$Abbreviation[which(CVD_score_betas$Abbreviation %in% MiMIR::metabolites_subsets$MET62)]
-  models_betas["CVD_score",met]<-CVD_score_betas$Beta_value[which(CVD_score_betas$Abbreviation %in% MiMIR::metabolites_subsets$MET62)]
-  met<-COVID_score_betas$Abbreviation[which(COVID_score_betas$Abbreviation %in% MiMIR::metabolites_subsets$MET62)]
-  models_betas["COVID_score",met]<-COVID_score_betas$Beta_value[which(COVID_score_betas$Abbreviation %in% MiMIR::metabolites_subsets$MET62)]
-  
-  
-  mat <-models_betas
-  mat <- sapply(colnames(mat), function(colname) {
-    sapply(rownames(mat), function(rowname) {
-      paste("The original coefficient is", round(models_betas[rowname, colname],digits=3))
-    })
-  })
-  
-  heatmaply::heatmaply(models_betas,main=paste("<b> Models Coefficients scaled on the rows<b>"),
-                       scale="row",custom_hovertext = mat,
-                       scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(low = "blue", mid="white", high = "red", limits=c(-0.1146100, 0.14128)),
-                       margins=c(0,0,40,0))
-}
-
-#' Function to plot the histogram of the mortality score separated for different age ranges
-#'
-#' @param mort_score data.frame of the mortality score
-#' @param phenotypes data.frame with age included in it
-#' @return plotly image with the histogram of the mortlity score separated in 3 age ranges
 #' @export
 #'
 hist_plots_mortality<-function(mort_score,phenotypes){
@@ -2215,8 +1830,6 @@ hist_plots_mortality<-function(mort_score,phenotypes){
     m<-base::mean(mort_score[ which(mort_score$age_ranges==i),"mortScore"],na.rm=T)
     m<-data.frame(age_ranges=i,mean=m)
     }
-  
-  #mu<-plyr::ddply(mort_score,~age_ranges, dplyr::summarise, mean=mean(mortScore,na.rm=T))
   
   axis_font <- list(
     family = "Arial",
@@ -2255,12 +1868,38 @@ hist_plots_mortality<-function(mort_score,phenotypes){
   fig
 }
 
-#' Function that creates a boxplot with a continuous variable split using the binary variable
+
+#' ttest_scores
+#' 
+#' #' Function that creates a boxplot with a continuous variable split using the binary variable
 #'
 #' @param dat The data.frame containing the 2 variables
 #' @param pred character indicating the y variable
 #' @param pheno character indicating the binary variable
 #' @return plotly boxplot with the continuous variable split using the binary variable
+#' @export
+#' 
+#' 
+#' @examples
+#' \dontrun{
+#' library(MiMIR)
+#' library(plotly)
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #' #load the phenotypic dataset
+#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' 
+#' #Compute the mortality score
+#' mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
+#' 
+#' pred<-as.character(input$pred_choices2)
+#' pheno<-as.character(input$pheno_chosen2)
+#' dat<-data.frame(mortScore, sex=phenotypes$sex)
+#' 
+#' ttest_scores(dat = dat, pred= "mortScore", pheno="sex")
+#' 
+#' }
+#'
 #' @export
 #'
 ttest_scores<-function(dat, pred, pheno){
@@ -2288,13 +1927,38 @@ ttest_scores<-function(dat, pred, pheno){
   return(pl)
 }
 
-#' Function that creates a Kaplan Meier for an Event of the predictor divided by its mean 
+
+#' kapmeier_scores
+#' 
+#' #' Function that creates a Kaplan Meier comparing first and last tertile of a metabolic score
 #'
 #' @param predictors The data.frame containing the predictors
 #' @param pheno The data.frame containing the phenotypes
 #' @param score a character string indicating which predictor to use
 #' @param Eventname a character string with the name of the event to print on the plot
-#' @return plotly with a Kaplan Meier for an Event of the predictor divided by its mean 
+#' @return plotly with a Kaplan Meier comparing first and last tertile of a metabolic score
+#' @export
+#' 
+#' @examples
+#' \dontrun{
+#' 
+#' require(MiMIR)
+#' require(plotly)
+#' require(survminer)
+#' require(ggplot2)
+#' 
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the phenotypic dataset
+#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#'
+#' #Compute the mortality score
+#' mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
+#' 
+#' #Plot a Kaplan Meier
+#' kapmeier_scores(predictors=mortScore, pheno=phenotypes, score="mort_score")
+#' }
+#'
 #' @export
 #'
 kapmeier_scores<-function(predictors, pheno, score, Eventname="Event"){
@@ -2314,13 +1978,6 @@ kapmeier_scores<-function(predictors, pheno, score, Eventname="Event"){
     labels=c("Tertile 1","Tertile 2","Tertile 3")
   ))
   
-  # M<-mean(predictors[,score],na.rm=T)
-# dat$score_divided<-rep(NA,dim(dat)[1])
-#   dat$score_divided[which(dat[,score]<=M)]<-paste0(score,"<mean(",score,")")
-#   dat$score_divided[which(dat[,score]>M)]<-paste0(score,">mean(",score,")") 
-#   
-#   dat$score_divided<-as.factor(dat$score_divided)
-  
   dat<-dat[-which(dat$tertile=="Tertile 2"),]
   
   km_trt_fit <- survminer::surv_fit(Surv(time = dat$EventAge-dat$age , event=dat$Event) ~ 
@@ -2334,22 +1991,38 @@ kapmeier_scores<-function(predictors, pheno, score, Eventname="Event"){
   
   pl<-plotly::ggplotly(pl) 
   
-  
   return(pl)
 }
 
-
-#' SubFunction for plotting data1 x data2 associations on basis of (partial) correlations:
+#' cor_assoc
+#' 
+#' Function to calulate the correlation between 2 matrices
 #'
 #' @param dat1 matrix 1
 #' @param dat2 matrix 2
-#' @param feat1 string with the names of the selected variables in dat
-#' @param feat2 string with the names of the selected variables in dat2
-#' @param method indicates which methods of the correlation to use (look at cor.test)
-#' @param quiet TRUE/FALSE. if TRUE if will suppress all messages from the function
+#' @param feat1 vector of strings with the names of the selected variables in dat
+#' @param feat2 vector if strings with the names of the selected variables in dat2
+#' @param method indicates which methods of the correlation to use
+#' @param quiet logical to suppress the messages in the console
 #' @return correlations of the selected variables in the 2 martrices
-#' @export
+#' 
+#' @examples
+#' \dontrun{
+#' library(stats)
+#' 
+#' #load the metabolites dataset
+#' metabolites <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #'
+#' #Compute the pearson correlation of all the variables in the data.frame metabolic_measures
+#' cors<-cor_assoc(metabolites, metabolites, colnames(metabolites ),colnames(metabolites))
+#' 
+#' }
+#' 
+#' @seealso 
+#' plot_corply
+#' 
+#' @export
+#' 
 cor_assoc <- function(dat1,dat2,feat1,feat2,method="pearson",quiet=FALSE){
   res <- lapply(feat1, function(F1){
     t(sapply(feat2,function(F2){
@@ -2361,104 +2034,40 @@ cor_assoc <- function(dat1,dat2,feat1,feat2,method="pearson",quiet=FALSE){
 }
 
 
-#' Function for plotting dat1 x dat2 associations on basis of (partial) correlations:
+#' plot_corply
+#' 
+#' Function creating plottig the correlation between 2 datasets, dat1 x dat2 on basis of (partial) correlations
 #'
-#' @param res associatins obtained with cor.assoc
+#' @param res associations obtained with cor.assoc
 #' @param main title of the plot
 #' @param zlim max association to plot
-#' @param reorder.x TRUE/FALSE. If TRUE it will reorder the x axis based on clustering
-#' @param reorder.y TRUE/FALSE. If TRUE it will reorder the y axis based on clustering
-#' @param resort_on_p TRUE/FALSE. If TRUE it will reorder the x and y axis based on the pvalues of the associations
-#' @param abs TRUE/FALSE. If TRUE it will reorder based the absolute values
-#' @param cor.abs TRUE/FALSE. If TRUE it will plot the absolute values 
-#' @param text TRUE/FALSE. If TRUE it will include text in the plot
-#' @param value TRUE/FALSE. If TRUE it will plot the values of the associations
-#' @param cex.num integer indicating the size of the text
-#' @param fontsize integer indicating the size of the title and axis
+#' @param reorder.x logical indicating if the function should reorder the x axis based on clustering
+#' @param reorder.y logical indicating if the function should reorder the y axis based on clustering
+#' @param resort_on_p logical indicating if the function should reorder x and y axis based on the pvalues of the associations
+#' @param abs logical indicating if the function should  reorder based the absolute values
+#' @param cor.abs logical indicating if the function should reorder the plot base on the absolute values 
+#' @param reorder_dend Tlogical indicating if the function should reorder the plot based on dendrogram
 #' @return heatmap with the results of cor.assoc
 #' @export
 #'
-plot_cor_assoc <- function(res, main=NULL,zlim=NULL,reorder.x=FALSE,reorder.y=reorder.x,resort_on_p=FALSE,
-                           abs=FALSE,cor.abs=FALSE,text=TRUE,value=FALSE, cex.num=8, fontsize=8){
-
-  if(reorder.x|reorder.y){
-    if (resort_on_p){
-      IND <- resort.on.p(res,abs=abs)
-    }else{
-      IND <- resort.on.s(res,abs=abs)
-    }
-  }
-  s <- get.s(res)
-  p <- get.p(res)
-  if(reorder.x){
-    s <- s[IND$y,]
-    p <- p[IND$y,]
-  }
-  if(reorder.y){
-    s <- s[,IND$x]
-    p <- p[,IND$x]
-  }
-  if(is.null(main)){
-    main <- "Phenotypes vs. Features"
-  }
-  # Plot:
-  if(is.null(zlim)){
-    MAX_s <- max(abs(c(min(s),max(s))))
-    zlim <- c(min(pretty(c(-MAX_s,MAX_s))),max(pretty(c(-MAX_s,MAX_s))))
-  }
-  if(cor.abs){s<-abs(s)}
-  if(text){
-    if(value){
-      if(dim(s)[1]>35 || dim(s)[2]>35){
-        textMatrix <- paste(signif(s, 2), "(",signif(p, 2), ")", sep = "")
-      }else{
-        textMatrix <- paste(signif(s, 2), "\n(",signif(p, 2), ")", sep = "")
-      }
-    } else {
-      textMatrix <- rep("",(nrow(p)*ncol(p))) #it repeats the "" for all the possible values
-      IND1 <- which(p<=(0.05/(nrow(p)*ncol(p)))) #it compares the p-values with the Bonferroni corrected threshold
-      IND2 <- which(stats::p.adjust(p,method="fdr")<=0.05) #it compares the p-values adjusted with the fdr with thresh=0.05
-      #compose the textMatrix with * if they are selected with the bonferroni thresh, 
-      #. if they are selected using the fdr but not with bonferroni
-      #X if they were not selected on the previous steps
-      textMatrix[IND1] <- "**"
-      textMatrix[setdiff(IND2,IND1)] <- ".."
-      textMatrix[which(is.na(p))] <- "X"
-    }
-    dim(textMatrix) <- dim(p)
-    if(is.sym(res)){
-      textMatrix[cbind(1:nrow(p),1:ncol(p))] <- "X"
-    }
-  } else {
-    textMatrix <- NULL
-  }
-  if(text){
-    pheatmap::pheatmap(s, scale = "none", main=main, display_numbers = textMatrix,
-                 cluster_rows = F, cluster_cols = F, margin = c(5,5), fontsize_number = cex.num, cex=1.2,
-                 show_rownames=1, show_colnames=1, colors = grDevices::colorRampPalette(c("blue","white", "red"))(20))
-  }else{
-    pheatmap::pheatmap(s, scale = "none", main=main,
-             cluster_rows = F, cluster_cols = F, margin = c(5,5), fontsize_number = cex.num, cex=1.2,
-             fontsize=fontsize,
-             show_rownames=1, show_colnames=1, colors = grDevices::colorRampPalette(c("blue","white", "red"))(20))
-  }
-}
-
-
-#' Function creating a plotly image with the dat1 x dat2 associations on basis of (partial) correlations:
+#' @examples
+#' \dontrun{
+#' library(stats)
+#' 
+#' #load the metabolites dataset
+#' metabolites <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #'
-#' @param res associatins obtained with cor.assoc
-#' @param main title of the plot
-#' @param zlim max association to plot
-#' @param reorder.x TRUE/FALSE. If TRUE it will reorder the x axis based on clustering
-#' @param reorder.y TRUE/FALSE. If TRUE it will reorder the y axis based on clustering
-#' @param resort_on_p TRUE/FALSE. If TRUE it will reorder the x and y axis based on the pvalues of the associations
-#' @param abs TRUE/FALSE. If TRUE it will reorder based the absolute values
-#' @param cor.abs TRUE/FALSE. If TRUE it will plot the absolute values 
-#' @param reorder_dend TRUE/FALSE. If TRUE it will use the dendrogram calculated by plotly
-#' @return heatmap with the results of cor.assoc
+#' #Compute the pearson correlation of all the variables in the data.frame metabolic_measures
+#' cors<-cor_assoc(metabolites, metabolites, colnames(metabolites),colnames(metabolites))
+#' #Plot the correlations
+#' plot_corply(cors, main="Correlations metabolites")
+#' }
+#' 
+#' @seealso 
+#' cor_assoc
+#' 
 #' @export
-#'
+#' 
 plot_corply <- function(res,main=NULL,zlim=NULL,reorder.x=FALSE,reorder.y=reorder.x,resort_on_p=FALSE,
                            abs=FALSE,cor.abs=FALSE,reorder_dend=F){
 
@@ -2492,140 +2101,50 @@ plot_corply <- function(res,main=NULL,zlim=NULL,reorder.x=FALSE,reorder.y=reorde
   
 }
 
-#' helper function for clustering cor.assoc results reordering based on the associations
-#'
-#' @param res Results of cor.assoc
-#' @param abs TRUE/FALSE. If TRUE it will cluster the absolute values
-#' @return Returns the clustered order of the associations
-#' @export
-#'
-resort.on.s <- function(res,abs=FALSE){
-  s <- get.s(res)
-  if(abs){
-    s <- abs(s)
-  }
-  order.x <- stats::hclust(stats::as.dist(1-(stats::cor(s))))$order
-  if(is.sym(res)){
-    order.y <- order.x
-  } else {
-    order.y <- stats::hclust(stats::as.dist(1-(stats::cor(t(s)))))$order
-  }
-  return(list(x=order.x,y=order.y))
-}
 
-#' helper function for clustering cor.assoc results reordering based on the pvalues
-#'
-#' @param res Results of cor.assoc
-#' @param abs TRUE/FALSE. If TRUE it will cluster the absolute values
-#' @return Returns the clustered order of the associations based on the pvalues
-#' @export
-#'
-resort.on.p <- function(res,abs=FALSE){
-  p <- get.p(res)
-  if(abs){
-    p <- abs(p)
-  }
-  order.x <- stats::hclust(stats::as.dist(1-(stats::cor(log(p+1e-323)))))$order
-  if(is.sym(res)){
-    order.y <- order.x
-  } else {
-    order.y <- stats::hclust(stats::as.dist(1-(stats::cor(t(log(p+1e-323))))))$order
-  }
-  return(list(x=order.x,y=order.y))
-}
-
-#' helper function for extracting statistics from cor.assoc results
-#'
-#' @param res Results of cor.assoc
-#' @return the matrix of associations
-#' @export
-#'
-get.s <- function(res){
-  return(
-    sapply(res,function(x){
-      if(is.data.frame(x)){
-        # Data.frame coming from feat.expr
-        x[,"logFC"]
-      }else{
-        # Matrix coming from cor.assoc
-        if(is.matrix(x)){
-          x[,"estimate.cor"]
-        } else {
-          sapply(x,function(y){
-            # List coming from feat.assoc?
-            if("Estimate" %in% colnames(y)){
-              y["FEAT","Estimate"]
-            } else {
-              NA
-            }
-          })
-        }
-      }
-    })
-  )
-}
-
-#' helper function for extracting pvalues from cor.assoc results
-#'
-#' @param res Results of cor.assoc
-#' @return the matrix of the pvalues of the associations
-#' @export
-#'
-get.p <- function(res){
-  return(
-    sapply(res,function(x){
-      if(is.data.frame(x)){
-        # Data.frame coming from feat.expr
-        x[,"PValue"]
-      }else{
-        # Matrix coming from cor.assoc
-        if(is.matrix(x)){
-          x[,"p.value"]
-        }else{
-          # List coming from feat.assoc
-          sapply(x,function(y){
-            if("Pr(>|t|)" %in% colnames(y)){
-              y["FEAT","Pr(>|t|)"]
-            } else {
-              NA
-            }
-          })
-        }
-      }
-    })
-  )
-}
-
-
-## Defining a helper function to check whether a supplied matrix is symmetric:
-#' helper function to check whether a supplied matrix is symmetric
-#'
-#' @param res Results of cor.assoc
-#' @return TRUE/FALSE
-#' @export
-#'
-is.sym <- function(res){
-  s <- get.s(res)
-  if(nrow(s)==ncol(s)){
-    if(all(colnames(s)==rownames(s))){
-      return(TRUE)
-    } else {
-      return(FALSE)
-    }
-  } else {
-    return(FALSE)
-  }
-}
-
+#' plattCalibration
+#' 
 #' Function that calculates the Platt Calibrations
 #'
-#' @param r.calib binary real data
+#' @param r.calib observed binary phenotype
 #' @param p.calib predicted probabilities
 #' @param nbins number of bins to create the plots
-#' @param pl TRUE/FALSE. If TRUE it will plot the Reliability diagram and histogram of the calibrations
+#' @param pl logical indicating if the function should plot the Reliability diagram and histogram of the calibrations
 #' @return list with samples, responses, calibrations, ECE, MCE and calibration plots if save==T
-#' @export
 #'
+#' @examples
+#' \dontrun{
+#' library(stats)
+#' library(plotly)
+#' 
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the phenotypic dataset
+#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #Calculating the binarized surrogates
+#' bin_pheno<-binarize_all_pheno(phenotypes)
+#' #Apply a surrogate models and plot the ROC curve
+#' surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
+#' #Calibration of the surrogate sex
+#' plattCalibration((r.calib=bin_pheno$sex, p.calib=surrogates$s_sex, nbins = 10, pl=TRUE)
+#' }
+#' 
+#' @details 
+#' Many popular machine learning algorithms produce inaccurate predicted probabilities, especially when applied on a dataset different than the training set.
+#' Platt (1999) proposed an adjustment, in which the original probabilities are used as a predictor in a single-variable logistic regression to produce more accurate adjusted predicted probabilities.
+#' The function will also help the evaluation of the calibration, by plotting: reliability diagrams and distributions of the calibrated and non-calibrated probabilities.
+#' The reliability diagrams plots the mean predicted value within a certain range of posterior probabilities, against the fraction of accurately predicted values.
+#' Finally, we also report accuracy measures for the calibrations: the ECE, MCE and the Log-Loss of the probabilities before and after calibration.
+#' 
+#' @references
+#' This is a function originally created for the package in eRic, under the name prCalibrate and modified ad hoc for our purposes
+#' (\href{https://rdrr.io/github/etlundquist/eRic/man/prCalibrate.html}{Github})
+#' 
+#' J. C. Platt, ‘Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods’, in Advances in Large Margin Classifiers, 1999, pp. 61–74.
+#' 
+#' 
+#' @export
+#' 
 plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
 
   pred <- p.calib
@@ -2721,323 +2240,56 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
   }
 }
 
-#' Function that plots the Platt Calibrations using plotly
+
+#' MetaboWAS
+#' 
+#' Function to calculate a Metabolome Wide Association study
 #'
-#' @param r binary real data
-#' @param p predicted probabilities
-#' @param p.orig the uncalibrated posterior probabilities
-#' @param name character string indicating the name of the calibrated variable
-#' @param nbins number of bins to create the plots
-#' @param annot_x integer indicating the x axis points in which the ECE and MCE values will be plotted
-#' @param annot_y integer indicating the y axis points in which the ECE and MCE values will be plotted
-#' @return list with Reliability diagram and histogram with calibrations and original predictions
+#' @param met numeric data.frame with the metabolomics features
+#' @param pheno data.frame containing the phenotype of interest
+#' @param test_variable string vector with the name of the phenotype of interest
+#' @param covariates string vector with the name of the variables to be added as a covariate
+#' @param img logical indicating if the function should plot a Manhattan plot
+#' @param adj_method multiple testing correction method
+#' @return res= the results of the MetaboWAS, manhplot= the Manhattan plot made with plotly, N_hits= the number of significant hits
+#' 
+#'
+#' @examples
+#' \dontrun{
+#' require(MiMIR)
+#' require(plotly)
+#' require(ggplot2)
+#' 
+#' #load the metabolites dataset
+#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the phenotypic dataset containing age and sex
+#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' 
+#' #Computing a MetaboWAS for age corrected by sex
+#' MetaboWAS(met=metabo_measures, pheno=phenotypes, test_variable="age", covariates= "sex", img=T)
+#' }
+#' 
+#' @details 
+#' This is a function to compute linear associations individually for each variable in the first data.frame
+#' with the test variable and corrected for the selected covariates. 
+#' This function to computes linear regression modelindividually for each variable in the first data.frame
+#' with the test variable and adjusted for potential confounders. 
+#' False Discovery Rate (FDR) is applied to account for multiple testing correction. 
+#' The user has the faculty to select the test variable and the potential covariates within the pool of variables in the phenotypic file input.
+#' The results of the associations are reported in a Manhattan plot 
+#' 
+#' The p-value of the association is then corrected using Benjamini Hochberg.
+#' Finally we use plotly to plot a Manhattan Plot, which reports on the x-axis the list of metabolites reported in the Nightingale Health,
+#' divided in groups, and on the y-axis the -log (adjusted p-value).
+#' 
+#' @references
+#' This method is also described and used in:
+#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+#' 
 #' @export
 #'
-plattCalib_evaluation<-function(r, p, p.orig, name, nbins = 10, annot_x=c(1,1),annot_y=c(0.1,0.3)){
-  
-  i<-which(is.na(r))
-  if(length(i!=0)){
-    r<-r[-i]
-    p<-p[-i]
-    p.orig<-p.orig[-i]
-  }
-  
-  set.seed(222)
-  train_ind<- caret::createDataPartition(r, p=0.8, list=FALSE)
-  r.calib<-as.numeric(r[train_ind])
-  p.calib<-p[train_ind]
-  resp<-as.numeric(r[-train_ind])
-  pred<-p[-train_ind]
-  pred.orig<-p.orig[-train_ind]
-  
-  # add/subtract epsilon to predictions at (0,1) to avoid infinite log-loss
-  
-  pred[pred == 0] <- 1e-8
-  pred[pred == 1] <- 1 - 1e-8
-  
-  # fit the calibration model and calculate calibrated probabilities
-  
-  cmodel <- stats::glm(y ~ x, data.frame(y = r.calib, x = p.calib), family = 'binomial')
-  calibrated <- stats::predict(cmodel, data.frame(y = resp, x = pred), type = 'response')
-  
-  # calculate visualization/return measures for original probabilities (on either calibration or validation data) 
-  
-  raw.bins <- cut(pred.orig, nbins, include.lowest = TRUE)
-  raw.xval <- tapply(pred.orig, raw.bins, mean)
-  raw.yval <- tapply(resp, raw.bins, mean) 
-  raw.cali <- data.frame(method = rep('Original', nbins), x = raw.xval, y = raw.yval)
-  raw.logl <- (-1/length(resp)) * sum(resp*log(pred.orig) + (1-resp)*(log(1-pred.orig)), na.rm = TRUE)
-  
-  # calculate needed measures using transformed probabilities
-  
-  cal.bins <- cut(calibrated, nbins, include.lowest = TRUE)
-  cal.xval <- tapply(calibrated, cal.bins, mean)
-  cal.yval <- tapply(resp, cal.bins, mean)
-  cal.cali <- data.frame(method = rep('Calibrated', nbins), x = cal.xval, y = cal.yval)
-  cal.logl <- (-1/length(resp)) * sum(resp*log(calibrated) + (1-resp)*(log(1-calibrated)), na.rm = TRUE)
-  
-  ## Calibration Errors ##
-  ece_orig <- getECE(resp, pred.orig, nbins)
-  ece_calib <- getECE(resp, calibrated, nbins)
-  ECE<-data.frame(ece_orig, ece_calib)
-  mce_orig <- getMCE(resp, pred.orig, nbins)
-  mce_calib <- getMCE(resp, calibrated, nbins)
-  MCE<-data.frame(mce_orig, mce_calib)
-  
-  ## Plots ##
-  #Layouts
-  axis_font <- list(
-    family = "Arial",
-    size = 14
-  )
-  title_font <- list(
-    family = "Arial",
-    size = 18,
-    margin=10
-  )
-  
-  cdata<-cbind(raw.cali[,c(2,3)], cal.cali[,c(2,3)])
-  colnames(cdata)<-c("x.original","y.original","x.calibrated","y.calibrated")
-  
-  cPlot <- plotly::plot_ly(cdata, x= ~x.original, y= ~y.original, name="Original", 
-                   type = 'scatter', mode = 'lines+markers', line = list(width = 2)) %>% 
-    plotly::add_trace(x= ~x.calibrated, y= ~y.calibrated, name = 'Calibrated', 
-              mode = 'lines+markers', color= I("red"), line = list(width = 2)) %>% 
-    plotly::add_segments(x = 0, xend = 1, y = 0, yend = 1, name="Perfect", line = list(dash = "dash", width= 1, color="black")) %>%
-    plotly::layout(title = list(text=paste('<b>Reliability Diagram<b>',name,'<b>'),font=title_font, y = 0.98),
-           xaxis = list(title = '<b>Confidence per bin<b>',titlefont = axis_font),
-           yaxis = list (title = '<b>Fraction of positives<b>',titlefont = axis_font),
-           margin = list(l = 50, r = 140, b = 30, t = 30, pad = 4),
-           annotations = list(
-             text = list(paste("ECE Orig=",round(ece_orig, digits = 3),
-                               "\nMCE Orig=",round(mce_orig, digits = 3),
-                               "\nLogLoss Orig=",round(raw.logl, digits = 3)),
-                         paste("ECE Calib=",round(ece_calib, digits = 3),
-                               "\nMCE Calib=",round(mce_calib, digits = 3),
-                               "\nLogLoss Calib=",round(cal.logl, digits = 3))),
-             xref='paper',
-             yref='paper',
-             x =annot_x, y = annot_y,
-             showarrow=FALSE,
-             bordercolor=c('blue','red'),
-             borderwidth=2))
-  
-  hdata<-data.frame(pred.orig, calibrated)
-  hPlot<-plotly::plot_ly(hdata, x = ~pred.orig, opacity = 0.45, type = "histogram", nbinsx = nbins,
-                 marker = list(color = "blue"), name = "Original") %>% 
-    plotly::add_histogram(x = calibrated, marker = list(color = "red"), 
-                  name = "Calibrated") %>% 
-    plotly::layout( title =list(text=paste("<b> Distributions <b>",name,'<b>'),font=title_font,y = 0.98),
-            xaxis = list(
-              title = paste("<b> Predicted Probability <b>"),
-              titlefont = axis_font), 
-            yaxis = list(
-              title = "<b> Counts <b>",
-              titlefont = axis_font),barmode = "overlay")
-
-  return(list(train_ind= train_ind, responses = resp, raw.probs = pred, cal.probs = calibrated, 
-              raw.logloss = raw.logl, cal.logloss = cal.logl, 
-              cal.model = cmodel, cal.Plot = cPlot, prob.hist = hPlot))
-}
-
-#' helper function that calculates the Platt Calibrations  for all the surrogates
-#'
-#' @param bin_phenotypes data.frame with binary phenotypes resulting form binarize_all_pheno
-#' @param surrogates data.frame with surrogates resulting from calculate_surrogate_scores
-#' @param bin_names string with the names of the binarize clinical variables
-#' @param bin_pheno_available string with the names of the binarize clinical variables available in the dataset
-#' @param pl TRUE/FALSE. If TRUE creates the calibration plots
-#' @param nbins number of bins for the plots
-#' @return list with the calibrated surrogates
-#' @export
-#'
-calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_available, pl=FALSE, nbins=10){
-  bin_surro<-paste0("s_",bin_names)
-  calib<-lapply(1:length(bin_surro), function(i){
-    orig<-as.numeric(bin_phenotypes[,bin_names[i]])
-    names(orig)<-rownames(bin_phenotypes)
-    pred<-as.numeric(surrogates[,bin_surro[i]])
-    names(pred)<-rownames(surrogates)
-    ind<-which(!is.na(orig))
-    if(length(ind)!=0){
-      calibration<-plattCalibration(orig,pred, nbins = nbins, pl=pl)
-      return(calibration)
-    }
-  })
-  names(calib)<-bin_names
-  calib_df<-calib_data_frame(calib, bin_phenotypes, bin_pheno_available)
-
-  calib<-append(calib,list(calib_df))
-  names(calib)<-c(bin_names,"calib_df")
-  
-  return(calib)
-}
-
-#' helper function that creates a data.frame with the Platt Calibrations
-#'
-#'@param calibrations list result of calibration_surro
-#' @param bin_phenotypes data.frame with binary phenotypes resulting form binarize_all_pheno
-#' @param bin_pheno_available string with the names of the binarize clinical variables available in the dataset
-#' @return data.frame with the calibrated surrogates
-#' @export
-#'
-calib_data_frame<-function(calibrations, bin_phenotypes, bin_pheno_available){
-    cal<-matrix(NA, nrow = dim(bin_phenotypes)[1], ncol = length(bin_pheno_available))
-    rownames(cal)<-rownames(bin_phenotypes)
-    colnames(cal)<-bin_pheno_available
-    for(i in 1:length(bin_pheno_available)){
-      #cal[,i]<-calibrations[[bin_pheno_available[i]]]$cal.probs
-      cal[names(calibrations[[bin_pheno_available[i]]]$cal.probs),i]<-calibrations[[bin_pheno_available[i]]]$cal.probs
-    }
-    colnames(cal)<-bin_pheno_available
-  return(as.data.frame(cal))
-}
-
-#' helper function to calculate the ECE of the calibrations
-#'
-#' @param actual real values of the variables
-#' @param predicted predicted values by one of the surrogates
-#' @param n_bins the number of bins
-#' @return ECE value
-#' @export
-#'
-getECE<-function (actual, predicted, n_bins = 10) 
-{
-  predicted <- predicted
-  labels <- actual
-  idx <- order(predicted)
-  pred_actual <- (cbind(predicted[idx], labels[idx]))
-  N <- nrow(pred_actual)
-  rest <- N%%n_bins
-  S <- 0
-  W <- c()
-  B <- min(N, n_bins)
-  groups <- list()
-  for (i in 1:B) {
-    if (i <= rest) {
-      group_pred <- (pred_actual[(((i - 1) * ceiling(N/n_bins) + 
-                                     1):(i * ceiling(N/n_bins))), 1])
-      group_actual <- (pred_actual[(((i - 1) * ceiling(N/n_bins) + 
-                                       1):(i * ceiling(N/n_bins))), 2])
-    }
-    else {
-      group_pred <- (pred_actual[((rest + (i - 1) * floor(N/n_bins) + 
-                                     1):(rest + i * floor(N/n_bins))), 1])
-      group_actual <- (pred_actual[((rest + (i - 1) * 
-                                       floor(N/n_bins) + 1):(rest + i * floor(N/n_bins))), 
-                                   2])
-    }
-    n_ <- length(group_pred)
-    expected <- mean(group_pred, na.rm=TRUE)
-    observed <- mean(group_actual, na.rm=TRUE)
-    S[i] <- abs(observed - expected)
-    W[i] <- n_/N
-    groups[[i]] <- group_pred
-  }
-  mean_prediction <- lapply(groups, mean, na.rm=TRUE)
-  min_group <- lapply(groups, min, na.rm=TRUE)
-  max_group <- lapply(groups, max, na.rm=TRUE)
-  res <- t(S) %*% W
-  return(as.numeric(res))
-}
-
-#' helper function to calculate the MCE of the calibrations
-#'
-#' @param actual real values of the variables
-#' @param predicted predicted values by one of the surrogates
-#' @param n_bins the number of bins
-#' @return MCE value
-#' @export
-#'
-getMCE<-function (actual, predicted, n_bins = 10) 
-{
-  predicted <- predicted
-  labels <- actual
-  idx <- order(predicted)
-  pred_actual <- (cbind(predicted[idx], actual[idx]))
-  N <- nrow(pred_actual)
-  rest <- N%%n_bins
-  B <- min(N, n_bins)
-  S <- 0
-  W <- c()
-  for (i in 1:B) {
-    if (i <= rest) {
-      group_pred <- (pred_actual[(((i - 1) * ceiling(N/n_bins) + 
-                                     1):(i * ceiling(N/n_bins))), 1])
-      group_actual <- (pred_actual[(((i - 1) * ceiling(N/n_bins) + 
-                                       1):(i * ceiling(N/n_bins))), 2])
-    }
-    else {
-      group_pred <- (pred_actual[((rest + (i - 1) * floor(N/n_bins) + 
-                                     1):(rest + i * floor(N/n_bins))), 1])
-      group_actual <- (pred_actual[((rest + (i - 1) * 
-                                       floor(N/n_bins) + 1):(rest + i * floor(N/n_bins))), 
-                                   2])
-    }
-    n <- length(group_pred)
-    expected <- mean(group_pred, na.rm=TRUE)
-    observed <- mean(group_actual, na.rm=TRUE)
-    S[i] <- abs(observed - expected)
-    W[i] <- n/N
-  }
-  res <- max(S * W)
-  return(res)
-}
-
-
-#' helper function to create a plotly indicating a problem with a plotly image
-#'
-#' @param main Message to plot
-#' @return plotly image
-#' @export
-#'
-plotly_NA_message<-function(main="Phenotype not available!"){
-  title_font <- list(
-    family = "Arial",
-    size = 20,
-    margin=10
-  )
-  
-  ax <- list(
-    title = "",
-    zeroline = FALSE,
-    showline = FALSE,
-    showticklabels = FALSE,
-    showgrid = FALSE
-  )
-  
-  plotly::plot_ly(x=0,y=0, opacity=0, type = "histogram")%>% 
-    plotly::layout(title = list(text=paste('<b>',main,'<b>'),font=title_font, y = 0.5),
-           xaxis = ax, yaxis = ax)
-}
-
-#' helper function to create a plot indicating a problem with a plotly image
-#'
-#' @param main Message to plot
-#' @return plot
-#' @export
-#'
-NA_message<-function(main="Metabolites are missing, please check your upload!"){
-  graphics::plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')
-  graphics::text(x = 0.5, y = 0.5, main,cex = 1.6, col = "black", font=2)
-}
-
-
-
-
-
-#' Function that produces a MetaboWAS
-#'
-#' @param met metabolites data.frame
-#' @param pheno phenotypes data.frame
-#' @param test_variable the variable to be investigated 
-#' @param covariates the covariates that you want to add
-#' @param img TRUE to plot a Manhattan plot
-#' @return res= the results of the MetaboWAS, manhplot= the Manhattan plot, N_hits= the number of significant hits
-#' @export
-#'
-MetaboWAS<-function(met, pheno, test_variable, covariates, img=T){
-  res<-do_metabowas(phen=pheno, dat= met, test_variable = test_variable, covariates=covariates)
+MetaboWAS<-function(met, pheno, test_variable, covariates, img=T, adj_method="BH"){
+  res<-do_metabowas(phen=pheno, dat= met, test_variable = test_variable, covariates=covariates, adj_method=adj_method)
   N_hits<-length(which(res$pval.adj<=0.05))
   
   if(img){
@@ -3094,48 +2346,5 @@ MetaboWAS<-function(met, pheno, test_variable, covariates, img=T){
   }
   
   list(res=res, manhplot=manhplot, N_hits=N_hits)
-}
-
-
-#' Function to compute MetaboWASs
-#' 
-#' This helper function is called when doing Metabolites wide association analysis.It reports the results of linear regression models to study the association of a test variable to each metabolites individually and corrected for the covariates indicated.
-#'
-#' @param phen phenotypes data.frame
-#' @param dat metabolites data.frame
-#' @param test_variable the variable to be investigated 
-#' @param covariates the covariates that you want to add
-#' @param adj_method correction method.
-#' @param quiet if FALSE it will plot the amount of people avaialble
-#' @return results= the results of the MetaboWAS (estimate, tstatistics, pvalue, BH corrected pvalue)
-#' @export
-#'
-do_metabowas<-function(phen, dat, test_variable="age", covariates=c("sex"), adj_method="BH", quiet=T){
-  if(!is.null(covariates)){
-    vars <- phen[, c(test_variable, covariates)]
-  }else{
-    vars <- as.data.frame(phen[,test_variable])
-    rownames(vars)<-rownames(phen)
-    colnames(vars)<-test_variable
-  }
-  vars <- stats:: na.omit(vars)
-  if(!quiet){
-    print(paste("The number of samples is:",dim(vars)[1]))
-  }
-  dat <- dat[match(rownames(vars), rownames(dat)),]
-  allmisscols <- sapply(dat, function(x)all(is.na(x)))
-  dat<-dat[,-which(allmisscols==T)]
-  data<-merge(vars,dat,by=0)
-  rownames(data)<-data$Row.names
-  data<-data[,-1]
-  fit<-foreach::foreach(i=colnames(dat), .combine="rbind") %do% {
-    res <-data.frame(stats::coefficients(summary(stats::lm(stats::as.formula(paste0(test_variable,"~",paste(covariates,collapse="+"),"+",i)), data))))
-    colnames(res) <- c("estimate","stdErr","tstat","pval")
-    res<-res[,c("estimate","tstat","pval")]
-    return(res[i,])
-  }
-  fit$pval.adj<-stats::p.adjust(fit$pval, method = adj_method)
-  fit<-fit[order(fit$pval.adj, decreasing = F),]
-  return(fit)
 }
 

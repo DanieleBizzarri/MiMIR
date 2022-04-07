@@ -2,17 +2,16 @@
 % Please edit documentation in R/predictors_functions.R
 \name{LOBOV_accuracies}
 \alias{LOBOV_accuracies}
-\title{Function created to visualize the accuracies in the current dataset compared to the
-accuracies in the Leave One Biobank Out Validation in Bizzarri et al.}
+\title{LOBOV_accuracies}
 \usage{
 LOBOV_accuracies(surrogates, bin_phenotypes, bin_pheno_available, acc_LOBOV)
 }
 \arguments{
-\item{surrogates}{matrix with the surrogate variables calculated in Bizzarri et all.}
+\item{surrogates}{numeric data.frame containing the surrogate values by Bizzarri et al.}
 
-\item{bin_phenotypes}{magtrix with the binarized variables}
+\item{bin_phenotypes}{numeric data.frame with the binarized phenotypes output of binarize_all_pheno}
 
-\item{bin_pheno_available}{character vector with the phenotypes availables}
+\item{bin_pheno_available}{vector of strings with the available phenotypes}
 
 \item{acc_LOBOV}{accuracy of LOBOV calculated in Bizzarri et al.}
 }
@@ -22,4 +21,32 @@ Boxplot with the accuracies of the LOBOV
 \description{
 Function created to visualize the accuracies in the current dataset compared to the
 accuracies in the Leave One Biobank Out Validation in Bizzarri et al.
+}
+\details{
+Comparison of the AUCs of the surrogates in the updated dataset and the
+results of the Leave One Biobank Out Validation made in BBMRI-nl.
+}
+\examples{
+\dontrun{
+require(pROC)
+require(plotly)
+require(MiMIR)
+require(foreach)
+require(ggplot2)
+
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Calculating the binarized surrogates
+bin_pheno<-binarize_all_pheno(phenotypes)
+#Apply a surrogate models and plot the ROC curve
+surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
+LOBOV_accuracies(surrogates$surrogates, bin_phenotypes, c("sex","diabetes","high_age"))
+}
+
+}
+\references{
+This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
 }

@@ -5,8 +5,8 @@ output[["get_started"]] <- renderUI({
       br(),
       span(
         "This webtool was created to easily allow the computation of several
-        existing metabolic scores made with Nightingale Health data.
-        This application works only with a file with the Nighitngale NH-metabolomics measurements  in a specific format:",
+        existing metabolic scores trained using Nightingale Health data.
+        This application works only with file, including the Nighitngale NH-metabolomics measurements, in a specific format:",
         style = "text-align: justify; display: block; width: 95%"
       ),
       br(),
@@ -15,12 +15,12 @@ output[["get_started"]] <- renderUI({
         tags$br(),
         "- Input data should be raw. Don't apply any preprocessing steps.",
         tags$br(),
-        "- The columns should represent the metabolites and the rows the samples.",
+        "- The columns: metabolic features and rows samples.
+        Please include also the column names with the metabolites names and an 'ID' column with unique sample IDs.",
         tags$br(),
         "- The app can translate alternative metabolic names created by Nightingale health.
-        To know if a metabolite wasn't recognised look below at the table 'Variables names recognised'.
-        If a metabolite is not found please upload again the file with the name you can find in the example dataset.
-        Notice that it also requires a columns with unique sample IDs.
+        The table 'Variables names recognised', below, will allow you to identify unrecognised features.
+        If a metabolite is not found please update your file with the name you can find in the example dataset.
         The models only use subsets of the metabolites measured by the 
         Nightingale Health platform (see Supplementary Info). If these metabolites are missing 
         or if they don't have the correct names, an error will be returned.",
@@ -43,7 +43,7 @@ output[["get_started"]] <- renderUI({
         tags$br(),
         "Please ensure that your dataset looks similar to this example dataset before submitting.
         You can check the column names below in the table 'Variables names recognised'. 
-        If a column updated was not recognise please upload agein the file with the correct naming",
+        If a column updated was not recognised please upload again the file with the correct nomenclature",
         style = "text-align: justify; display: block; width: 95%"
       ),
       br(),
@@ -72,7 +72,8 @@ upload_met <- reactive({
         header = TRUE, row.names = 1
       )
     }
-    
+    #avoid case-sensitive alternative names
+    colnames(metabo_measures())<-tolower(colnames(metabo_measures()))
     #Looking for alternative names
     nam<-find_BBMRI_names(colnames(metabo_measures))
     i<-which(nam$BBMRI_names %in% MiMIR::metabo_names_translator$BBMRI_names)
@@ -105,6 +106,9 @@ upload_phen <- reactive({
   if(!is.null(metabo_measures())){
     phenotypes<-phenotypes[rownames(metabo_measures()),]
   }
+  
+  #avoid case-sensitive alternative names
+  colnames(phenotypes())<-tolower(colnames(phenotypes()))
   
   phenotypes
 })

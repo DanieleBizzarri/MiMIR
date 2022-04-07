@@ -26,7 +26,8 @@ high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, lo
 }
 \examples{
 \dontrun{
-library(MiMIR)
+require(MiMIR)
+require(foreach)
 
 #load the phenotypes dataset
 phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)

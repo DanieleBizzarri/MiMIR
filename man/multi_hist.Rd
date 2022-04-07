@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{multi_hist}
 \alias{multi_hist}
-\title{Function to plot the histograms for all the variables in dat}
+\title{multi_hist}
 \usage{
 multi_hist(dat, color = MiMIR::c21, scaled = FALSE)
 }
@@ -11,11 +11,23 @@ multi_hist(dat, color = MiMIR::c21, scaled = FALSE)
 
 \item{color}{colors selected for all the variables}
 
-\item{scaled}{TRUE/FALSE. If TRUE the variables will be z-scaled}
+\item{scaled}{logical to z-scale the variables}
 }
 \value{
 plotly image with the histograms for all the variables in dat
 }
 \description{
-Function to plot the histograms for all the variables in dat
+#' Function to plot the histograms for all the variables in dat
+}
+\examples{
+\dontrun{
+library(plotly)
+library(MiMIR)
+
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+
+multi_hist(metabolic_measures, scaled=T)
+}
+
 }

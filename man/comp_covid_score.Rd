@@ -29,7 +29,7 @@ library(MiMIR)
 
 #load the Nightignale metabolomics dataset
 metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#Prepare the metabolic features fo the mortality score
+#Compute the mortality score
 mortScore<-comp_covid_score(dat=metabolic_measures, quiet=TRUE)
 }
 

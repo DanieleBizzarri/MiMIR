@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{kapmeier_scores}
 \alias{kapmeier_scores}
-\title{Function that creates a Kaplan Meier for an Event of the predictor divided by its mean}
+\title{kapmeier_scores}
 \usage{
 kapmeier_scores(predictors, pheno, score, Eventname = "Event")
 }
@@ -16,8 +16,29 @@ kapmeier_scores(predictors, pheno, score, Eventname = "Event")
 \item{Eventname}{a character string with the name of the event to print on the plot}
 }
 \value{
-plotly with a Kaplan Meier for an Event of the predictor divided by its mean
+plotly with a Kaplan Meier comparing first and last tertile of a metabolic score
 }
 \description{
-Function that creates a Kaplan Meier for an Event of the predictor divided by its mean
+#' Function that creates a Kaplan Meier comparing first and last tertile of a metabolic score
+}
+\examples{
+\dontrun{
+
+require(MiMIR)
+require(plotly)
+require(survminer)
+require(ggplot2)
+
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+
+#Compute the mortality score
+mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
+
+#Plot a Kaplan Meier
+kapmeier_scores(predictors=mortScore, pheno=phenotypes, score="mort_score")
+}
+
 }

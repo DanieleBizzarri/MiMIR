@@ -2,18 +2,34 @@
 % Please edit documentation in R/predictors_functions.R
 \name{hist_plots_mortality}
 \alias{hist_plots_mortality}
-\title{Function to plot the histogram of the mortality score separated for different age ranges}
+\title{hist_plots_mortality}
 \usage{
 hist_plots_mortality(mort_score, phenotypes)
 }
 \arguments{
-\item{mort_score}{data.frame of the mortality score}
+\item{mort_score}{data.frame containing the mortality score}
 
-\item{phenotypes}{data.frame with age included in it}
+\item{phenotypes}{data.frame containing age}
 }
 \value{
-plotly image with the histogram of the mortlity score separated in 3 age ranges
+plotly image with the histogram of the mortality score separated in 3 age ranges
 }
 \description{
-Function to plot the histogram of the mortality score separated for different age ranges
+#' Function to plot the histogram of the mortality score separated for different age ranges as a plotly image
+}
+\examples{
+\dontrun{
+library(MiMIR)
+library(plotly)
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+
+#Compute the mortality score
+mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
+#Plot the mortality score histogram at different ages
+hist_plots_mortality(mortScore, phenotypes)
+}
+
 }

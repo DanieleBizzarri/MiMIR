@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{BBMRI_hist_plot}
 \alias{BBMRI_hist_plot}
-\title{Function to plot the 57 selected metabolites to their distributions in BBMRI-nl}
+\title{multi_hist}
 \usage{
 BBMRI_hist_plot(
   dat,
@@ -20,9 +20,9 @@ BBMRI_hist_plot(
 
 \item{color}{colors selected for all the variables}
 
-\item{scaled}{TRUE/FALSE. If TRUE the variables will be z-scaled before plotting them}
+\item{scaled}{logical to z-scale the variables}
 
-\item{datatype}{a character vector indicating what data type is beeing plotted}
+\item{datatype}{a character vector indicating what data type is being plotted}
 
 \item{main}{title of the plot}
 }
@@ -30,5 +30,29 @@ BBMRI_hist_plot(
 plotly image with the histogram of the selected variable compared to the distributions in BBMRI-nl
 }
 \description{
-Function to plot the 57 selected metabolites to their distributions in BBMRI-nl
+Function to plot the ~60 metabolites used for the metabolomics-based scores and compare them to to their distributions in BBMRI-nl
+}
+\details{
+This function plots the distribution of a metabolic feature in the uploaded dataset, compared to their distributions in BBMRI-nl.
+The selection of features available is done following the metabolic scores features.
+}
+\examples{
+\dontrun{
+library(plotly)
+library(MiMIR)
+
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+
+BBMRI_hist_plot(metabolic_measures, x_name="glc", scaled=T)
+}
+
+}
+\references{
+The selection of metabolic features available is the one selected by the papers:
+Deelen,J. et al. (2019) A metabolic profile of all-cause mortality risk identified in an observational study of 44,168 individuals. Nature Communications, 10, 1–8, doi: 10.1038/s41467-019-11311-9.
+Ahola-Olli,A.V. et al. (2019) Circulating metabolites and the risk of type 2 diabetes: a prospective study of 11,896 young adults from four Finnish cohorts. Diabetologia, 62, 2298–2309, doi: 10.1007/s00125-019-05001-w
+Würtz,P. et al. (2015) Metabolite profiling and cardiovascular event risk: a prospective study of 3 population-based cohorts. Circulation, 131, 774–785, doi: 10.1161/CIRCULATIONAHA.114.013116
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
 }

@@ -2,18 +2,40 @@
 % Please edit documentation in R/predictors_functions.R
 \name{ttest_surrogates}
 \alias{ttest_surrogates}
-\title{Function that creates a plotly image of the selected surrogates}
+\title{ttest_surrogates}
 \usage{
 ttest_surrogates(surrogates, bin_phenotypes)
 }
 \arguments{
-\item{surrogates}{The data.frame containing the surrogate values by Bizzarri et al.}
+\item{surrogates}{numeric data.frame containing the surrogate values by Bizzarri et al.}
 
-\item{bin_phenotypes}{data.frame with the binarized phenotypes}
+\item{bin_phenotypes}{numeric data.frame with the binarized phenotypes output of binarize_all_pheno}
 }
 \value{
-plotly image with the ROC curves for the selected variables
+plotly image with all the ROCs for all the available clinical variables
 }
 \description{
-Function that creates a plotly image of the selected surrogates
+Function that calculates a t-test and a plotly image of the selected surrogates
+}
+\details{
+Barplot and T-test indicating if the surrogate variables could split accordingly the real value of the binary clinical variables.
+}
+\examples{
+\dontrun{
+require(pROC)
+require(plotly)
+require(MiMIR)
+require(foreach)
+
+#load the metatolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Calculating the binarized surrogates
+bin_pheno<-binarize_all_pheno(phenotypes)
+#Apply a surrogate models and plot the ROC curve
+surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
+ttest_surrogates(surrogates$surrogates, bin_phenotypes)
+}
+
 }

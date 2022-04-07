@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{plot_corply}
 \alias{plot_corply}
-\title{Function creating a plotly image with the dat1 x dat2 associations on basis of (partial) correlations:}
+\title{plot_corply}
 \usage{
 plot_corply(
   res,
@@ -17,27 +17,44 @@ plot_corply(
 )
 }
 \arguments{
-\item{res}{associatins obtained with cor.assoc}
+\item{res}{associations obtained with cor.assoc}
 
 \item{main}{title of the plot}
 
 \item{zlim}{max association to plot}
 
-\item{reorder.x}{TRUE/FALSE. If TRUE it will reorder the x axis based on clustering}
+\item{reorder.x}{logical indicating if the function should reorder the x axis based on clustering}
 
-\item{reorder.y}{TRUE/FALSE. If TRUE it will reorder the y axis based on clustering}
+\item{reorder.y}{logical indicating if the function should reorder the y axis based on clustering}
 
-\item{resort_on_p}{TRUE/FALSE. If TRUE it will reorder the x and y axis based on the pvalues of the associations}
+\item{resort_on_p}{logical indicating if the function should reorder x and y axis based on the pvalues of the associations}
 
-\item{abs}{TRUE/FALSE. If TRUE it will reorder based the absolute values}
+\item{abs}{logical indicating if the function should  reorder based the absolute values}
 
-\item{cor.abs}{TRUE/FALSE. If TRUE it will plot the absolute values}
+\item{cor.abs}{logical indicating if the function should reorder the plot base on the absolute values}
 
-\item{reorder_dend}{TRUE/FALSE. If TRUE it will use the dendrogram calculated by plotly}
+\item{reorder_dend}{Tlogical indicating if the function should reorder the plot based on dendrogram}
 }
 \value{
 heatmap with the results of cor.assoc
 }
 \description{
-Function creating a plotly image with the dat1 x dat2 associations on basis of (partial) correlations:
+Function creating plottig the correlation between 2 datasets, dat1 x dat2 on basis of (partial) correlations
+}
+\examples{
+\dontrun{
+library(stats)
+
+#load the metabolites dataset
+metabolites <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+
+#Compute the pearson correlation of all the variables in the data.frame metabolic_measures
+cors<-cor_assoc(metabolites, metabolites, colnames(metabolites),colnames(metabolites))
+#Plot the correlations
+plot_corply(cors, main="Correlations metabolites")
+}
+
+}
+\seealso{
+cor_assoc
 }

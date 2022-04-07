@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{plot_na_heatmap}
 \alias{plot_na_heatmap}
-\title{Function for plotting a heatmap indcating missing & zero values}
+\title{plot_na_heatmap}
 \usage{
 plot_na_heatmap(dat)
 }
@@ -10,8 +10,25 @@ plot_na_heatmap(dat)
 \item{dat}{The matrix or data.frame}
 }
 \value{
-Plot with an heatmap and two histogram on the sides indicating zeros and missing values
+Plot with a central heatmap and two histogram on the sides
 }
 \description{
-Function for plotting a heatmap indcating missing & zero values
+Function plotting information about missing & zero values on the indicated matrix.
+}
+\details{
+This heatmap indicates the available values in grey and missing or zeros in white.
+On the sides two bar plots on the sides, one showing the missingn or zero values
+per row and another to show the missing or zeroes per column.
+}
+\examples{
+\dontrun{
+library(graphics)
+library(MiMIR)
+
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#Plot the missing values in the metabolomics matrix
+plot_na_heatmap(metabolic_measures)
+}
+
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictors_functions.R
 \name{QCprep_surrogates}
 \alias{QCprep_surrogates}
-\title{QCprep}
+\title{QCprep_surrogates}
 \usage{
 QCprep_surrogates(
   mat,

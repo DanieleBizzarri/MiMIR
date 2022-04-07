@@ -3,7 +3,7 @@ tab_qc <- tabItem(
   align = "center",
   
   #Pre-processing instructions
-  h1("Pre-Processing"),
+  h1("Pre-Processing (OPTIONAL)"),
   uiOutput("qc_intro"),
   HTML('<hr style="border-color: #0088cc;">'),
   

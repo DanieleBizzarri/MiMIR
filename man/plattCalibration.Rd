@@ -2,22 +2,53 @@
 % Please edit documentation in R/predictors_functions.R
 \name{plattCalibration}
 \alias{plattCalibration}
-\title{Function that calculates the Platt Calibrations}
+\title{plattCalibration}
 \usage{
 plattCalibration(r.calib, p.calib, nbins = 10, pl = FALSE)
 }
 \arguments{
-\item{r.calib}{binary real data}
+\item{r.calib}{observed binary phenotype}
 
 \item{p.calib}{predicted probabilities}
 
 \item{nbins}{number of bins to create the plots}
 
-\item{pl}{TRUE/FALSE. If TRUE it will plot the Reliability diagram and histogram of the calibrations}
+\item{pl}{logical indicating if the function should plot the Reliability diagram and histogram of the calibrations}
 }
 \value{
 list with samples, responses, calibrations, ECE, MCE and calibration plots if save==T
 }
 \description{
 Function that calculates the Platt Calibrations
+}
+\details{
+Many popular machine learning algorithms produce inaccurate predicted probabilities, especially when applied on a dataset different than the training set.
+Platt (1999) proposed an adjustment, in which the original probabilities are used as a predictor in a single-variable logistic regression to produce more accurate adjusted predicted probabilities.
+The function will also help the evaluation of the calibration, by plotting: reliability diagrams and distributions of the calibrated and non-calibrated probabilities.
+The reliability diagrams plots the mean predicted value within a certain range of posterior probabilities, against the fraction of accurately predicted values.
+Finally, we also report accuracy measures for the calibrations: the ECE, MCE and the Log-Loss of the probabilities before and after calibration.
+}
+\examples{
+\dontrun{
+library(stats)
+library(plotly)
+
+#load the metabolites dataset
+metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the phenotypic dataset
+phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#Calculating the binarized surrogates
+bin_pheno<-binarize_all_pheno(phenotypes)
+#Apply a surrogate models and plot the ROC curve
+surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
+#Calibration of the surrogate sex
+plattCalibration((r.calib=bin_pheno$sex, p.calib=surrogates$s_sex, nbins = 10, pl=TRUE)
+}
+
+}
+\references{
+This is a function originally created for the package in eRic, under the name prCalibrate and modified ad hoc for our purposes
+(\href{https://rdrr.io/github/etlundquist/eRic/man/prCalibrate.html}{Github})
+
+J. C. Platt, ‘Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods’, in Advances in Large Margin Classifiers, 1999, pp. 61–74.
 }
