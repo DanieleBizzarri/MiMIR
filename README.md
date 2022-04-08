@@ -8,7 +8,7 @@ calculation of the metabolic predictorsdeveloped by the groups of MOLEPI
 and LCBC (LUMC), from raw Nightingale Health 1H-NMR metabolomics data.
 To have a detail description of all the possible analyses available in
 MiMIR, please take a look at the
-Manual:<https://github.com/DanieleBizzarri/MiMIR/blob/main/man/MANUAL.pdf>
+Manual:<https://github.com/DanieleBizzarri/MiMIR/blob/main/data/MANUAL.pdf>
 Please refer to our manuscripts when using these metabolic biomarkers in
 your works: - mortality score: J. Deelen et al., ‘A metabolic profile of
 all-cause mortality risk identified in an observational study of 44,168
