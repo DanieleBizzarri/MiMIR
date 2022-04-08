@@ -19,7 +19,6 @@ if (!require("purrr")) install.packages("purrr")
 if (!require("rmarkdown")) install.packages("rmarkdown")
 
 #Imaging libraries
-if (!require("pheatmap")) install.packages("pheatmap")
 if (!require("pROC")) install.packages("pROC")
 if (!require("plotly")) install.packages("plotly")
 if (!require("heatmaply")) install.packages("heatmaply")

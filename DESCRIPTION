@@ -21,15 +21,12 @@ Imports:
     ggplot2,
     glmnet,
     heatmaply,
-    knitr,
     matrixStats,
-    pheatmap,
     pkgload,
     plotly,
     plyr,
     pROC,
     purrr,
-    rmarkdown,
     shiny,
     shinycssloaders,
     shinyFiles,
@@ -41,3 +38,6 @@ Imports:
     survminer,
     dplyr
 LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown
