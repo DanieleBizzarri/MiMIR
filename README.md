@@ -12,7 +12,7 @@ allows to easily explore new metabolomics measurements assayed by
 Nightingale Health; project previously published metabolic scores; and
 calibrate the metabolic surrogate values to a desired dataset.
 
-![MiMIR_logo](inst/shinyApp/www/MiMIR_logo.svg)
+![MiMIR_logo](inst/shinyApp/www/MiMIR_logo.svg) {width=20%, height=20%}
 
 To have a detail description of all the possible analyses available in
 MiMIR, please take a look at the
