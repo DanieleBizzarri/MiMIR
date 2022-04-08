@@ -12,9 +12,10 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+
+# MiMIR
 [![R-CMD-check](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml)
 
-# MetaboRiSc
 MiMIR (Metabolomics-based Models for Imputing Risk), is a a unique graphical user interface that provides an intuitive framework for ad-hoc statistical analysis of 1H-NMR metabolomics by Nightingale Health. It allows to easily explore new metabolomics measurements assayed by Nightingale Health; project previously published metabolic scores; and calibrate the metabolic surrogate values to a desired dataset. 
 
  ![MiMIR_logo](MiMIR/inst/shinyApp/www/MiMIR_logo.svg)
