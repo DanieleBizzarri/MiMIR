@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "d.bizzarri@lumc.nl",
            comment = c(ORCID = "0000-0002-6881-273X"))
-Description: This R-shiny webtool  was made to calculate the metabolic predictors from raw Nightingale Health 1H-NMR metabolomics data, developed by the groups of Molecular Epidemiology and LCBC (LUMC).
+Description: MiMIR (Metabolomics-based Models for Imputing Risk), is a unique graphical user interface that provides an intuitive framework for ad-hoc statistical analysis of 1H-NMR metabolomics by Nightingale Health. It allows to easily explore new metabolomics measurements assayed by Nightingale Health, comparing the distributions with a large Consortium (BBMRI-nl); project previously published metabolic scores; and calibrate the metabolic surrogate values to a desired dataset.
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
