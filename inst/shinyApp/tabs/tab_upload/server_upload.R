@@ -200,7 +200,7 @@ bin_pheno_available <- reactive({
 # Variable TRUE/FALSE if all the metabolites names were found
 required<-reactive({
   if(length(metabo_measures())>0){
-    length(which(MiMIR::metabolites_subsets$MET57 %in% colnames(metabo_measures())))==57
+    length(which(MiMIR::metabolites_subsets$MET14 %in% colnames(metabo_measures())))==14
   }else{FALSE}
 })
 
