@@ -491,8 +491,6 @@ model_coeff_heat<-function(mort_betas, metaboAge_betas, surrogates_betas, Ahola_
                        margins=c(0,0,40,0))
 }
 
-
-
 #' resort.on.s
 #' 
 #' helper function for clustering cor.assoc results reordering based on the associations

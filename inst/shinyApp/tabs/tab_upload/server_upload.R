@@ -73,7 +73,7 @@ upload_met <- reactive({
       )
     }
     #avoid case-sensitive alternative names
-    colnames(metabo_measures())<-tolower(colnames(metabo_measures()))
+    colnames(metabo_measures)<-tolower(colnames(metabo_measures))
     #Looking for alternative names
     nam<-find_BBMRI_names(colnames(metabo_measures))
     i<-which(nam$BBMRI_names %in% MiMIR::metabo_names_translator$BBMRI_names)
@@ -108,7 +108,7 @@ upload_phen <- reactive({
   }
   
   #avoid case-sensitive alternative names
-  colnames(phenotypes())<-tolower(colnames(phenotypes()))
+  colnames(phenotypes)<-tolower(colnames(phenotypes))
   
   phenotypes
 })

@@ -1,13 +1,33 @@
 Package: MiMIR
-Title: Metabolomics-based Models for Imputing Risk
-Version: 0.0.0.9000
+Title: Metabolomics-Based Models for Imputing Risk
+Version: 1.2
 Authors@R: 
-    person(given = "Daniele",
+    c(person(given = "Daniele",
            family = "Bizzarri",
            role = c("aut", "cre"),
            email = "d.bizzarri@lumc.nl",
-           comment = c(ORCID = "0000-0002-6881-273X"))
-Description: MiMIR (Metabolomics-based Models for Imputing Risk), is a unique graphical user interface that provides an intuitive framework for ad-hoc statistical analysis of 1H-NMR metabolomics by Nightingale Health. It allows to easily explore new metabolomics measurements assayed by Nightingale Health, comparing the distributions with a large Consortium (BBMRI-nl); project previously published metabolic scores; and calibrate the metabolic surrogate values to a desired dataset.
+           comment = c(ORCID = "0000-0002-6881-273X")),
+    person(given = "Marcel",
+           family = "Reinders",
+           role = c("aut","ths"),
+           email = "m.j.t.reinders@tudelft.nl",
+           comment = c(ORCID = "0000-0002-1148-1562")),
+    person(given = "Marian",
+           family = "Beekman",
+           role = c("aut"),
+           email = "M.Beekman@lumc.nl",
+           comment = c(ORCID = "0000-0003-0585-6206")),
+    person(given = "Pieternella Eline",
+           family = "Slagboom",
+           role = c("aut","ths"),
+           email = "P.Slagboom@lumc.nl",
+           comment = c(ORCID = "0000-0002-2875-4723")),
+    person(given = "Erik",
+           family = "van den Akker",
+           role = c("aut","ths"),
+           email = "E.B.van_den_Akker@lumc.nl",
+           comment = c(ORCID = "0000-0002-7693-0728")))
+Description: Provides an intuitive framework for ad-hoc statistical analysis of 1H-NMR metabolomics by Nightingale Health. It allows to easily explore new metabolomics measurements assayed by Nightingale Health, comparing the distributions with a large Consortium (BBMRI-nl); project previously published metabolic scores [<doi:10.1016/j.ebiom.2021.103764>, <doi:10.1161/CIRCGEN.119.002610>, <doi:10.1038/s41467-019-11311-9>, <doi:10.7554/eLife.63033>, <doi:10.1161/CIRCULATIONAHA.114.013116>, <doi:10.1007/s00125-019-05001-w>]; and calibrate the metabolic surrogate values to a desired dataset.   
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
