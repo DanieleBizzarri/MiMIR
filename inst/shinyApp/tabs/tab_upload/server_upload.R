@@ -108,7 +108,7 @@ upload_phen <- reactive({
   }
   
   #avoid case-sensitive alternative names
-  colnames(phenotypes)<-tolower(colnames(phenotypes))
+  #colnames(phenotypes)<-tolower(colnames(phenotypes))
   
   phenotypes
 })
