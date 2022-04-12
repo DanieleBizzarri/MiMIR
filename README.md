@@ -56,7 +56,7 @@ cohorts’, Circulation, vol. 131, no. 9, pp. 774–785, Mar. 2015, doi:
 <!-- -->
 
     library("devtools")
-    devtools::install_github("DanieleBizzarri/MetaboRiSc")
+    devtools::install_github("DanieleBizzarri/MiMIR")
 
 3.  Launch the application:
 
