@@ -25,14 +25,12 @@ current smoking, alcohol consumption, high age, middle age, low age, high hsCRP,
 high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the phenotypes dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+phenotypes <- synthetic_phenotypic_dataset
 #Calculate BMI, LDL cholesterol and eGFR
 binarized_phenotypes<-binarize_all_pheno(phenotypes)
-}
 
 }
 \references{

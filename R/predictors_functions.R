@@ -17,6 +17,7 @@
 #' @importFrom stats as.formula  
 #' @importFrom stats coefficients
 #' @importFrom stats p.adjust
+#' @importFrom graphics par
 NULL
 
 ###################################
@@ -42,15 +43,13 @@ utils::globalVariables(c("bin_phenotypes", "i", "y", "mortScore",
 #' @return data.frame with the uploaded metabolites names on the first column and the BBMRI names on the second column.
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' library(purrr)
 #' 
 #' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' #Find the metabolites names used in BBMRI-nl
 #' nam<-find_BBMRI_names(colnames(metabolic_measures)) 
-#' }
 #' 
 #' @references 
 #' This is a function originally created for the package ggforestplot and modified ad hoc for our package 
@@ -95,14 +94,12 @@ find_BBMRI_names<-function(names){
 #' @return The Nightingale-metabolomics data-frame after pre-processing (checked for zeros, zscale and log-transformed) according to what has been done by the authors of the original papers.
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the Nightingale metabolomics dataset
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' #Prepare the metabolic features fo the mortality score
 #' prepped_met <- prep_met_for_scores(metabolic_measures,featID=MiMIR::mort_betas$Abbreviation)
-#' }
 #' 
 #' @references 
 #' This function is constructed to be able to follow the pre-processing steps described in:
@@ -117,7 +114,7 @@ find_BBMRI_names<-function(names){
 #' 
 #' @export
 #' 
-prep_met_for_scores <- function(dat, featID, plusone=F, quiet=FALSE){
+prep_met_for_scores <- function(dat, featID, plusone=FALSE, quiet=FALSE){
   if(!quiet){
     cat("|| Preparing data ... \n")
   }
@@ -162,14 +159,12 @@ prep_met_for_scores <- function(dat, featID, plusone=F, quiet=FALSE){
 #' @return data-frame containing the value of the mortality score on the uploaded data-set
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' #Prepare the metabolic features fo the mortality score
 #' mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
-#' }
 #' 
 #' @details 
 #' This multivariate model predicts all-cause mortality at 5 or 10 years better than clinical variables normally associated with mortality. 
@@ -185,7 +180,7 @@ prep_met_for_scores <- function(dat, featID, plusone=F, quiet=FALSE){
 #'  
 #' @export
 #' 
-comp.mort_score <- function(dat, betas=mort_betas,quiet=FALSE){
+comp.mort_score <- function(dat, betas=mort_betas, quiet=FALSE){
   ## 1. Prepare data:
   if(!quiet){
     cat("=== Computing mortality score === \n")
@@ -222,15 +217,13 @@ comp.mort_score <- function(dat, betas=mort_betas,quiet=FALSE){
 #' It was trained using a stepwise logistic regression on 3 cohorts.
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' met <- synthetic_metabolic_dataset
+#' phen<-synthetic_phenotypic_dataset
 #' #Prepare the metabolic features fo the mortality score
-#' T2Dscore<-comp.T2D_Ahola_Olli(met= metabolic_measures, phen=phenotypes, quiet=TRUE)
-#' }
+#' T2Dscore<-comp.T2D_Ahola_Olli(met= met, phen=phen,betas=MiMIR::Ahola_Olli_betas, quiet=TRUE)
 #' 
 #' @references 
 #' This function is constructed to be able to apply the T2D-score as described in:
@@ -238,8 +231,9 @@ comp.mort_score <- function(dat, betas=mort_betas,quiet=FALSE){
 #' 
 #' @seealso 
 #' prep_met_for_scores, Ahola_Olli_betas, comp.mort_score, comp.CVD_score
+#' @export
 #' 
-comp.T2D_Ahola_Olli<- function(met,phen,betas=MiMIR::Ahola_Olli_betas,quiet=FALSE){
+comp.T2D_Ahola_Olli<- function(met, phen, betas, quiet=FALSE){
   ## 1. Prepare data:
   if(!quiet){
     cat("=== Computing Ahola Olli T2D score === \n")
@@ -284,15 +278,13 @@ comp.T2D_Ahola_Olli<- function(met,phen,betas=MiMIR::Ahola_Olli_betas,quiet=FALS
 #' 
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' met <- synthetic_metabolic_dataset
+#' phen<-synthetic_phenotypic_dataset
 #' #Prepare the metabolic features fo the mortality score
-#' T2Dscore<-comp.CVD_score(met= metabolic_measures, phen=phenotypes, quiet=TRUE)
-#' }
+#' CVDscore<-comp.CVD_score(met= met, phen=phen, betas=MiMIR::CVD_score_betas, quiet=TRUE)
 #' 
 #' @details 
 #' This multivariate model predicts all-cause mortality at 5 or 10 years better than clinical variables normally associated with mortality. 
@@ -312,7 +304,7 @@ comp.T2D_Ahola_Olli<- function(met,phen,betas=MiMIR::Ahola_Olli_betas,quiet=FALS
 #'  
 #' @export
 #' 
-comp.CVD_score <- function(met,phen,betas=MiMIR::CVD_score_betas,quiet=FALSE){
+comp.CVD_score <- function(met, phen, betas, quiet=FALSE){
   ## 1. Prepare data:
   if(!quiet){
     cat("=== Computing CVD score === \n")
@@ -356,15 +348,14 @@ comp.CVD_score <- function(met,phen,betas=MiMIR::CVD_score_betas,quiet=FALSE){
 #' @return The Nightingale-metabolomics data-frame after pre-processing (checked for zeros, z-scaled and log-transformed) according to what has been done by the authors of the original papers.
 #' 
 #' @examples
-#' \dontrun{
 #' require(MiMIR)
 #' require(matrixStats)
 #' 
 #' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' #Prepare the metabolic features fo the mortality score
 #' prepped_met <- prep_data_COVID_score(dat=metabolic_measures)
-#' }
+#' 
 #' 
 #' @references 
 #' This function is constructed to be able to follow the pre-processing steps described in:
@@ -375,9 +366,9 @@ comp.CVD_score <- function(met,phen,betas=MiMIR::CVD_score_betas,quiet=FALSE){
 #' 
 #' @export
 #'
-prep_data_COVID_score <- function(dat,featID=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
+prep_data_COVID_score <- function(dat, featID=c("gp","dha","crea","mufa", "apob_apoa1","tyr","ile","sfa_fa","glc","lac","faw6_faw3",
                                                "phe", "serum_c", "faw6_fa","ala","pufa","glycine","his","pufa_fa","val","leu",
-                                               "alb","faw3","ldl_c","serum_tg"),quiet=FALSE){
+                                               "alb","faw3","ldl_c","serum_tg"), quiet=FALSE){
   if(!quiet){
     cat("|| Preparing data ... \n")
   }
@@ -415,14 +406,13 @@ prep_data_COVID_score <- function(dat,featID=c("gp","dha","crea","mufa", "apob_a
 #' @return data-frame containing the value of the COVID-score on the uploaded data-set
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
+#' 
 #' #Compute the mortality score
 #' mortScore<-comp_covid_score(dat=metabolic_measures, quiet=TRUE)
-#' }
 #' 
 #' @details 
 #' Multivariate model predicting the risk of severe COVID-19 infection. 
@@ -437,7 +427,7 @@ prep_data_COVID_score <- function(dat,featID=c("gp","dha","crea","mufa", "apob_a
 #'  
 #' @export
 #' 
-comp_covid_score <- function(dat,betas=MiMIR::covid_betas ,quiet=FALSE){
+comp_covid_score <- function(dat, betas=MiMIR::covid_betas ,quiet=FALSE){
   ## 1. Prepare data:
   if(!quiet){
     cat("=== Computing mortality score === \n")
@@ -491,14 +481,13 @@ comp_covid_score <- function(dat,betas=MiMIR::covid_betas ,quiet=FALSE){
 #' @return Nightingale-metabolomics data-frame after pre-processing (checked for zeros, missing values, samples>5SD from the BBMRI-mean, imputing the missing values and z-scaled)
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
+#' 
 #' #Pre-process the metabolic features
-#' prepped_met<-QCprep(as.matrix(metabolic_measures), PARAM_metaboAge)
-#' }
+#' prepped_met<-QCprep(as.matrix(metabolic_measures[,metabolites_subsets$MET63]), PARAM_metaboAge)
 #' 
 #' @references 
 #' This function is constructed to be able to follow the pre-processing steps described in:
@@ -509,7 +498,7 @@ comp_covid_score <- function(dat,betas=MiMIR::covid_betas ,quiet=FALSE){
 #' 
 #' @export
 #'
-QCprep<-function(mat,PARAM_metaboAge=PARAM_metaboAge,quiet=TRUE, Nmax_zero=1, Nmax_miss=1){
+QCprep<-function(mat, PARAM_metaboAge, quiet=TRUE, Nmax_zero=1, Nmax_miss=1){
   # 0. Start:
   if(!quiet){
     cat(report.dim(mat,header="Start"))
@@ -546,16 +535,14 @@ QCprep<-function(mat,PARAM_metaboAge=PARAM_metaboAge,quiet=TRUE, Nmax_zero=1, Nm
 #' @return data-frame containing the value of the MetaboAge by van den Akker et al.
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' #Pre-process the metabolic features
-#' prepped_met<-QCprep(as.matrix(metabolic_measures, PARAM_metaboAge)
+#' prepped_met<-QCprep(as.matrix(metabolic_measures[,metabolites_subsets$MET63]), PARAM_metaboAge)
 #' #Apply the metaboAge
 #' metaboAge<-apply.fit(prepped_met, FIT=PARAM_metaboAge$FIT_COEF)
-#' }
 #' 
 #' @details 
 #' Multivariate model indicating the biological age of an individual, based on 56 metabolic features. 
@@ -595,15 +582,13 @@ apply.fit<-function(mat,FIT){
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
+#' phenotypes <- synthetic_phenotypic_dataset
 #' #Calculate BMI, LDL cholesterol and eGFR
 #' phenotypes<-BMI_LDL_eGFR(phenotypes, metabolic_measures)
-#' }
 #' 
 #' @references 
 #' This function is constructed to calculate BMI, LDL cholesterol and eGFR as in the following papers:
@@ -666,14 +651,12 @@ BMI_LDL_eGFR<-function(phenotypes, metabo_measures){
 #' @return The phenotypic variables binarized following the thresholds in in the metabolomics surrogates made by by Bizzarri et al.
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the phenotypes dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' phenotypes <- synthetic_phenotypic_dataset
 #' #Calculate BMI, LDL cholesterol and eGFR
 #' binarized_phenotypes<-binarize_all_pheno(phenotypes)
-#' }
 #' 
 #' @details 
 #' Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual. 
@@ -862,14 +845,13 @@ binarize_all_pheno<-function(data){
 #' @return Nightingale-metabolomics data-frame after pre-processing (checked for zeros, missing values, samples>5SD from the BBMRI-mean, imputing the missing values and z-scaled)
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' 
 #' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' #Pre-process the metabolic features
-#' prepped_met<-QCprep_surrogates(as.matrix(metabolic_measures))
-#' }
+#' prepped_met<-QCprep_surrogates(as.matrix(metabolic_measures), MiMIR::PARAM_surrogates)
+#' 
 #' 
 #' @details 
 #' Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual. 
@@ -886,8 +868,7 @@ binarize_all_pheno<-function(data){
 #' 
 #' @export
 #'
-QCprep_surrogates<-function(mat,PARAM_surrogates= MiMIR::PARAM_surrogates, 
-                             Nmax_miss=1, Nmax_zero=1,quiet=FALSE){
+QCprep_surrogates<-function(mat,PARAM_surrogates, Nmax_miss=1, Nmax_zero=1,quiet=FALSE){
   ## mat is the input NH matrix; it may contain a mixture of flags and metabolites in the columns.
   ## PARAM is a list holding the parameters of the pipeline
   # 0. Start:
@@ -942,19 +923,16 @@ QCprep_surrogates<-function(mat,PARAM_surrogates= MiMIR::PARAM_surrogates,
 #' if pheno is available: list with the surrogates, ROC curves, phenotypes, binarized phenotypes and the Nightingale metabolomics matrix after QC,
 #' 
 #' @examples
-#' \dontrun{
 #' require(MiMIR)
 #' require(foreach)
 #' require(pROC)
 #' require(foreach)
 #' 
-#' #load the Nightignale metabolomics dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
-#' #Apply the metaboAge
-#' surro<-calculate_surrogate_scores(met=metabo_measures, pheno=phenotypes, Nmax_miss=1, Nmax_zero=1)
-#' }
+#' #load dataset
+#' m <- synthetic_metabolic_dataset
+#' p <- synthetic_phenotypic_dataset
+#' #Apply the surrogates
+#' sur<-calculate_surrogate_scores(met=m,pheno=p,MiMIR::PARAM_surrogates,bin_names=c("sex","diabetes"))
 #' 
 #' @details 
 #' Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual. 
@@ -971,13 +949,16 @@ QCprep_surrogates<-function(mat,PARAM_surrogates= MiMIR::PARAM_surrogates,
 #'  
 #' @export
 #' 
-calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates= MiMIR::PARAM_surrogates, bin_names, Nmax_miss=1,Nmax_zero=1, post=TRUE, roc=FALSE,quiet=FALSE){
+calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates, bin_names=c("sex","diabetes"), Nmax_miss=1,Nmax_zero=1, post=TRUE, roc=FALSE,quiet=FALSE){
   bin_surro=paste0("s_",bin_names)
   #QC of the metabolites
   metabo_measures<-QCprep_surrogates(as.matrix(met[,MiMIR::metabolites_subsets$MET63]), 
                                      PARAM_surrogates, quiet=quiet,Nmax_miss=Nmax_miss,Nmax_zero=Nmax_zero)
   
   if(roc){
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(par(oldpar)) 
+    
     phenotypes<-pheno[which(rownames(pheno)%in%rownames(metabo_measures)),]
     #Calculating the binarized surrogates
     bin_pheno<-binarize_all_pheno(phenotypes)
@@ -1029,17 +1010,17 @@ calculate_surrogate_scores <- function(met, pheno, PARAM_surrogates= MiMIR::PARA
 #' @return The phenotypic variables binarized following the thresholds in in the metabolomics surrogates made by by Bizzarri et al.
 #' 
 #' @examples
-#' \dontrun{
 #' require(MiMIR)
 #' require(foreach)
 #' 
 #' #load the phenotypes dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' phenotypes <- synthetic_phenotypic_dataset
+#' 
 #' #Calculate BMI, LDL cholesterol and eGFR
 #' binarized_phenotypes<-binarize_all_pheno(phenotypes)
 #' #Plot the variables
 #' pheno_barplots(binarized_phenotypes)
-#' }
+#' 
 #' 
 #' @details 
 #' Bizzarri et al. built multivariate models,using 56 metabolic features quantified by Nightingale, to predict the 19 binary characteristics of an individual. 
@@ -1082,15 +1063,13 @@ pheno_barplots<-function(bin_phenotypes){
 #' @return Plot with a central heatmap and two histogram on the sides
 #
 #' @examples
-#' \dontrun{
 #' library(graphics)
 #' library(MiMIR)
 #' 
 #' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' #Plot the missing values in the metabolomics matrix
 #' plot_na_heatmap(metabolic_measures)
-#' }
 #' 
 #' @details
 #' This heatmap indicates the available values in grey and missing or zeros in white. 
@@ -1100,6 +1079,9 @@ pheno_barplots<-function(bin_phenotypes){
 #' @export
 #'
 plot_na_heatmap  <- function(dat){
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar)) 
+  
   Dummi <- matrix(NA,ncol=ncol(dat),nrow=nrow(dat))
   Dummi[which(!is.na(dat==0))] <- 1
   graphics::layout(mat=matrix(c(1,2,3,4),ncol=2,byrow=TRUE),widths=c(4,1),heights=c(1,4))
@@ -1146,25 +1128,21 @@ plot_na_heatmap  <- function(dat){
 #' @return plotly image with the ROC curves for one or more selected variables
 #' 
 #' @examples
-#' \dontrun{
 #' require(pROC)
 #' require(plotly)
 #' require(foreach)
 #' require(MiMIR)
 #' 
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+#' met <- synthetic_metabolic_dataset
+#' phen<- synthetic_phenotypic_dataset
 #' 
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
 #' #Calculating the binarized surrogates
-#' bin_pheno<-binarize_all_pheno(phenotypes)
+#' b_phen<-binarize_all_pheno(phen)
 #' #Apply a surrogate models and plot the ROC curve
-#' data<-data.frame(out=factor(phenotypes_names$bin_names[,1]), metabo_measures)
-#' colnames(data)[1]<-"out"
-#' s_diabetes<-predictions_surrogates(PARAM_surrogates$models_betas["s_diabetes",], data=data)
-#' roc_surro(s_diabetes, bin_phenotypes, "diabetes")
-#' }
+#' surr<-calculate_surrogate_scores(met, phen, MiMIR::PARAM_surrogates, colnames(b_phen))
+#' #Plot the ROC curves
+#' roc_surro(surr$surrogates, b_phen, "sex")
 #' 
 #' @export
 #'
@@ -1260,21 +1238,21 @@ roc_surro<-function(surrogates, bin_phenotypes, x_name){
 #' @return plotly image with all the ROCs for all the available clinical variables
 #' 
 #' @examples
-#' \dontrun{
 #' library(pROC)
 #' library(plotly)
 #' library(MiMIR)
 #' 
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+#' met <- synthetic_metabolic_dataset
+#' phen<- synthetic_phenotypic_dataset
+#' 
 #' #Calculating the binarized surrogates
-#' bin_pheno<-binarize_all_pheno(phenotypes)
+#' b_phen<-binarize_all_pheno(phen)
 #' #Apply a surrogate models and plot the ROC curve
-#' surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
-#' roc_surro_subplots(surrogates$surrogates, bin_phenotypes)
-#' }
+#' surr<-calculate_surrogate_scores(met, phen, MiMIR::PARAM_surrogates, colnames(b_phen))
+#' 
+#' roc_surro_subplots(surr$surrogates, b_phen)
+#' 
 #' 
 #' @export
 #'
@@ -1340,22 +1318,20 @@ roc_surro_subplots<-function(surrogates, bin_phenotypes){
 #' @return plotly image with all the ROCs for all the available clinical variables
 #' 
 #' @examples
-#' \dontrun{
 #' require(pROC)
 #' require(plotly)
 #' require(MiMIR)
 #' require(foreach)
 #' 
-#' #load the metatolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+#' m <- synthetic_metabolic_dataset
+#' p <- synthetic_phenotypic_dataset
+#' 
 #' #Calculating the binarized surrogates
-#' bin_pheno<-binarize_all_pheno(phenotypes)
+#' b_p<-binarize_all_pheno(p)
 #' #Apply a surrogate models and plot the ROC curve
-#' surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
-#' ttest_surrogates(surrogates$surrogates, bin_phenotypes)
-#' }
+#' surr<-calculate_surrogate_scores(met=m, pheno=p, MiMIR::PARAM_surrogates, bin_names=colnames(b_p))
+#' ttest_surrogates(surr$surrogates, b_p)
 #' 
 #' @details 
 #' Barplot and T-test indicating if the surrogate variables could split accordingly the real value of the binary clinical variables. 
@@ -1395,20 +1371,20 @@ ttest_surrogates<-function(surrogates,bin_phenotypes){
   Surrogates$value<-as.numeric(Surrogates$value)-1
   Surrogates[which(is.na(Surrogates),arr.ind=T)]<-NaN
   Surrogates$value<-factor(Surrogates$value)
-  pl_surro<-plotly::plot_ly(Surrogates,
+  pl_surro<-suppressWarnings(plotly::plot_ly(Surrogates,
               x = ~variable,
               y = ~surrogate,
               color = ~value,
               type = "box",
               colors = c("#377EB8","#E41A1C", "grey")
               ) %>% 
-    plotly::layout(boxmode = "group",
+                plotly::layout(boxmode = "group",
            title = list(text="<b>Surrogates' distributions split for their original values<b>",y = 0.98),
            xaxis = list(title = "<b>Clinical Variables<b>",
                         zeroline = FALSE),
            yaxis = list(title = "<b>Surrogate values<b>",
                         zeroline = FALSE)
-           )
+           ))
   
   return(pl_surro)
 }
@@ -1425,23 +1401,22 @@ ttest_surrogates<-function(surrogates,bin_phenotypes){
 #' @return Boxplot with the accuracies of the LOBOV
 #' 
 #' @examples
-#' \dontrun{
 #' require(pROC)
 #' require(plotly)
 #' require(MiMIR)
 #' require(foreach)
 #' require(ggplot2)
 #' 
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+#' m <- synthetic_metabolic_dataset
+#' p<- synthetic_phenotypic_dataset
+#' 
 #' #Calculating the binarized surrogates
-#' bin_pheno<-binarize_all_pheno(phenotypes)
+#' b_p<-binarize_all_pheno(p)
 #' #Apply a surrogate models and plot the ROC curve
-#' surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
-#' LOBOV_accuracies(surrogates$surrogates, bin_phenotypes, c("sex","diabetes","high_age"))
-#' }
+#' sur<-calculate_surrogate_scores(m, p, MiMIR::PARAM_surrogates, bin_names=colnames(b_p))
+#' p_avail<-colnames(b_p)[c(1:5)]
+#' LOBOV_accuracies(sur$surrogates, b_p, p_avail, MiMIR::acc_LOBOV)
 #' 
 #' @details 
 #' Comparison of the AUCs of the surrogates in the updated dataset and the 
@@ -1510,24 +1485,23 @@ LOBOV_accuracies<-function(surrogates, bin_phenotypes, bin_pheno_available, acc_
 #' @return plotly image with the scatterplot
 #' 
 #' @examples
-#' \dontrun{
 #' library(plotly)
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+#' metabolic_measures <- synthetic_metabolic_dataset
+#' phenotypes <- synthetic_phenotypic_dataset
 #' 
 #' #Pre-process the metabolic features
-#' prepped_met<-QCprep(as.matrix(metabolic_measures, PARAM_metaboAge)
+#' prepped_met<-QCprep(as.matrix(metabolic_measures), MiMIR::PARAM_metaboAge)
 #' #Apply the metaboAge
 #' metaboAge<-apply.fit(prepped_met, FIT=PARAM_metaboAge$FIT_COEF)
 #' 
-#' scatterplot_predictions(phenotypes$age, metaboAge, title="Chronological Age vs MetaboAge")
-#' }
+#' age<-data.frame(phenotypes$age)
+#' rownames(age)<-rownames(phenotypes)
+#' scatterplot_predictions(age, metaboAge, title="Chronological Age vs MetaboAge")
 #' 
 #' @export
 #'
-scatterplot_predictions <- function(x, p, title, xname, yname) {
+scatterplot_predictions <- function(x, p, title, xname="x", yname="predicted x") {
   x<-data.frame(ID=row.names(x), original=x)
   colnames(x)[2]<-"original"
   p<-data.frame(ID=row.names(p), predicted=p)
@@ -1585,14 +1559,14 @@ scatterplot_predictions <- function(x, p, title, xname, yname) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(plotly)
 #' library(MiMIR)
 #' 
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' 
-#' multi_hist(metabolic_measures, scaled=T)
+#' multi_hist(metabolic_measures[,MiMIR::metabolites_subsets$MET14], scaled=T)
 #' }
 #' 
 #' @export
@@ -1649,17 +1623,16 @@ multi_hist<-function(dat, color=MiMIR::c21, scaled=FALSE){
 #' @return plotly image with the histograms of the selected variables
 #'
 #' @examples
-#' \dontrun{
 #' require(MiMIR)
 #' require(plotly)
 #' require(matrixStats)
 #' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' m <- synthetic_metabolic_dataset
+#' 
 #' #Apply a surrogate models and plot the ROC curve
-#' surrogates<-calculate_surrogate_scores(met=metabo_measures,Nmax_miss=1,Nmax_zero=1,roc=F)
+#' surrogates<-calculate_surrogate_scores(m, PARAM_surrogates=MiMIR::PARAM_surrogates, roc=FALSE)
 #' #Plot the histogram of the surrogate sex values scaled 
-#' hist_plots(surrogates, x_name="s_sex", scaled=T)
-#' }
+#' hist_plots(surrogates$surrogates, x_name="s_sex", scaled=TRUE)
 #'
 #' @export
 #'
@@ -1724,15 +1697,13 @@ hist_plots<-function(dat, x_name, color=MiMIR::c21, scaled=FALSE, datatype="meta
 #'
 #'
 #' @examples
-#' \dontrun{
 #' library(plotly)
 #' library(MiMIR)
 #' 
 #' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#' metabolic_measures <- synthetic_metabolic_dataset
 #' 
-#' BBMRI_hist_plot(metabolic_measures, x_name="glc", scaled=T)
-#' }
+#' BBMRI_hist_plot(metabolic_measures, x_name="alb", scaled=TRUE)
 #' 
 #' @details 
 #' This function plots the distribution of a metabolic feature in the uploaded dataset, compared to their distributions in BBMRI-nl.
@@ -1802,19 +1773,16 @@ BBMRI_hist_plot<-function(dat, x_name, color=MiMIR::c21, scaled=FALSE, datatype=
 #' @return plotly image with the histogram of the mortality score separated in 3 age ranges
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' library(plotly)
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #' #load the dataset
+#' metabolic_measures <- synthetic_metabolic_dataset
+#' phenotypes <- synthetic_phenotypic_dataset
 #' 
 #' #Compute the mortality score
 #' mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
 #' #Plot the mortality score histogram at different ages
 #' hist_plots_mortality(mortScore, phenotypes)
-#' }
 #'
 #' @export
 #'
@@ -1881,24 +1849,19 @@ hist_plots_mortality<-function(mort_score,phenotypes){
 #' 
 #' 
 #' @examples
-#' \dontrun{
 #' library(MiMIR)
 #' library(plotly)
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' 
+#' #load the dataset
+#' metabolic_measures <- synthetic_metabolic_dataset
+#' phenotypes <- synthetic_phenotypic_dataset
 #' 
 #' #Compute the mortality score
 #' mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
-#' 
-#' pred<-as.character(input$pred_choices2)
-#' pheno<-as.character(input$pheno_chosen2)
-#' dat<-data.frame(mortScore, sex=phenotypes$sex)
-#' 
+
+#' dat<-data.frame(predictor=mortScore, pheno=phenotypes$sex)
+#' colnames(dat)<-c("predictor","pheno")
 #' ttest_scores(dat = dat, pred= "mortScore", pheno="sex")
-#' 
-#' }
 #'
 #' @export
 #'
@@ -1940,24 +1903,21 @@ ttest_scores<-function(dat, pred, pheno){
 #' @export
 #' 
 #' @examples
-#' \dontrun{
-#' 
 #' require(MiMIR)
 #' require(plotly)
 #' require(survminer)
+#' require(ggfortify)
 #' require(ggplot2)
 #' 
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+#' metabolic_measures <- synthetic_metabolic_dataset
+#' phenotypes <- synthetic_phenotypic_dataset
 #'
 #' #Compute the mortality score
 #' mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
 #' 
 #' #Plot a Kaplan Meier
-#' kapmeier_scores(predictors=mortScore, pheno=phenotypes, score="mort_score")
-#' }
+#' kapmeier_scores(predictors=mortScore, pheno=phenotypes, score="mortScore")
 #'
 #' @export
 #'
@@ -2007,16 +1967,13 @@ kapmeier_scores<-function(predictors, pheno, score, Eventname="Event"){
 #' @return correlations of the selected variables in the 2 martrices
 #' 
 #' @examples
-#' \dontrun{
 #' library(stats)
 #' 
-#' #load the metabolites dataset
-#' metabolites <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#'
-#' #Compute the pearson correlation of all the variables in the data.frame metabolic_measures
-#' cors<-cor_assoc(metabolites, metabolites, colnames(metabolites ),colnames(metabolites))
+#' #load the dataset
+#' m <- as.matrix(synthetic_metabolic_dataset)
 #' 
-#' }
+#' #Compute the pearson correlation of all the variables in the data.frame metabolic_measures
+#' cors<-cor_assoc(m, m, MiMIR::metabolites_subsets$MET63,MiMIR::metabolites_subsets$MET63)
 #' 
 #' @seealso 
 #' plot_corply
@@ -2051,17 +2008,15 @@ cor_assoc <- function(dat1,dat2,feat1,feat2,method="pearson",quiet=FALSE){
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' library(stats)
 #' 
-#' #load the metabolites dataset
-#' metabolites <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#'
+#' #load the dataset
+#' m <- as.matrix(synthetic_metabolic_dataset)
+#' 
 #' #Compute the pearson correlation of all the variables in the data.frame metabolic_measures
-#' cors<-cor_assoc(metabolites, metabolites, colnames(metabolites),colnames(metabolites))
+#' cors<-cor_assoc(m, m, MiMIR::metabolites_subsets$MET63,MiMIR::metabolites_subsets$MET63)
 #' #Plot the correlations
 #' plot_corply(cors, main="Correlations metabolites")
-#' }
 #' 
 #' @seealso 
 #' cor_assoc
@@ -2069,7 +2024,7 @@ cor_assoc <- function(dat1,dat2,feat1,feat2,method="pearson",quiet=FALSE){
 #' @export
 #' 
 plot_corply <- function(res,main=NULL,zlim=NULL,reorder.x=FALSE,reorder.y=reorder.x,resort_on_p=FALSE,
-                           abs=FALSE,cor.abs=FALSE,reorder_dend=F){
+                           abs=FALSE,cor.abs=FALSE,reorder_dend=FALSE){
 
   if(reorder.x|reorder.y){
     if (resort_on_p){
@@ -2113,21 +2068,21 @@ plot_corply <- function(res,main=NULL,zlim=NULL,reorder.x=FALSE,reorder.y=reorde
 #' @return list with samples, responses, calibrations, ECE, MCE and calibration plots if save==T
 #'
 #' @examples
-#' \dontrun{
 #' library(stats)
 #' library(plotly)
 #' 
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+#' met <- synthetic_metabolic_dataset
+#' phen <- synthetic_phenotypic_dataset
+#' 
 #' #Calculating the binarized surrogates
-#' bin_pheno<-binarize_all_pheno(phenotypes)
+#' b_phen<-binarize_all_pheno(phen)
 #' #Apply a surrogate models and plot the ROC curve
-#' surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
+#' surr<-calculate_surrogate_scores(met, phen,MiMIR::PARAM_surrogates, bin_names=colnames(b_phen))
 #' #Calibration of the surrogate sex
-#' plattCalibration((r.calib=bin_pheno$sex, p.calib=surrogates$s_sex, nbins = 10, pl=TRUE)
-#' }
+#' real_data<-as.numeric(b_phen$sex)
+#' pred_data<-surr$surrogates[,"s_sex"]
+#' plattCalibration(r.calib=real_data, p.calib=pred_data, nbins = 10, pl=TRUE)
 #' 
 #' @details 
 #' Many popular machine learning algorithms produce inaccurate predicted probabilities, especially when applied on a dataset different than the training set.
@@ -2163,8 +2118,8 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
   raw.yval <- tapply(resp, raw.bins, mean)
   raw.cali <- data.frame(method = rep("Original", nbins), 
                          x = raw.xval, y = raw.yval)
-  raw.logl <- (-1/length(resp)) * sum(resp * log(pred) + 
-                                        (1 - resp) * (log(1 - pred)), na.rm = TRUE)
+  raw.logl <- suppressWarnings((-1/length(resp)) * sum(resp * log(pred) + 
+                                        (1 - resp) * (log(1 - pred)), na.rm = TRUE))
   cal.bins <- cut(calibrated, nbins, include.lowest = TRUE)
   cal.xval <- tapply(calibrated, cal.bins, mean)
   cal.yval <- tapply(resp, cal.bins, mean)
@@ -2255,19 +2210,16 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
 #' 
 #'
 #' @examples
-#' \dontrun{
 #' require(MiMIR)
 #' require(plotly)
 #' require(ggplot2)
 #' 
-#' #load the metabolites dataset
-#' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset containing age and sex
-#' phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #' #load the dataset
+#' metabolic_measures <- synthetic_metabolic_dataset
+#' phenotypes <- synthetic_phenotypic_dataset
 #' 
 #' #Computing a MetaboWAS for age corrected by sex
-#' MetaboWAS(met=metabo_measures, pheno=phenotypes, test_variable="age", covariates= "sex", img=T)
-#' }
+#' MetaboWAS(met=metabolic_measures, pheno=phenotypes, test_variable="age", covariates= "sex")
 #' 
 #' @details 
 #' This is a function to compute linear associations individually for each variable in the first data.frame
@@ -2288,7 +2240,7 @@ plattCalibration<- function (r.calib, p.calib, nbins = 10, pl=FALSE) {
 #' 
 #' @export
 #'
-MetaboWAS<-function(met, pheno, test_variable, covariates, img=T, adj_method="BH"){
+MetaboWAS<-function(met, pheno, test_variable, covariates, img=TRUE, adj_method="BH"){
   res<-do_metabowas(phen=pheno, dat= met, test_variable = test_variable, covariates=covariates, adj_method=adj_method)
   N_hits<-length(which(res$pval.adj<=0.05))
   

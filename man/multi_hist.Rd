@@ -20,14 +20,14 @@ plotly image with the histograms for all the variables in dat
 #' Function to plot the histograms for all the variables in dat
 }
 \examples{
-\dontrun{
+\donttest{
 library(plotly)
 library(MiMIR)
 
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the dataset
+metabolic_measures <- synthetic_metabolic_dataset
 
-multi_hist(metabolic_measures, scaled=T)
+multi_hist(metabolic_measures[,MiMIR::metabolites_subsets$MET14], scaled=T)
 }
 
 }

@@ -26,16 +26,13 @@ correlations of the selected variables in the 2 martrices
 Function to calulate the correlation between 2 matrices
 }
 \examples{
-\dontrun{
 library(stats)
 
-#load the metabolites dataset
-metabolites <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the dataset
+m <- as.matrix(synthetic_metabolic_dataset)
 
 #Compute the pearson correlation of all the variables in the data.frame metabolic_measures
-cors<-cor_assoc(metabolites, metabolites, colnames(metabolites ),colnames(metabolites))
-
-}
+cors<-cor_assoc(m, m, MiMIR::metabolites_subsets$MET63,MiMIR::metabolites_subsets$MET63)
 
 }
 \seealso{

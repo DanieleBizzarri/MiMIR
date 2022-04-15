@@ -26,15 +26,14 @@ The Nightingale-metabolomics data-frame after pre-processing (checked for zeros,
 Helper function to pre-process the Nightingale Health metabolomics data-set before applying the COVID score.
 }
 \examples{
-\dontrun{
 require(MiMIR)
 require(matrixStats)
 
 #load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
 #Prepare the metabolic features fo the mortality score
 prepped_met <- prep_data_COVID_score(dat=metabolic_measures)
-}
+
 
 }
 \references{

@@ -4,7 +4,7 @@
 \alias{comp.CVD_score}
 \title{comp.CVD_score}
 \usage{
-comp.CVD_score(met, phen, betas = MiMIR::CVD_score_betas, quiet = FALSE)
+comp.CVD_score(met, phen, betas, quiet = FALSE)
 }
 \arguments{
 \item{met}{numeric data-frame with Nightingale-metabolomics}
@@ -30,15 +30,13 @@ It is calculated using information on sex, systolic blood pressure, current smok
 together with phe, mufa_fa,faw6, and dha quantified by Nightingale. It was trained using a Cox proportional hazard regression model.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+met <- synthetic_metabolic_dataset
+phen<-synthetic_phenotypic_dataset
 #Prepare the metabolic features fo the mortality score
-T2Dscore<-comp.CVD_score(met= metabolic_measures, phen=phenotypes, quiet=TRUE)
-}
+CVDscore<-comp.CVD_score(met= met, phen=phen, betas=MiMIR::CVD_score_betas, quiet=TRUE)
 
 }
 \references{

@@ -4,7 +4,7 @@
 \alias{scatterplot_predictions}
 \title{scatterplot_predictions}
 \usage{
-scatterplot_predictions(x, p, title, xname, yname)
+scatterplot_predictions(x, p, title, xname = "x", yname = "predicted x")
 }
 \arguments{
 \item{x}{numeric vector}
@@ -24,19 +24,18 @@ plotly image with the scatterplot
 Function to visualize a scatter-plot comparing two variables
 }
 \examples{
-\dontrun{
 library(plotly)
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#load the dataset
+metabolic_measures <- synthetic_metabolic_dataset
+phenotypes <- synthetic_phenotypic_dataset
 
 #Pre-process the metabolic features
-prepped_met<-QCprep(as.matrix(metabolic_measures, PARAM_metaboAge)
+prepped_met<-QCprep(as.matrix(metabolic_measures), MiMIR::PARAM_metaboAge)
 #Apply the metaboAge
 metaboAge<-apply.fit(prepped_met, FIT=PARAM_metaboAge$FIT_COEF)
 
-scatterplot_predictions(phenotypes$age, metaboAge, title="Chronological Age vs MetaboAge")
-}
+age<-data.frame(phenotypes$age)
+rownames(age)<-rownames(phenotypes)
+scatterplot_predictions(age, metaboAge, title="Chronological Age vs MetaboAge")
 
 }

@@ -14,8 +14,8 @@ calibration_plot<-reactive({
     return(NULL)
   }else{
     return(
-      plattCalib_evaluation(r=bin_phenotypes()[,bin], p=surro[,sur],p.orig=surrogates()[,sur],
-                            name=sur, nbins = input$Nbins))
+      suppressWarnings(plattCalib_evaluation(r=bin_phenotypes()[,bin], p=surro[,sur],p.orig=surrogates()[,sur],
+                            name=sur, nbins = input$Nbins)))
   }
 })
 
@@ -25,9 +25,9 @@ output$reliability_calib <- renderPlotly({
     tryCatch({
       req(phenotypes())
       if(is.null(calibration_plot())){
-        plotly_NA_message(main="This phenotype is not available")
+        suppressWarnings(plotly_NA_message(main="This phenotype is not available"))
       }else{
-        calibration_plot()$cal.Plot
+        suppressWarnings(calibration_plot()$cal.Plot)
       }
       }, error = function(err) {
         return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
@@ -45,7 +45,7 @@ output$hist_calib <- renderPlotly({
     if(is.null(calibration_plot())){
       plotly_NA_message(main="This phenotype is not available")
     }else{
-      calibration_plot()$prob.hist
+      suppressWarnings(calibration_plot()$prob.hist)
     }
     }, error = function(err) {
       return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))

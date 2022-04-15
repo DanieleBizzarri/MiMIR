@@ -19,15 +19,13 @@ phenotypes data.frame with the addition of BMI, LDL cholesterol and eGFR
 3) eGFR creatinine levels, sex and age.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
+phenotypes <- synthetic_phenotypic_dataset
 #Calculate BMI, LDL cholesterol and eGFR
 phenotypes<-BMI_LDL_eGFR(phenotypes, metabolic_measures)
-}
 
 }
 \references{

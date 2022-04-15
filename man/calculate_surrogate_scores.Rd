@@ -7,8 +7,8 @@
 calculate_surrogate_scores(
   met,
   pheno,
-  PARAM_surrogates = MiMIR::PARAM_surrogates,
-  bin_names,
+  PARAM_surrogates,
+  bin_names = c("sex", "diabetes"),
   Nmax_miss = 1,
   Nmax_zero = 1,
   post = TRUE,
@@ -51,19 +51,16 @@ current smoking, alcohol consumption, high age, middle age, low age, high hsCRP,
 high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
 }
 \examples{
-\dontrun{
 require(MiMIR)
 require(foreach)
 require(pROC)
 require(foreach)
 
-#load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
-#Apply the metaboAge
-surro<-calculate_surrogate_scores(met=metabo_measures, pheno=phenotypes, Nmax_miss=1, Nmax_zero=1)
-}
+#load dataset
+m <- synthetic_metabolic_dataset
+p <- synthetic_phenotypic_dataset
+#Apply the surrogates
+sur<-calculate_surrogate_scores(met=m,pheno=p,MiMIR::PARAM_surrogates,bin_names=c("sex","diabetes"))
 
 }
 \references{

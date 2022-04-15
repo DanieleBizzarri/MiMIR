@@ -25,14 +25,12 @@ It is constituted of 14 metabolic features quantified by Nightingale Health.
 It was originally trained using a stepwise Cox regression analysis in a meta-analysis on 12 cohorts composed by 44,168 individuals.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
 #Prepare the metabolic features fo the mortality score
 mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
-}
 
 }
 \references{

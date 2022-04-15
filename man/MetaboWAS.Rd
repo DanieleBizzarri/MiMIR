@@ -4,7 +4,7 @@
 \alias{MetaboWAS}
 \title{MetaboWAS}
 \usage{
-MetaboWAS(met, pheno, test_variable, covariates, img = T, adj_method = "BH")
+MetaboWAS(met, pheno, test_variable, covariates, img = TRUE, adj_method = "BH")
 }
 \arguments{
 \item{met}{numeric data.frame with the metabolomics features}
@@ -39,19 +39,16 @@ Finally we use plotly to plot a Manhattan Plot, which reports on the x-axis the 
 divided in groups, and on the y-axis the -log (adjusted p-value).
 }
 \examples{
-\dontrun{
 require(MiMIR)
 require(plotly)
 require(ggplot2)
 
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#load the phenotypic dataset containing age and sex
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+metabolic_measures <- synthetic_metabolic_dataset
+phenotypes <- synthetic_phenotypic_dataset
 
 #Computing a MetaboWAS for age corrected by sex
-MetaboWAS(met=metabo_measures, pheno=phenotypes, test_variable="age", covariates= "sex", img=T)
-}
+MetaboWAS(met=metabolic_measures, pheno=phenotypes, test_variable="age", covariates= "sex")
 
 }
 \references{

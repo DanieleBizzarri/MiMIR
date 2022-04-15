@@ -4,7 +4,7 @@
 \alias{comp.T2D_Ahola_Olli}
 \title{comp.T2D_Ahola_Olli}
 \usage{
-comp.T2D_Ahola_Olli(met, phen, betas = MiMIR::Ahola_Olli_betas, quiet = FALSE)
+comp.T2D_Ahola_Olli(met, phen, betas, quiet = FALSE)
 }
 \arguments{
 \item{met}{numeric data-frame with Nightingale-metabolomics}
@@ -28,15 +28,13 @@ and some phenotypic information: sex, age, BMI, fasting glucose.
 It was trained using a stepwise logistic regression on 3 cohorts.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+met <- synthetic_metabolic_dataset
+phen<-synthetic_phenotypic_dataset
 #Prepare the metabolic features fo the mortality score
-T2Dscore<-comp.T2D_Ahola_Olli(met= metabolic_measures, phen=phenotypes, quiet=TRUE)
-}
+T2Dscore<-comp.T2D_Ahola_Olli(met= met, phen=phen,betas=MiMIR::Ahola_Olli_betas, quiet=TRUE)
 
 }
 \references{

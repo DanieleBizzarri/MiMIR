@@ -24,14 +24,13 @@ Multivariate model predicting the risk of severe COVID-19 infection.
 It is based on 37 metabolic features and trained using LASSO regression on 52,573 samples from the UK-biobanks.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
+
 #Compute the mortality score
 mortScore<-comp_covid_score(dat=metabolic_measures, quiet=TRUE)
-}
 
 }
 \references{

@@ -10,7 +10,7 @@ do_metabowas(
   test_variable = "age",
   covariates = c("sex"),
   adj_method = "BH",
-  quiet = T
+  quiet = TRUE
 )
 }
 \arguments{

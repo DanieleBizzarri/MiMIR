@@ -18,18 +18,15 @@ plotly image with the histogram of the mortality score separated in 3 age ranges
 #' Function to plot the histogram of the mortality score separated for different age ranges as a plotly image
 }
 \examples{
-\dontrun{
 library(MiMIR)
 library(plotly)
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#' #load the dataset
+metabolic_measures <- synthetic_metabolic_dataset
+phenotypes <- synthetic_phenotypic_dataset
 
 #Compute the mortality score
 mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
 #Plot the mortality score histogram at different ages
 hist_plots_mortality(mortScore, phenotypes)
-}
 
 }

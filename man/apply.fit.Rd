@@ -22,16 +22,14 @@ Multivariate model indicating the biological age of an individual, based on 56 m
 It was trained using a linear regression in BBMRI-nl, a Consortium of 28 cohorts comprising ~25,000 individuals.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
 #Pre-process the metabolic features
-prepped_met<-QCprep(as.matrix(metabolic_measures, PARAM_metaboAge)
+prepped_met<-QCprep(as.matrix(metabolic_measures[,metabolites_subsets$MET63]), PARAM_metaboAge)
 #Apply the metaboAge
 metaboAge<-apply.fit(prepped_met, FIT=PARAM_metaboAge$FIT_COEF)
-}
 
 }
 \references{

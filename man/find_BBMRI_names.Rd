@@ -16,15 +16,13 @@ data.frame with the uploaded metabolites names on the first column and the BBMRI
 Function to translate Nightingale metabolomics alternative metabolite names to the ones used in BBMRI-nl
 }
 \examples{
-\dontrun{
 library(MiMIR)
 library(purrr)
 
 #load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
 #Find the metabolites names used in BBMRI-nl
 nam<-find_BBMRI_names(colnames(metabolic_measures)) 
-}
 
 }
 \references{

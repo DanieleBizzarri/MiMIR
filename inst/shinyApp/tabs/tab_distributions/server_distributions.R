@@ -3,7 +3,7 @@ output$hist_surrogates <- renderPlotly({
   tryCatch({
     req(required())
     pred<-as.character(input$surrogates)
-    hist_plots(surrogates(), x_name=pred, scaled=input$scaling_surro)
+    suppressWarnings(hist_plots(surrogates(), x_name=pred, scaled=input$scaling_surro))
   }, error = function(err) {
     return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   })

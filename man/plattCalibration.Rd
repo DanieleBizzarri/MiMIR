@@ -29,21 +29,21 @@ The reliability diagrams plots the mean predicted value within a certain range o
 Finally, we also report accuracy measures for the calibrations: the ECE, MCE and the Log-Loss of the probabilities before and after calibration.
 }
 \examples{
-\dontrun{
 library(stats)
 library(plotly)
 
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#load the dataset
+met <- synthetic_metabolic_dataset
+phen <- synthetic_phenotypic_dataset
+
 #Calculating the binarized surrogates
-bin_pheno<-binarize_all_pheno(phenotypes)
+b_phen<-binarize_all_pheno(phen)
 #Apply a surrogate models and plot the ROC curve
-surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
+surr<-calculate_surrogate_scores(met, phen,MiMIR::PARAM_surrogates, bin_names=colnames(b_phen))
 #Calibration of the surrogate sex
-plattCalibration((r.calib=bin_pheno$sex, p.calib=surrogates$s_sex, nbins = 10, pl=TRUE)
-}
+real_data<-as.numeric(b_phen$sex)
+pred_data<-surr$surrogates[,"s_sex"]
+plattCalibration(r.calib=real_data, p.calib=pred_data, nbins = 10, pl=TRUE)
 
 }
 \references{

@@ -126,11 +126,11 @@ surrogates <- reactive({
 
 # Calculate the T2D score
 T2D_score_AholaOlli <- reactive({
-  T2Dscore<-comp.T2D_Ahola_Olli(met=metabo_measures(), phen=phenotypes(),quiet=TRUE)
+  T2Dscore<-comp.T2D_Ahola_Olli(met=metabo_measures(), phen=phenotypes(), betas=MiMIR::Ahola_Olli_betas, quiet=TRUE)
 })
 # Calculate CVD score
 CVD_score <- reactive({
-  CVDscore<-comp.CVD_score(met=metabo_measures(), phen=phenotypes(),quiet=TRUE)
+  CVDscore<-comp.CVD_score(met=metabo_measures(), phen=phenotypes(),betas=MiMIR::CVD_score_betas, quiet=TRUE)
 })
 
 # Calculate CVD score

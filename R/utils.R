@@ -25,7 +25,7 @@
 #' QCprep, apply.fit, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale, and report.dim
 #'  
 #' @keywords internal
-#' 
+#' @export
 #' 
 subset_metabolites_overlap<-function(x,metabos,quiet=FALSE){
   x <- x[,intersect(colnames(x),metabos),drop=FALSE]
@@ -63,6 +63,7 @@ subset_metabolites_overlap<-function(x,metabos,quiet=FALSE){
 #' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale, and report.dim
 #'  
 #' @keywords internal
+#' @export
 #' 
 subset_samples_miss<-function(x,Nmax=1,quiet=FALSE){
   MISS <- colSums(is.na(t(x)))
@@ -101,6 +102,7 @@ subset_samples_miss<-function(x,Nmax=1,quiet=FALSE){
 #' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_sd, impute.miss, apply.scale, and report.dim
 #' 
 #' @keywords internal
+#' @export
 #' 
 subset_samples_zero<-function(x,Nmax=1,quiet=FALSE){
   ZERO <- colSums(t(x==0),na.rm=TRUE)
@@ -139,6 +141,7 @@ subset_samples_zero<-function(x,Nmax=1,quiet=FALSE){
 #' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, impute.miss, apply.scale, and report.dim
 #' 
 #' @keywords internal 
+#' @export
 #'
 subset_samples_sd<-function(x,MEAN,SD,quiet=FALSE){
   MEAN <- MEAN[colnames(x)]
@@ -185,6 +188,7 @@ subset_samples_sd<-function(x,MEAN,SD,quiet=FALSE){
 #' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, apply.scale, and report.dim
 #' 
 #' @keywords internal
+#' @export
 #'
 impute.miss<-function(x){
   ## This is an boiler-plate solution :)
@@ -222,6 +226,7 @@ impute.miss<-function(x){
 #' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, and report.dim
 #' 
 #' @keywords internal
+#' @export
 #'
 apply.scale <- function(dat,MEAN,SD,quiet=TRUE){
   if(!quiet){
@@ -263,6 +268,7 @@ apply.scale <- function(dat,MEAN,SD,quiet=TRUE){
 #' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, and apply.scale
 #' 
 #' @keywords internal
+#' @export
 #'
 report.dim<-function(x,header,trailing="0"){
   return(paste0(sprintf(paste0("%-",trailing,"s"),paste0("| ",header,":\n")),sprintf("%4s",ncol(x))," metabolites x ",sprintf("%4s",nrow(x))," samples \n"))
@@ -303,6 +309,7 @@ report.dim<-function(x,header,trailing="0"){
 #' QCprep_surrogates, calculate_surrogate_scores, apply.fit_surro
 #' 
 #' @keywords internal
+#' @export
 #'
 subset_samples_sd_surrogates<-function(x,MEAN,SD, N=5, quiet=FALSE){
   MEAN <- MEAN[colnames(x)]
@@ -365,6 +372,7 @@ subset_samples_sd_surrogates<-function(x,MEAN,SD, N=5, quiet=FALSE){
 #' QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, predictions_surrogates
 #' 
 #' @keywords internal
+#' @export
 #'
 apply.fit_surro<-function(mat, FIT, post=TRUE){
   # Resort:
@@ -390,7 +398,7 @@ apply.fit_surro<-function(mat, FIT, post=TRUE){
 #' @param data numeric data-frame with Nightingale-metabolomics and the binarized phenotype to predict
 #' @param title_img string with title of the image
 #' @param plot logical to obtain the ROC curve
-#' @return If plot==T The surrogate predictions and the roc curve. If plot==F only the surrogate predictions
+#' @return If plot==TRUE The surrogate predictions and the roc curve. If plot==F only the surrogate predictions
 #'
 #' @examples
 #' \dontrun{
@@ -427,6 +435,7 @@ apply.fit_surro<-function(mat, FIT, post=TRUE){
 #' QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, apply.fit_surro
 #' 
 #' @keywords internal
+#' @export
 #'
 predictions_surrogates<- function(FIT, data, title_img=FALSE, plot=TRUE){
   
@@ -458,7 +467,9 @@ predictions_surrogates<- function(FIT, data, title_img=FALSE, plot=TRUE){
 #' @param CVD_score_betas dataframe with the coefficients of the CVD score
 #' @param COVID_score_betas ataframe with the coefficients of the COVID_score
 #' @return heatmapply with the scaled coefficients of the metabolic scores
+#' 
 #' @keywords internal
+#' @export
 #'
 model_coeff_heat<-function(mort_betas, metaboAge_betas, surrogates_betas, Ahola_Olli_betas, CVD_score_betas, COVID_score_betas){
   models_betas<-matrix(0, 24, 62)
@@ -498,7 +509,9 @@ model_coeff_heat<-function(mort_betas, metaboAge_betas, surrogates_betas, Ahola_
 #' @param res Results of cor.assoc
 #' @param abs TRUE/FALSE. If TRUE it will cluster the absolute values
 #' @return Returns the clustered order of the associations
+#' 
 #' @keywords internal
+#' @export
 #'
 resort.on.s <- function(res,abs=FALSE){
   s <- get.s(res)
@@ -523,6 +536,7 @@ resort.on.s <- function(res,abs=FALSE){
 #' @return Returns the clustered order of the associations based on the pvalues
 #' 
 #' @keywords internal
+#' @export
 #'
 resort.on.p <- function(res,abs=FALSE){
   p <- get.p(res)
@@ -546,6 +560,7 @@ resort.on.p <- function(res,abs=FALSE){
 #' @return the matrix of associations
 #' 
 #' @keywords internal
+#' @export
 #'
 get.s <- function(res){
   return(
@@ -580,6 +595,7 @@ get.s <- function(res){
 #' @return the matrix of the pvalues of the associations
 #' 
 #' @keywords internal
+#' @export
 #'
 get.p <- function(res){
   return(
@@ -615,6 +631,7 @@ get.p <- function(res){
 #' @return TRUE/FALSE
 #' 
 #' @keywords internal
+#' @export
 #'
 is.sym <- function(res){
   s <- get.s(res)
@@ -645,6 +662,7 @@ is.sym <- function(res){
 #' @seealso plattCalibration
 #' 
 #' @keywords internal
+#' @export
 #'
 calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_available, pl=FALSE, nbins=10){
   bin_surro<-paste0("s_",bin_names)
@@ -679,6 +697,7 @@ calibration_surro<-function(bin_phenotypes, surrogates, bin_names, bin_pheno_ava
 #' @return data.frame with the calibrated surrogates
 #' 
 #' @keywords internal
+#' @export
 #'
 calib_data_frame<-function(calibrations, bin_phenotypes, bin_pheno_available){
   cal<-matrix(NA, nrow = dim(bin_phenotypes)[1], ncol = length(bin_pheno_available))
@@ -705,6 +724,7 @@ calib_data_frame<-function(calibrations, bin_phenotypes, bin_pheno_available){
 #' @return list with Reliability diagram and histogram with calibrations and original predictions
 #' 
 #' @keywords internal
+#' @export
 #'
 plattCalib_evaluation<-function(r, p, p.orig, name, nbins = 10, annot_x=c(1,1),annot_y=c(0.1,0.3)){
   
@@ -715,7 +735,6 @@ plattCalib_evaluation<-function(r, p, p.orig, name, nbins = 10, annot_x=c(1,1),a
     p.orig<-p.orig[-i]
   }
   
-  set.seed(222)
   train_ind<- caret::createDataPartition(r, p=0.8, list=FALSE)
   r.calib<-as.numeric(r[train_ind])
   p.calib<-p[train_ind]
@@ -822,6 +841,7 @@ plattCalib_evaluation<-function(r, p, p.orig, name, nbins = 10, annot_x=c(1,1),a
 #' @param n_bins the number of bins
 #' @return ECE value
 #' @keywords internal
+#' @export
 #'
 getECE<-function (actual, predicted, n_bins = 10){
   predicted <- predicted
@@ -869,6 +889,7 @@ getECE<-function (actual, predicted, n_bins = 10){
 #' @param n_bins the number of bins
 #' @return MCE value
 #' @keywords internal
+#' @export
 #'
 getMCE<-function (actual, predicted, n_bins = 10) 
 {
@@ -915,6 +936,7 @@ getMCE<-function (actual, predicted, n_bins = 10)
 #' @return plotly image
 #' 
 #' @keywords internal
+#' @export
 #'
 plotly_NA_message<-function(main="Phenotype not available!"){
   title_font <- list(
@@ -950,8 +972,9 @@ plotly_NA_message<-function(main="Phenotype not available!"){
 #' @return results= the results of the MetaboWAS (estimate, tstatistics, pvalue, BH corrected pvalue)
 #' 
 #' @keywords internal
+#' @export
 #'
-do_metabowas<-function(phen, dat, test_variable="age", covariates=c("sex"), adj_method="BH", quiet=T){
+do_metabowas<-function(phen, dat, test_variable="age", covariates=c("sex"), adj_method="BH", quiet=TRUE){
   if(!is.null(covariates)){
     vars <- phen[, c(test_variable, covariates)]
   }else{
@@ -989,6 +1012,7 @@ do_metabowas<-function(phen, dat, test_variable="age", covariates=c("sex"), adj_
 #' @return plot
 #' 
 #' @keywords internal
+#' @export
 #'
 NA_message<-function(main="Metabolites are missing, please check your upload!"){
   graphics::plot(c(0, 1), c(0, 1), ann = F, bty = 'n', type = 'n', xaxt = 'n', yaxt = 'n')

@@ -16,7 +16,7 @@ predictions_surrogates(FIT, data, title_img = FALSE, plot = TRUE)
 \item{plot}{logical to obtain the ROC curve}
 }
 \value{
-If plot==T The surrogate predictions and the roc curve. If plot==F only the surrogate predictions
+If plot==TRUE The surrogate predictions and the roc curve. If plot==F only the surrogate predictions
 }
 \description{
 Helper function that apply a surrogate model and plot a ROC curve the accuracy

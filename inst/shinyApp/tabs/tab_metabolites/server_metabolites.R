@@ -54,8 +54,9 @@ output$hist_metabolites <- renderPlotly({
   tryCatch({
     req(required())
     met<-as.character(input$metabolites)
-    hist_plots(metabo_measures(), x_name=met, scaled=input$scale_met, 
-               main="Metabolites Distributions",datatype="metabolites")
+    
+    suppressWarnings(hist_plots(metabo_measures(), x_name=met, scaled=input$scale_met, 
+               main="Metabolites Distributions",datatype="metabolites"))
   }, error = function(err) {
     return(plotly_NA_message(main="Metabolites not available,\nplease check your uploaded files."))
   })

@@ -13,7 +13,7 @@ plot_corply(
   resort_on_p = FALSE,
   abs = FALSE,
   cor.abs = FALSE,
-  reorder_dend = F
+  reorder_dend = FALSE
 )
 }
 \arguments{
@@ -42,17 +42,15 @@ heatmap with the results of cor.assoc
 Function creating plottig the correlation between 2 datasets, dat1 x dat2 on basis of (partial) correlations
 }
 \examples{
-\dontrun{
 library(stats)
 
-#load the metabolites dataset
-metabolites <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the dataset
+m <- as.matrix(synthetic_metabolic_dataset)
 
 #Compute the pearson correlation of all the variables in the data.frame metabolic_measures
-cors<-cor_assoc(metabolites, metabolites, colnames(metabolites),colnames(metabolites))
+cors<-cor_assoc(m, m, MiMIR::metabolites_subsets$MET63,MiMIR::metabolites_subsets$MET63)
 #Plot the correlations
 plot_corply(cors, main="Correlations metabolites")
-}
 
 }
 \seealso{

@@ -33,16 +33,15 @@ plotly image with the histograms of the selected variables
 #' Function to plot the histograms for all the variables in dat
 }
 \examples{
-\dontrun{
 require(MiMIR)
 require(plotly)
 require(matrixStats)
 #load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+m <- synthetic_metabolic_dataset
+
 #Apply a surrogate models and plot the ROC curve
-surrogates<-calculate_surrogate_scores(met=metabo_measures,Nmax_miss=1,Nmax_zero=1,roc=F)
+surrogates<-calculate_surrogate_scores(m, PARAM_surrogates=MiMIR::PARAM_surrogates, roc=FALSE)
 #Plot the histogram of the surrogate sex values scaled 
-hist_plots(surrogates, x_name="s_sex", scaled=T)
-}
+hist_plots(surrogates$surrogates, x_name="s_sex", scaled=TRUE)
 
 }

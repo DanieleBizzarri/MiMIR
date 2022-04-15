@@ -6,7 +6,7 @@
 \usage{
 QCprep_surrogates(
   mat,
-  PARAM_surrogates = MiMIR::PARAM_surrogates,
+  PARAM_surrogates,
   Nmax_miss = 1,
   Nmax_zero = 1,
   quiet = FALSE
@@ -36,14 +36,13 @@ current smoking, alcohol consumption, high age, middle age, low age, high hsCRP,
 high total cholesterol, low hdl cholesterol, low eGFR, low white blood cells, low hemoglobin levels.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
 #Pre-process the metabolic features
-prepped_met<-QCprep_surrogates(as.matrix(metabolic_measures))
-}
+prepped_met<-QCprep_surrogates(as.matrix(metabolic_measures), MiMIR::PARAM_surrogates)
+
 
 }
 \references{

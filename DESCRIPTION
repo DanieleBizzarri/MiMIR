@@ -59,5 +59,6 @@ Imports:
     dplyr
 LazyData: true
 Suggests: 
+    ggfortify,
     knitr,
     rmarkdown

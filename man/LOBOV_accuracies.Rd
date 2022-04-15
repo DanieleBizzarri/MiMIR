@@ -27,23 +27,22 @@ Comparison of the AUCs of the surrogates in the updated dataset and the
 results of the Leave One Biobank Out Validation made in BBMRI-nl.
 }
 \examples{
-\dontrun{
 require(pROC)
 require(plotly)
 require(MiMIR)
 require(foreach)
 require(ggplot2)
 
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#load the dataset
+m <- synthetic_metabolic_dataset
+p<- synthetic_phenotypic_dataset
+
 #Calculating the binarized surrogates
-bin_pheno<-binarize_all_pheno(phenotypes)
+b_p<-binarize_all_pheno(p)
 #Apply a surrogate models and plot the ROC curve
-surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
-LOBOV_accuracies(surrogates$surrogates, bin_phenotypes, c("sex","diabetes","high_age"))
-}
+sur<-calculate_surrogate_scores(m, p, MiMIR::PARAM_surrogates, bin_names=colnames(b_p))
+p_avail<-colnames(b_p)[c(1:5)]
+LOBOV_accuracies(sur$surrogates, b_p, p_avail, MiMIR::acc_LOBOV)
 
 }
 \references{

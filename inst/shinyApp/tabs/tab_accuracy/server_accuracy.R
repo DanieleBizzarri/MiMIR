@@ -18,8 +18,7 @@ output$ttest <- renderPlotly({
   if(required()){
     tryCatch({
       req(phenotypes())
-      #ttest_surrogates(surrogates = predictors()[,bin_surro], bin_phenotypes = bin_phenotypes())
-      ttest_surrogates(surrogates = surrogates(), bin_phenotypes = bin_phenotypes())
+      suppressWarnings(ttest_surrogates(surrogates = surrogates(), bin_phenotypes = bin_phenotypes()))
     }, error = function(err) {
       return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })
@@ -33,7 +32,8 @@ output$LOBOV_surro <- renderPlotly({
   if(required()){
     tryCatch({
       req(phenotypes())
-      LOBOV_accuracies(surrogates= surrogates(), bin_phenotypes= bin_phenotypes(), bin_pheno_available = bin_pheno_available(), acc_LOBOV= MiMIR::acc_LOBOV)
+      suppressWarnings(LOBOV_accuracies(surrogates= surrogates(), bin_phenotypes= bin_phenotypes(), 
+                                        bin_pheno_available = bin_pheno_available(), acc_LOBOV= MiMIR::acc_LOBOV))
     }, error = function(err) {
       return(plotly_NA_message(main="Phenotypes not available,\nplease check your uploaded files."))
     })

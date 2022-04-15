@@ -37,15 +37,13 @@ This function plots the distribution of a metabolic feature in the uploaded data
 The selection of features available is done following the metabolic scores features.
 }
 \examples{
-\dontrun{
 library(plotly)
 library(MiMIR)
 
 #load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
 
-BBMRI_hist_plot(metabolic_measures, x_name="glc", scaled=T)
-}
+BBMRI_hist_plot(metabolic_measures, x_name="alb", scaled=TRUE)
 
 }
 \references{

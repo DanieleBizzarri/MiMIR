@@ -21,21 +21,19 @@ Function that calculates a t-test and a plotly image of the selected surrogates
 Barplot and T-test indicating if the surrogate variables could split accordingly the real value of the binary clinical variables.
 }
 \examples{
-\dontrun{
 require(pROC)
 require(plotly)
 require(MiMIR)
 require(foreach)
 
-#load the metatolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#load the dataset
+m <- synthetic_metabolic_dataset
+p <- synthetic_phenotypic_dataset
+
 #Calculating the binarized surrogates
-bin_pheno<-binarize_all_pheno(phenotypes)
+b_p<-binarize_all_pheno(p)
 #Apply a surrogate models and plot the ROC curve
-surrogates<-calculate_surrogate_scores(met=metabo_measures(),Nmax_miss=1,Nmax_zero=1,roc=F)
-ttest_surrogates(surrogates$surrogates, bin_phenotypes)
-}
+surr<-calculate_surrogate_scores(met=m, pheno=p, MiMIR::PARAM_surrogates, bin_names=colnames(b_p))
+ttest_surrogates(surr$surrogates, b_p)
 
 }

@@ -22,23 +22,20 @@ plotly with a Kaplan Meier comparing first and last tertile of a metabolic score
 #' Function that creates a Kaplan Meier comparing first and last tertile of a metabolic score
 }
 \examples{
-\dontrun{
-
 require(MiMIR)
 require(plotly)
 require(survminer)
+require(ggfortify)
 require(ggplot2)
 
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+#load the dataset
+metabolic_measures <- synthetic_metabolic_dataset
+phenotypes <- synthetic_phenotypic_dataset
 
 #Compute the mortality score
 mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
 
 #Plot a Kaplan Meier
-kapmeier_scores(predictors=mortScore, pheno=phenotypes, score="mort_score")
-}
+kapmeier_scores(predictors=mortScore, pheno=phenotypes, score="mortScore")
 
 }

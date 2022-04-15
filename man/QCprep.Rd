@@ -4,13 +4,7 @@
 \alias{QCprep}
 \title{QCprep}
 \usage{
-QCprep(
-  mat,
-  PARAM_metaboAge = PARAM_metaboAge,
-  quiet = TRUE,
-  Nmax_zero = 1,
-  Nmax_miss = 1
-)
+QCprep(mat, PARAM_metaboAge, quiet = TRUE, Nmax_zero = 1, Nmax_miss = 1)
 }
 \arguments{
 \item{mat}{numeric data-frame NH-metabolomics matrix.}
@@ -30,14 +24,13 @@ Nightingale-metabolomics data-frame after pre-processing (checked for zeros, mis
 Helper function to pre-process the Nightingale Health metabolomics data-set before applying the MetaboAge score by van den Akker et al.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
 #load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
+
 #Pre-process the metabolic features
-prepped_met<-QCprep(as.matrix(metabolic_measures), PARAM_metaboAge)
-}
+prepped_met<-QCprep(as.matrix(metabolic_measures[,metabolites_subsets$MET63]), PARAM_metaboAge)
 
 }
 \references{

@@ -31,7 +31,6 @@ startApp <- function(launch.browser = TRUE) {
   
   library("MiMIR")
   options(shiny.maxRequestSize=30*1024^2)
-  options(warn = -1)
   
   message("Initializing MiMIR...")
   suppressMessages(source(system.file("shinyApp/lib/libraries.R", package = "MiMIR")))

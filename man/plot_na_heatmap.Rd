@@ -21,14 +21,12 @@ On the sides two bar plots on the sides, one showing the missingn or zero values
 per row and another to show the missing or zeroes per column.
 }
 \examples{
-\dontrun{
 library(graphics)
 library(MiMIR)
 
 #load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+metabolic_measures <- synthetic_metabolic_dataset
 #Plot the missing values in the metabolomics matrix
 plot_na_heatmap(metabolic_measures)
-}
 
 }

@@ -3,7 +3,7 @@ output$hist_predictors <- renderPlotly({
   tryCatch({
     req(required())
     pred<-as.character(input$predictors)
-    hist_plots(predictors(),x_name=pred, scaled=input$scaling)
+    suppressWarnings(hist_plots(predictors(),x_name=pred, scaled=input$scaling))
   }, error = function(err) {
     return(plotly_NA_message(main="Image not available,\nplease check your uploaded files."))
   })

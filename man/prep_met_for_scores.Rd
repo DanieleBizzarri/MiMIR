@@ -4,7 +4,7 @@
 \alias{prep_met_for_scores}
 \title{prep_met_for_scores}
 \usage{
-prep_met_for_scores(dat, featID, plusone = F, quiet = FALSE)
+prep_met_for_scores(dat, featID, plusone = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{dat}{numeric data-frame with Nightingale-metabolomics}
@@ -22,14 +22,12 @@ The Nightingale-metabolomics data-frame after pre-processing (checked for zeros,
 Helper function to pre-process the Nightingale Health metabolomics data-set before applying the mortality, Type-2-diabetes and CVD scores.
 }
 \examples{
-\dontrun{
 library(MiMIR)
 
-#load the Nightignale metabolomics dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the Nightingale metabolomics dataset
+metabolic_measures <- synthetic_metabolic_dataset
 #Prepare the metabolic features fo the mortality score
 prepped_met <- prep_met_for_scores(metabolic_measures,featID=MiMIR::mort_betas$Abbreviation)
-}
 
 }
 \references{

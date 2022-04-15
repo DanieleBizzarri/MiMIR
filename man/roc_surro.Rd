@@ -20,24 +20,20 @@ plotly image with the ROC curves for one or more selected variables
 Function that creates a ROC curve of the selected metabolic surrogates as a plotly image
 }
 \examples{
-\dontrun{
 require(pROC)
 require(plotly)
 require(foreach)
 require(MiMIR)
 
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
+#load the dataset
+met <- synthetic_metabolic_dataset
+phen<- synthetic_phenotypic_dataset
 
-#load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
 #Calculating the binarized surrogates
-bin_pheno<-binarize_all_pheno(phenotypes)
+b_phen<-binarize_all_pheno(phen)
 #Apply a surrogate models and plot the ROC curve
-data<-data.frame(out=factor(phenotypes_names$bin_names[,1]), metabo_measures)
-colnames(data)[1]<-"out"
-s_diabetes<-predictions_surrogates(PARAM_surrogates$models_betas["s_diabetes",], data=data)
-roc_surro(s_diabetes, bin_phenotypes, "diabetes")
-}
+surr<-calculate_surrogate_scores(met, phen, MiMIR::PARAM_surrogates, colnames(b_phen))
+#Plot the ROC curves
+roc_surro(surr$surrogates, b_phen, "sex")
 
 }

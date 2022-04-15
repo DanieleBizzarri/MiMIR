@@ -83,7 +83,7 @@ output$km_score <- renderPlotly({
     }else if(length(which(colnames(phenotypes())=="Event"))==0 & length(which(colnames(phenotypes())=="EventAge"))==0 ){
       plotly_NA_message(main="Event is not available")
     }else{
-      kapmeier_scores(predictors=predictors(), pheno=phenotypes(), score=input$pred_km2, Eventname=input$Eventname)
+      suppressWarnings(kapmeier_scores(predictors=predictors(), pheno=phenotypes(), score=input$pred_km2, Eventname=input$Eventname))
     }
   } else {
     return(plotly_NA_message(main="Image not available,\nplease check your uploaded files."))

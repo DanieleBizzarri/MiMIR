@@ -20,23 +20,17 @@ plotly boxplot with the continuous variable split using the binary variable
 #' Function that creates a boxplot with a continuous variable split using the binary variable
 }
 \examples{
-\dontrun{
 library(MiMIR)
 library(plotly)
-#load the metabolites dataset
-metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
-#' #load the phenotypic dataset
-phenotypes <- read.csv("phenotypes_file_path",header = TRUE, row.names = 1)
+
+#load the dataset
+metabolic_measures <- synthetic_metabolic_dataset
+phenotypes <- synthetic_phenotypic_dataset
 
 #Compute the mortality score
 mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
-
-pred<-as.character(input$pred_choices2)
-pheno<-as.character(input$pheno_chosen2)
-dat<-data.frame(mortScore, sex=phenotypes$sex)
-
+dat<-data.frame(predictor=mortScore, pheno=phenotypes$sex)
+colnames(dat)<-c("predictor","pheno")
 ttest_scores(dat = dat, pred= "mortScore", pheno="sex")
-
-}
 
 }

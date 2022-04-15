@@ -1,5 +1,3 @@
-options(warn = -1)
-
 server <- function(input, output) {
   options(shiny.maxRequestSize=30*1024^2)
   
