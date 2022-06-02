@@ -35,7 +35,7 @@ prepped_met<-QCprep(as.matrix(metabolic_measures[,metabolites_subsets$MET63]), P
 }
 \references{
 This function is constructed to be able to follow the pre-processing steps described in:
-van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, \url{doi:10.1161/CIRCULATIONAHA.114.013116}
 }
 \seealso{
 apply.fit

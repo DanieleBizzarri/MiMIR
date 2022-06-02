@@ -135,7 +135,7 @@ tab_metabolites <- tabItem(
                     "Glycoprotein acetyls (gp)" = "gp",
                     "Total lipids in chylomicrons and extremely large VLDL (xxl_vldl_l)" = "xxl_vldl_l",
                     "Cholesteryl esters in chylomicrons and extremely large VLDL (l_vldl_ce_percentage)"="l_vldl_ce_percentage",
-                    "Free cholesterol in large LDL (l_hdl_fc)"="l_hdl_fc", 
+                    "Free cholesterol in large LDL (l_hdl_fc)"="l_hdl_fc",
                     "Ratio of apolipoprotein B to apolipoprotein A1 (apob_apoa1)"="apob_apoa1",
                     "Ratio of omega-6 fatty acids to omega-3 fatty acids (faw6_faw3)"="faw6_faw3",
                     "Glycine"="glycine"

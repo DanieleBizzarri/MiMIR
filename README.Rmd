@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 MiMIR (Metabolomics-based Models for Imputing Risk), is a a unique graphical user interface that provides an intuitive framework for ad-hoc statistical analysis of 1H-NMR metabolomics by Nightingale Health. It allows to easily explore new metabolomics measurements assayed by Nightingale Health; project previously published metabolic scores; and calibrate the metabolic surrogate values to a desired dataset. 
 
-<img src="./inst/shinyApp/www/scaled_mimir_logo.svg" width="250" height="250" align="right">
+<img src="inst/shinyApp/www/scaled_mimir_logo.svg" width="250" height="250" align="right">
 
 To have a detail description of all the possible analyses available in MiMIR, please take a look at the Manual:https://github.com/DanieleBizzarri/MiMIR/blob/main/man/MANUAL.pdf
 Please refer to our manuscripts when using these metabolic biomarkers in your works:
@@ -43,8 +43,8 @@ devtools::install_github("DanieleBizzarri/MetaboRiSc")
 
 3. Launch the application:
 ```
-library("MetaboRiSc")
-MetaboRiSc::launchApp()
+library("MiMIR")
+MiMIR::startApp()
 ```
 
 ## Quick Start
@@ -70,23 +70,20 @@ if (!require("shinydashboard")) install.packages("shinydashboard")
 if (!require("shinyWidgets")) install.packages("shinyWidgets")
 if (!require("shinycssloaders")) install.packages("shinycssloaders")
 if (!require("shinyjs")) install.packages("shinyjs")
+if (!require("shinyFiles")) install.packages("shinyFiles")
 
-## Statistics libraries
+#Statistics libraries
 if (!require("DT")) install.packages("DT")
 if (!require("foreach")) install.packages("foreach")
-if (!require("glmnet")) install.packages("glmnet")
 if (!require("matrixStats")) install.packages("matrixStats")
+if (!require("dplyr")) install.packages("dplyr")
 if (!require("plyr")) install.packages("plyr")
 if (!require("stats")) install.packages("stats")
-if (!require("reshape2")) install.packages("reshape2")
 if (!require("caret")) install.packages("caret")
 if (!require("purrr")) install.packages("purrr")
-if (!require("dplyr")) install.packages("dplyr")
 if (!require("rmarkdown")) install.packages("rmarkdown")
 
 #Imaging libraries
-if (!require("pheatmap")) install.packages("pheatmap")
-if (!require("RColorBrewer")) install.packages("RColorBrewer")
 if (!require("pROC")) install.packages("pROC")
 if (!require("plotly")) install.packages("plotly")
 if (!require("heatmaply")) install.packages("heatmaply")

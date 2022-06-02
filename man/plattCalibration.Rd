@@ -50,5 +50,5 @@ plattCalibration(r.calib=real_data, p.calib=pred_data, nbins = 10, pl=TRUE)
 This is a function originally created for the package in eRic, under the name prCalibrate and modified ad hoc for our purposes
 (\href{https://rdrr.io/github/etlundquist/eRic/man/prCalibrate.html}{Github})
 
-J. C. Platt, ‘Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods’, in Advances in Large Margin Classifiers, 1999, pp. 61–74.
+J. C. Platt, 'Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods', in Advances in Large Margin Classifiers, 1999, pp. 61-74.
 }

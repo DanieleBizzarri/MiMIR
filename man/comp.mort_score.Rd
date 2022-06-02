@@ -35,7 +35,7 @@ mortScore<-comp.mort_score(metabolic_measures,quiet=TRUE)
 }
 \references{
 This function is constructed to be able to apply the mortality score as described in:
-Deelen,J. et al. (2019) A metabolic profile of all-cause mortality risk identified in an observational study of 44,168 individuals. Nature Communications, 10, 1–8, doi: 10.1038/s41467-019-11311-9.
+Deelen,J. et al. (2019) A metabolic profile of all-cause mortality risk identified in an observational study of 44,168 individuals. Nature Communications, 10, 1-8, \url{doi:10.1038/s41467-019-11311-9}
 }
 \seealso{
 prep_met_for_scores, mort_betas, comp.T2D_Ahola_Olli, comp.CVD_score

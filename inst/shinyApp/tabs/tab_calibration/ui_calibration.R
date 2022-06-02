@@ -47,11 +47,12 @@ tab_calibration <- tabItem(
           fluidPage(
             fluidRow(
               #Reliability plot of the calibrations
-              plotlyOutput("reliability_calib") %>% withSpinner()
+              loading_spin(plotlyOutput("reliability_calib"))
               ),
             fluidRow(
               #Histogram of the calibrations
-              plotlyOutput("hist_calib") %>% withSpinner()
+              loading_spin(plotlyOutput("hist_calib"))
+              #addSpinner(plotlyOutput("hist_calib"), spin = "circle", color = "#E41A1C")
               )
             )
         )

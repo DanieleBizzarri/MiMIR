@@ -1,6 +1,6 @@
 ## QC introduction 
 output[["qc_intro"]] <- renderUI({
-  if (is.null(syn_met()) & is.null(upload_met())) {
+  if (is.null(metabo_measures())) {
     tagList(div(span("Please first upload the Nightingale metabolomics features!",
                      style = "text-align: justify; display: block; width: 90%")))
     }else{
@@ -100,16 +100,19 @@ MetaboAge <- reactive({
                            MiMIR::PARAM_metaboAge,quiet=TRUE,
                            Nmax_miss=input$Nmax_miss_metaboAge,
                            Nmax_zero=input$Nmax_zero_metaboAge)
-  metaboage<-apply.fit(metabo_metaboage,FIT=MiMIR::PARAM_metaboAge$FIT_COEF)
+  metaboage<-apply.fit(metabo_metaboage, FIT=MiMIR::PARAM_metaboAge$FIT_COEF)
   
-  #rownames(metaboage)<-rownames(metabo_measures())
-  if(!is.null(phenotypes()[,"age"])){
-    metaboage<-data.frame(metaboage=metaboage, deltaMetaboAge=metaboage-(phenotypes()[,"age"]))
-    colnames(metaboage)<-c("MetaboAge","deltaMetaboAge")
+  if (is.null(phen_input$inDir)){
     return(metaboage)
-  }else{
-    return(metaboage)
-  }
+    }else{
+      if (length(colnames(req(phenotypes()))=="age")==0){
+        return(metaboage)
+      }else{
+        metaboage<-data.frame(metaboage=metaboage, deltaMetaboAge=metaboage-(phenotypes()[,"age"]))
+        colnames(metaboage)<-c("MetaboAge","deltaMetaboAge")
+        return(metaboage)
+      }
+    }
 })
 
 # Calculate the surrogates
@@ -126,12 +129,22 @@ surrogates <- reactive({
 
 # Calculate the T2D score
 T2D_score_AholaOlli <- reactive({
-  T2Dscore<-comp.T2D_Ahola_Olli(met=metabo_measures(), phen=phenotypes(), betas=MiMIR::Ahola_Olli_betas, quiet=TRUE)
-})
+  if (is.null(phen_input$inDir)){
+    return("It was not possible to calculate the T2D score because the phenotypic values are missing")
+  }else{
+    T2Dscore<-comp.T2D_Ahola_Olli(met=metabo_measures(), phen=phenotypes(), betas=MiMIR::Ahola_Olli_betas, quiet=TRUE)
+  }
+  })
+
 # Calculate CVD score
 CVD_score <- reactive({
-  CVDscore<-comp.CVD_score(met=metabo_measures(), phen=phenotypes(),betas=MiMIR::CVD_score_betas, quiet=TRUE)
-})
+  if (is.null(phen_input$inDir)){
+    return("It was not possible to calculate the CVD score because the phenotypic values are missing")
+  }else{
+    CVDscore<-comp.CVD_score(met=metabo_measures(), phen=phenotypes(),betas=MiMIR::CVD_score_betas, quiet=TRUE)
+    }
+  })
+  
 
 # Calculate CVD score
 COVID_score <- reactive({
@@ -141,25 +154,43 @@ COVID_score <- reactive({
 # Compose the predictors table with mortality score, metaboage and surrogates
 predictors<-reactive({
   mortality<-data.frame(ID=rownames(mort_score()), mort_score())
-  metaboage<-data.frame(ID=rownames(MetaboAge()), MetaboAge())
-  surro<-data.frame(ID=rownames(surrogates()), surrogates())
+  predictors<-mortality
   
-  predictors<-merge(mortality,metaboage, by.x= 'ID',by.y="ID", all=TRUE)
-  if(length(t(T2D_score_AholaOlli()))>2){
+  if(is.null(req(MetaboAge()))){
+    predictors= predictors
+  }else{
+    metaboage<-data.frame(ID=rownames(MetaboAge()), MetaboAge())
+    predictors<-merge(predictors,metaboage, by.x= 'ID',by.y="ID", all=TRUE)
+  }
+  
+  if(is.null(req(surrogates()))){
+    predictors= predictors 
+  }else{
+    surro<-data.frame(ID=rownames(surrogates()), surrogates())
+    predictors<-merge(predictors,surro, by.x= 'ID',by.y="ID", all=TRUE)
+  }
+  
+  if(length(T2D_score_AholaOlli())<2){
+    predictors=predictors
+  }else{
     T2D_score<-data.frame(ID=rownames(T2D_score_AholaOlli()),T2D_score_AholaOlli())
     predictors<-merge(predictors,T2D_score, by.x= 'ID',by.y="ID", all=TRUE)
   }
-  if(length(t(CVD_score()))>2){
+
+  if(length(CVD_score())<2){
+    predictors= predictors
+  }else{
     CVDscore<-data.frame(ID=rownames(CVD_score()),CVD_score())
     predictors<-merge(predictors,CVDscore, by.x= 'ID',by.y="ID", all=TRUE)
   }
-  if(length(t(COVID_score()))>2){
+
+  if(length(COVID_score())<2){
+    predictors= predictors
+  }else{
     COVID_score<-data.frame(ID=rownames(COVID_score()),COVID_score())
     predictors<-merge(predictors,COVID_score, by.x= 'ID',by.y="ID", all=TRUE)
   }
-  
-  predictors<-merge(predictors,surro, by.x= 'ID',by.y="ID", all=TRUE)
-  
+
   ind<-order(match(predictors$ID, rownames(metabo_measures())))
   predictors<-predictors[ind,]
   rownames(predictors)<-predictors$ID

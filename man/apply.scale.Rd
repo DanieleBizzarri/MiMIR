@@ -34,9 +34,9 @@ mat <- apply.scale(metabolic_measures, MEAN=PARAM_metaboAge$MEAN, SD=PARAM_metab
 }
 \references{
 This function is constructed to be able to apply the metaboAge as described in:
-van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, \url{doi:10.1161/CIRCGEN.119.002610}
 }
 \seealso{
-QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, and report.dim
+QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute_miss, and report.dim
 }
 \keyword{internal}

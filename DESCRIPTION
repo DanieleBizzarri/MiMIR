@@ -1,6 +1,6 @@
 Package: MiMIR
 Title: Metabolomics-Based Models for Imputing Risk
-Version: 1.2
+Version: 1.4
 Authors@R: 
     c(person(given = "Daniele",
            family = "Bizzarri",
@@ -39,12 +39,9 @@ Imports:
     DT,
     foreach,
     ggplot2,
-    glmnet,
     heatmaply,
     matrixStats,
-    pkgload,
     plotly,
-    plyr,
     pROC,
     purrr,
     shiny,
@@ -56,9 +53,12 @@ Imports:
     stats,
     survival,
     survminer,
-    dplyr
+    dplyr,
+    fs
 LazyData: true
 Suggests: 
+    testthat (>= 3.0.0),
     ggfortify,
     knitr,
     rmarkdown
+Config/testthat/edition: 3

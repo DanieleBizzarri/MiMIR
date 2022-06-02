@@ -1,5 +1,5 @@
 ## Description of our works and how to cite them
-output[["description"]] <- renderUI({
+output[["about_text"]] <- renderUI({
   tagList(
     div(
       br(),

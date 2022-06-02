@@ -1,0 +1,5 @@
+ls
+setwd("~/Desktop/LUMC/Metabotypes/app/Github/MiMIR")
+R CMD Rd2pdf
+Rd2pdf
+Rd2pdf()

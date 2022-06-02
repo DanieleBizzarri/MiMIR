@@ -1,13 +1,6 @@
 ## Render surrogates to ui
-output[["surrogates_table"]] <- DT::renderDataTable({
-  tryCatch({
-    DT::datatable(surrogates(), options = list(pageLength = 5, scrollX = TRUE))
-  }, error = function(err) {
-    return(DT::datatable(data.frame(c(
-      "No data available"
-    )), rownames = FALSE, colnames = ""))
-  })
-})
+output[["surrogates_table"]]<- rendertable(surrogates())
+
 
 ## Render calibrated surrogates to ui
 output[["calibrated_surro_table"]] <- DT::renderDataTable({

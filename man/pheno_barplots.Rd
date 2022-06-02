@@ -40,7 +40,7 @@ pheno_barplots(binarized_phenotypes)
 }
 \references{
 This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
-Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, \url{doi:10.1016/j.ebiom.2021.103764}
 }
 \seealso{
 binarize_all_pheno

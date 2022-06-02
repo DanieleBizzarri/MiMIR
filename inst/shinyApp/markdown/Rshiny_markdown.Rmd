@@ -26,7 +26,7 @@ params:
   Nmax_zero_surrogates:  Nmax_zero_surrogates
 ---
 
-```{r setup, echo=FALSE}
+```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 # Required packages to load
 if (!require("knitr")) install.packages("knitr")
 if (!require("tidyr")) install.packages("tidyr")
@@ -76,7 +76,7 @@ Nightingale Health measures are mostly constituted by lipids and are often corre
 
 ### Histogram metabolites
 This interactive bar plot shows the distributions of the metabolic features used in the metabolomics-based scores within the uploaded data-set in three batches to allow better visibility of the plots.
-```{r histograms metabolites, echo=FALSE, out.width="150%", out.height="600%"}
+```{r histograms metabolites, echo=FALSE, out.width="150%", out.height="600%", warning=FALSE}
 multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[1:20]])
 multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[21:40]])
 multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[41:63]])
@@ -127,7 +127,7 @@ The missingness reported in this figure is closely related to the one seen in th
 
 ### Histogram predictors
 This interactive bar plot shows the distributions of the metabolomics-based scores within the uploaded data-set in two batches to allow better visibility of the plots.
-```{r histograms predicted scores, echo=FALSE, out.width="130%", out.height="400%"}
+```{r histograms predicted scores, echo=FALSE, out.width="130%", out.height="400%", warning=FALSE}
  multi_hist(predictors[,2:10])
  multi_hist(predictors[,11:dim(predictors)[2]])
 ```
@@ -151,7 +151,7 @@ The ROC curves are graphical tools to illustrates the accuracy of binary classif
 
 ### Surrogates t-test
 This Figure shows paired boxplots with the surrogate values split between the TRUE/FALSE (0 in blue, 1 in red) in the original values of the clinical variables.It will also produce t-tests to show how different the 2 distributions are.
-```{r t-test surrogates, echo=FALSE}
+```{r t-test surrogates, echo=FALSE, warning=FALSE}
    ttest_surrogates(surrogates = surrogates, bin_phenotypes = bin_phenotypes)
 ```
 
@@ -215,7 +215,7 @@ As for the other tables we report the missingness of the calibrated metabolic su
   plot_na_heatmap(t(calib))
 ```
 
-### Sessino Info
+### Session Info
 ```{r session info, echo=FALSE}
   sessionInfo()
 ```

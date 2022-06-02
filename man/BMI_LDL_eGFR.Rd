@@ -31,9 +31,9 @@ phenotypes<-BMI_LDL_eGFR(phenotypes, metabolic_measures)
 \references{
 This function is constructed to calculate BMI, LDL cholesterol and eGFR as in the following papers:
 
-BMI: Flint AJ, Rexrode KM, Hu FB, Glynn RJ, Caspard H, Manson JE et al. Body mass index, waist circumference, and risk of coronary heart disease: a prospective study among men and women. Obes Res Clin Pract 2010; 4: e171–e181, doi: 10.1016/j.orcp.2010.01.001
+BMI: Flint AJ, Rexrode KM, Hu FB, Glynn RJ, Caspard H, Manson JE et al. Body mass index, waist circumference, and risk of coronary heart disease: a prospective study among men and women. Obes Res Clin Pract 2010; 4: e171-e181, \url{doi:10.1016/j.orcp.2010.01.001}
 
-LDL-cholesterol: Friedewald WT, Levy RI, Fredrickson DS. Estimation of the Concentration of Low-Density Lipoprotein Cholesterol in Plasma, Without Use of the Preparative Ultracentrifuge. Clin Chem 1972; 18: 499–502, doi: https://doi.org/10.1093/clinchem/18.6.499
+LDL-cholesterol: Friedewald WT, Levy RI, Fredrickson DS. Estimation of the Concentration of Low-Density Lipoprotein Cholesterol in Plasma, Without Use of the Preparative Ultracentrifuge. Clin Chem 1972; 18: 499-502, <doi.org/10.1093/clinchem/18.6.499>
 
-eGFR: Carrero Juan Jesus, Andersson Franko Mikael, Obergfell Achim, Gabrielsen Anders, Jernberg Tomas. hsCRP Level and the Risk of Death or Recurrent Cardiovascular Events in Patients With Myocardial Infarction: a Healthcare‐Based Study. J Am Heart Assoc 2019; 8: e012638, doi: 10.1161/JAHA.119.012638
+eGFR: Carrero Juan Jesus, Andersson Franko Mikael, Obergfell Achim, Gabrielsen Anders, Jernberg Tomas. hsCRP Level and the Risk of Death or Recurrent Cardiovascular Events in Patients With Myocardial Infarction: a Healthcare-Based Study. J Am Heart Assoc 2019; 8: e012638, <doi: 10.1161/JAHA.119.012638>
 }

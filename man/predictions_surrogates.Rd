@@ -51,7 +51,7 @@ pred<-predictions_surrogates(PARAM_surrogates$models_betas["s_sex",], data=data,
 }
 \references{
 This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
-Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, \url{doi:10.1016/j.ebiom.2021.103764}
 }
 \seealso{
 QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, apply.fit_surro

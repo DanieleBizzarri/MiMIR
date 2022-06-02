@@ -39,7 +39,7 @@ T2Dscore<-comp.T2D_Ahola_Olli(met= met, phen=phen,betas=MiMIR::Ahola_Olli_betas,
 }
 \references{
 This function is constructed to be able to apply the T2D-score as described in:
-Ahola-Olli,A.V. et al. (2019) Circulating metabolites and the risk of type 2 diabetes: a prospective study of 11,896 young adults from four Finnish cohorts. Diabetologia, 62, 2298–2309, doi: 10.1007/s00125-019-05001-w
+Ahola-Olli,A.V. et al. (2019) Circulating metabolites and the risk of type 2 diabetes: a prospective study of 11,896 young adults from four Finnish cohorts. Diabetologia, 62, 2298-2309, \url{doi:10.1007/s00125-019-05001-w}
 }
 \seealso{
 prep_met_for_scores, Ahola_Olli_betas, comp.mort_score, comp.CVD_score

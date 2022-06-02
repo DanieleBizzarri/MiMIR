@@ -9,7 +9,6 @@ if (!require("shinyFiles")) install.packages("shinyFiles")
 #Statistics libraries
 if (!require("DT")) install.packages("DT")
 if (!require("foreach")) install.packages("foreach")
-if (!require("glmnet")) install.packages("glmnet")
 if (!require("matrixStats")) install.packages("matrixStats")
 if (!require("dplyr")) install.packages("dplyr")
 if (!require("plyr")) install.packages("plyr")

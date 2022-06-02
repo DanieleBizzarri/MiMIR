@@ -19,10 +19,10 @@
 #' 
 #' @references 
 #' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, <doi:10.1161/CIRCGEN.119.002610>
 #' 
 #' @seealso 
-#' QCprep, apply.fit, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale, and report.dim
+#' QCprep, apply.fit, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute_miss, apply.scale, and report.dim
 #'  
 #' @keywords internal
 #' @export
@@ -57,10 +57,10 @@ subset_metabolites_overlap<-function(x,metabos,quiet=FALSE){
 #' 
 #' @references 
 #' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, <doi:10.1161/CIRCGEN.119.002610>
 #' 
 #' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_zero, subset_samples_sd, impute.miss, apply.scale, and report.dim
+#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_zero, subset_samples_sd, impute_miss, apply.scale, and report.dim
 #'  
 #' @keywords internal
 #' @export
@@ -96,10 +96,10 @@ subset_samples_miss<-function(x,Nmax=1,quiet=FALSE){
 #' 
 #' @references 
 #' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, <doi:10.1161/CIRCGEN.119.002610>
 #' 
 #' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_sd, impute.miss, apply.scale, and report.dim
+#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_sd, impute_miss, apply.scale, and report.dim
 #' 
 #' @keywords internal
 #' @export
@@ -135,10 +135,10 @@ subset_samples_zero<-function(x,Nmax=1,quiet=FALSE){
 #' 
 #' @references 
 #' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, <doi:10.1161/CIRCGEN.119.002610>
 #' 
 #' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, impute.miss, apply.scale, and report.dim
+#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, impute_miss, apply.scale, and report.dim
 #' 
 #' @keywords internal 
 #' @export
@@ -160,7 +160,7 @@ subset_samples_sd<-function(x,MEAN,SD,quiet=FALSE){
   return(invisible(x))
 }
 
-#' impute.miss
+#' impute_miss
 #' 
 #' Helper function that subsets the NH-metabolomics matrix to the samples with less than Nmax zeros
 #' 
@@ -177,12 +177,12 @@ subset_samples_sd<-function(x,MEAN,SD,quiet=FALSE){
 #' #load the Nightignale metabolomics dataset
 #' metabolic_measures <- read.csv("Nightingale_file_path",header = TRUE, row.names = 1)
 #' #Imputing missing values
-#' mat <- impute.miss(metabolic_measures)
+#' mat <- impute_miss(metabolic_measures)
 #' }
 #' 
 #' @references 
 #' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, <doi:10.1161/CIRCGEN.119.002610>
 #' 
 #' @seealso 
 #' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, apply.scale, and report.dim
@@ -190,7 +190,7 @@ subset_samples_sd<-function(x,MEAN,SD,quiet=FALSE){
 #' @keywords internal
 #' @export
 #'
-impute.miss<-function(x){
+impute_miss<-function(x){
   ## This is an boiler-plate solution :)
   x[which(is.na(x))] <- 0
   return(x)
@@ -220,10 +220,10 @@ impute.miss<-function(x){
 #' 
 #' @references 
 #' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, <doi:10.1161/CIRCGEN.119.002610>
 #' 
 #' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, and report.dim
+#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute_miss, and report.dim
 #' 
 #' @keywords internal
 #' @export
@@ -262,10 +262,10 @@ apply.scale <- function(dat,MEAN,SD,quiet=TRUE){
 #' 
 #' @references 
 #' This function is constructed to be able to apply the metaboAge as described in:
-#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541–547, doi:10.1161/CIRCGEN.119.002610
+#' van den Akker Erik B. et al. (2020) Metabolic Age Based on the BBMRI-NL 1H-NMR Metabolomics Repository as Biomarker of Age-related Disease. Circulation: Genomic and Precision Medicine, 13, 541-547, <doi:10.1161/CIRCGEN.119.002610>
 #' 
 #' @seealso 
-#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute.miss, and apply.scale
+#' QCprep, apply.fit, subset_metabolites_overlap, subset_samples_miss, subset_samples_zero, subset_samples_sd, impute_miss, and apply.scale
 #' 
 #' @keywords internal
 #' @export
@@ -303,7 +303,7 @@ report.dim<-function(x,header,trailing="0"){
 #' 
 #' @references 
 #' This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
-#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, <doi:10.1016/j.ebiom.2021.103764>
 #' 
 #' @seealso 
 #' QCprep_surrogates, calculate_surrogate_scores, apply.fit_surro
@@ -366,7 +366,7 @@ subset_samples_sd_surrogates<-function(x,MEAN,SD, N=5, quiet=FALSE){
 #' 
 #' @references 
 #' This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
-#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, <doi:10.1016/j.ebiom.2021.103764>
 #' 
 #' @seealso 
 #' QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, predictions_surrogates
@@ -429,7 +429,7 @@ apply.fit_surro<-function(mat, FIT, post=TRUE){
 #' 
 #' @references 
 #' This function was made to vidualize the binarized variables calculated following the rules indicated in the article:
-#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+#' Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, <doi:10.1016/j.ebiom.2021.103764>
 #' 
 #' @seealso 
 #' QCprep_surrogates, calculate_surrogate_scores, subset_samples_sd_surrogates, apply.fit_surro
@@ -1020,3 +1020,127 @@ NA_message<-function(main="Metabolites are missing, please check your upload!"){
 }
 
 
+######################
+## Rshiny functions ##
+######################
+#' rendertable
+#' 
+#' helper function to create a table for an Rshiny app
+#'
+#' @param data the dataset to show
+#' @return table
+#' 
+#' @keywords internal
+#' @export
+#'
+rendertable<-function(data){
+  DT::renderDataTable({
+    tryCatch({
+      DT::datatable(data, options = list(pageLength = 5, scrollX = TRUE))
+    }, error = function(err) {
+      return(DT::datatable(data.frame(c(
+        "No data available"
+      )), rownames = FALSE, colnames = ""))
+    })
+  })
+}
+
+#' getvol
+#' 
+#' helper function to retrieve the volumes for the download from the Rshiny application
+#'
+#' @param data the dataset to show
+#' @return table
+#' 
+#' @keywords internal
+#' @export
+#'
+getvol<-function(){
+  volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), shinyFiles::getVolumes()())
+}
+
+#' loading_spin
+#' 
+#' helper function to create a loading spinner for the calibration
+#'
+#' @return loading spinner
+#' 
+#' @keywords internal
+#' @export
+#'
+loading_spin<-function(plot){
+  shinyWidgets::addSpinner(plot, spin = "circle", color = "#E41A1C")
+}
+
+
+#' withSpinner
+#' 
+#' helper function to show that the dataset is loading
+#'
+#' @return loader
+#' 
+#' @keywords internal
+#' @export
+#'
+loading<-function(){
+  shinycssloaders::withSpinner()
+}
+
+
+#' MOLEPI_LCBC_header
+#' 
+#' helper function to create a header with the links to MOLEPI, LCBC, LUMC and BBMRI-nl
+#'
+#' @return header for Rshiny app
+#' 
+#' @keywords internal
+#' @export
+#'
+MOLEPI_LCBC_header<-function(){
+  shinydashboard::dashboardHeader(
+    #title of the application
+    title = span(tagList(img(src ="scaled_mimir_logo.svg", height="85", width="85"), "MiMIR")),
+    titleWidth = 350,
+    
+    dropdownMenuOutput("messageMenu"),
+    #Links to our sites
+    tags$li(a(href = 'https://www.lumc.nl/',
+              tags$img(src = 'lumc-logo.jpg', height="60", width="60",
+                       title = "LUMC"),
+              target="_blank"),
+            class = "dropdown"),
+    tags$li(a(href = 'http://www.molepi.nl/en/home',
+              tags$img(src = 'LUMC_MOLEPI_330.png', height="35", width="100",
+                       title = "MOLEPI"),
+              target="_blank"),
+            class = "dropdown"),
+    tags$li(a(href = 'https://www.lcbc.nl/',
+              tags$img(src = 'logo_lcbc.png', height="60", width="50",
+                       title = "LCBC"),
+              target="_blank"),
+            class = "dropdown"),
+    tags$li(a(href = 'https://www.bbmri.nl/',
+              tags$img(src = 'logo_BBMRI.jpg', height="45", width="90",
+                       title = "BBMRI"),
+              target="_blank"),
+            class = "dropdown")
+    
+  )
+}
+
+#' activateButtn
+#' 
+#' helper function to activate buttons based on 2 checks
+#'
+#' @return button activation
+#' 
+#' @keywords internal
+#' @export
+#'
+activateButtn<-function(check1,check2,button){
+  if (check1 & check2) {
+    shinyjs::enable(button)
+  } else {
+    shinyjs::disable(button)
+  }
+}

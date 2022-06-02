@@ -53,5 +53,5 @@ MetaboWAS(met=metabolic_measures, pheno=phenotypes, test_variable="age", covaria
 }
 \references{
 This method is also described and used in:
-Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, doi: 10.1016/j.ebiom.2021.103764
+Bizzarri,D. et al. (2022) 1H-NMR metabolomics-based surrogates to impute common clinical risk factors and endpoints. EBioMedicine, 75, 103764, \url{doi:10.1016/j.ebiom.2021.103764}
 }

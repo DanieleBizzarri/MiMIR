@@ -21,7 +21,7 @@ params:
   Nmax_zero_surrogates:  Nmax_zero_surrogates
 ---
 
-```{r setup, echo=FALSE}
+```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 # Required packages to load
 if (!require("knitr")) install.packages("knitr")
 if (!require("tidyr")) install.packages("tidyr")
@@ -66,7 +66,7 @@ Nightingale Health measures are mostly constituted by lipids and are often corre
 
 ### Histogram metabolites
 This interactive bar plot shows the distributions of the metabolic features used in the metabolomics-based scores within the uploaded data-set in three batches to allow visibility of the plots.
-```{r histograms metabolites, echo=FALSE, out.width="150%", out.height="600%"}
+```{r histograms metabolites, echo=FALSE, out.width="150%", out.height="600%", warning=FALSE}
 multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[1:20]])
 multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[21:40]])
 multi_hist(metabo_measures[,MiMIR::metabolites_subsets$MET63[41:63]])
@@ -102,7 +102,7 @@ The missingness reported in this figure is closely related to the one seen in th
 
 ### Histogram predictors
 This interactive bar plot shows the distributions of the metabolomics-based scores within the uploaded data-set in two batches to allow better visibility of the plots.
-```{r histograms predicted scores, echo=FALSE, out.width="130%", out.height="400%"}
+```{r histograms predicted scores, echo=FALSE, out.width="130%", out.height="400%", warning=FALSE}
   multi_hist(predictors[,-1])
 ```
 
@@ -112,4 +112,9 @@ As for the other tables we report the Pearson's correlations of the metabolomics
 res<-cor_assoc(predictors, predictors, colnames(predictors)[-1],colnames(predictors)[-1])
 plot_corply(res, main="Correlations of the Metabolic scores", reorder.x=TRUE, abs=F,
                     resort_on_p= TRUE,reorder_dend=F)
+```
+
+### Session Info
+```{r session info, echo=FALSE}
+  sessionInfo()
 ```

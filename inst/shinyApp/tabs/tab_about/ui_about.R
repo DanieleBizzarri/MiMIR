@@ -4,7 +4,7 @@ tab_about <- tabItem(
   
   h1("MetaboRiSc"),
   #Description of our papers
-  uiOutput("description"),
+  uiOutput("about_text"),
   HTML('<hr style="border-color: #0088cc;">'),
   
   #Description of us

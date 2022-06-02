@@ -17,36 +17,7 @@ source("tabs/tab_about/ui_about.R", local = TRUE)
 ui <- dashboardPage(
   skin = "blue",
   title = "MiMIR",
-  
-  dashboardHeader(
-    #title of the application
-    title = span(tagList(img(src ="scaled_mimir_logo.svg", height="85", width="85"), "MiMIR")),
-    titleWidth = 350,
-    
-    dropdownMenuOutput("messageMenu"),
-    #Links to our sites
-    tags$li(a(href = 'https://www.lumc.nl/',
-              tags$img(src = 'lumc-logo.jpg', height="60", width="60",
-                       title = "LUMC"),
-              target="_blank"),
-            class = "dropdown"),
-    tags$li(a(href = 'http://www.molepi.nl/en/home',
-              tags$img(src = 'LUMC_MOLEPI_330.png', height="35", width="100",
-                  title = "MOLEPI"),
-            target="_blank"),
-            class = "dropdown"),
-    tags$li(a(href = 'https://www.lcbc.nl/',
-              tags$img(src = 'logo_lcbc.png', height="60", width="50",
-                  title = "LCBC"),
-            target="_blank"),
-            class = "dropdown"),
-    tags$li(a(href = 'https://www.bbmri.nl/',
-              tags$img(src = 'logo_BBMRI.jpg', height="45", width="90",
-                       title = "BBMRI"),
-              target="_blank"),
-            class = "dropdown")
-    
-  ),
+  MOLEPI_LCBC_header(),
   dashboardSidebar(
     collapsed = FALSE,
     width = 350,

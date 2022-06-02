@@ -175,13 +175,6 @@ res_metWAS <- reactive({
 
 
 ## Render MetaboAge to ui
-output[["res_metWAS_table"]] <- DT::renderDataTable({
-  tryCatch({
-    DT::datatable(res_metWAS(), options = list(pageLength = 5, scrollX = TRUE))
-  }, error = function(err) {
-    return(DT::datatable(data.frame(
-      res_metWAS()
-    ), rownames = FALSE, colnames = ""))
-  })
-})
+output[["res_metWAS_table"]]<- rendertable(res_metWAS())
+
 

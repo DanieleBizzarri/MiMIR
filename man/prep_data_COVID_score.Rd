@@ -38,7 +38,7 @@ prepped_met <- prep_data_COVID_score(dat=metabolic_measures)
 }
 \references{
 This function is constructed to be able to follow the pre-processing steps described in:
-Nightingale Health UK Biobank Initiative et al. (2021) Metabolic biomarker profiling for identification of susceptibility to severe pneumonia and COVID-19 in the general population. eLife, 10, e63033, doi: 10.7554/eLife.63033
+Nightingale Health UK Biobank Initiative et al. (2021) Metabolic biomarker profiling for identification of susceptibility to severe pneumonia and COVID-19 in the general population. eLife, 10, e63033, \url{doi:10.7554/eLife.63033}
 }
 \seealso{
 prep_met_for_scores, covid_betas, comp_covid_score

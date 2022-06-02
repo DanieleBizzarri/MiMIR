@@ -52,15 +52,25 @@ output[["get_started"]] <- renderUI({
   )
 })
 
-
 ####################
 ## Uploaded files ##
 ####################
+met_input<-reactiveValues(inDir=NULL)
+
+shiny::observeEvent(input$load_synth_data, {
+  met_input$inDir<-"synthetic"
+})
+
+shiny::observeEvent(input$file_samples$datapath, {
+  met_input$inDir<-"upload"
+})
+
 ## Read metabolites data file
-upload_met <- reactive({
-  if (is.null(input$file_samples$datapath)) {
-    return(NULL)
-  }
+metabo_measures <- reactive({
+  req(met_input$inDir)
+  if(met_input$inDir=="synthetic"){
+    metabo_measures<-as.data.frame(MiMIR::synthetic_metabolic_dataset)
+  }else{
     metabo_measures <- read.csv(
       input$file_samples$datapath,
       header = TRUE, row.names = 1,
@@ -75,7 +85,8 @@ upload_met <- reactive({
     #avoid case-sensitive alternative names
     colnames(metabo_measures)<-tolower(colnames(metabo_measures))
     #Looking for alternative names
-    nam<-find_BBMRI_names(colnames(metabo_measures))
+    
+    nam<-suppressWarnings(find_BBMRI_names(colnames(metabo_measures)))
     i<-which(nam$BBMRI_names %in% MiMIR::metabo_names_translator$BBMRI_names)
     metabo_measures<-metabo_measures[,i]
     colnames(metabo_measures)<-nam$BBMRI_names[i]
@@ -84,13 +95,26 @@ upload_met <- reactive({
       metabo_measures$faw6_faw3<-metabo_measures$faw6/metabo_measures$faw3
     }
     metabo_measures
-    })
+  }
+  })
+
+
+phen_input<-reactiveValues(inDir=NULL)
+
+shiny::observeEvent(input$load_synth_data, {
+  phen_input$inDir<-"synthetic"
+})
+
+shiny::observeEvent(input$file_phenotypes$datapath, {
+  phen_input$inDir<-"upload"
+})
 
 #Read phenotypes data file
-upload_phen <- reactive({
-  if (is.null(input$file_phenotypes$datapath)) {
-    return(NULL)
-  }
+phenotypes <- reactive({
+  req(phen_input$inDir)
+  if(phen_input$inDir=="synthetic"){
+    phenotypes<-as.data.frame(MiMIR::synthetic_phenotypic_dataset)
+  }else if(phen_input$inDir=="upload"){
   phenotypes <- read.csv(
     input$file_phenotypes$datapath,
     header = TRUE, row.names = 1,
@@ -106,23 +130,13 @@ upload_phen <- reactive({
   if(!is.null(metabo_measures())){
     phenotypes<-phenotypes[rownames(metabo_measures()),]
   }
-  
-  #avoid case-sensitive alternative names
-  #colnames(phenotypes)<-tolower(colnames(phenotypes))
-  
   phenotypes
+  }else{NULL}
 })
 
 ####################
 ## Synthetic Data ##
 ####################
-syn_met<-eventReactive(input$load_synth_data,{
-  metabo_measures<-as.data.frame(MiMIR::synthetic_metabolic_dataset)
-})
-
-syn_phen<-eventReactive(input$load_synth_data,{
-  phenotypes<-MiMIR::synthetic_phenotypic_dataset
-})
 
 # Download the example synthetic dataset
 shiny::observeEvent(
@@ -145,28 +159,6 @@ shiny::observeEvent(
   }
 )
 
-####################################
-## Dataset (uploaded or synthetic)##
-####################################
-metabo_measures<-reactive({
-  if(!is.null(upload_met())){
-    metabo_measures<-upload_met()
-  }else if(!is.null(syn_met())){
-    metabo_measures<-syn_met()
-  }else{
-    metabo_measures<-as.data.frame(MiMIR::synthetic_metabolic_dataset)
-  }
-})
-
-phenotypes<-reactive({
-  if(!is.null(upload_phen())){
-    phenotypes<-upload_phen()
-  }else if(!is.null(syn_met())){
-    phenotypes<-syn_phen()
-  }else{
-    phenotypes<-data.frame()
-  }
-})
 
 ##############################
 ## Check available features ##
@@ -255,41 +247,13 @@ output[["found_phen"]] <- DT::renderDataTable({
 
 # Show uploaded files
 # Render metabo_measures data to ui
-output[["metabo_table"]] <- DT::renderDataTable({
-  tryCatch({
-    req(metabo_measures())
-    DT::datatable(metabo_measures(), options = list(pageLength = 10, scrollX = TRUE))
-  }, error = function(err) {
-    return(DT::datatable(data.frame(c(
-      "No data available"
-    )), rownames = FALSE, colnames = ""))
-  })
-})
+output[["metabo_table"]] <- rendertable(metabo_measures())
 
 # Render pheno_table data to ui
-output[["pheno_table"]] <- DT::renderDataTable({
-  tryCatch({
-    req(phenotypes())
-    DT::datatable(phenotypes(), options = list(pageLength = 10, scrollX = TRUE))
-  }, error = function(err) {
-    return(DT::datatable(data.frame(c(
-      "No data available"
-    )), rownames = FALSE, colnames = ""))
-  })
-})
+output[["pheno_table"]] <- rendertable(phenotypes())
 
 # Render bin_pheno_table data to ui
-output[["bin_pheno_table"]] <- DT::renderDataTable({
-  tryCatch({
-    req(phenotypes())
-    DT::datatable(bin_phenotypes(), options = list(pageLength = 10, scrollX = TRUE))
-  }, error = function(err) {
-    return(DT::datatable(data.frame(c(
-      "No data available"
-    )), rownames = FALSE, colnames = ""))
-  })
-})
-
+output[["bin_pheno_table"]] <- rendertable(bin_phenotypes())
 
 
 
