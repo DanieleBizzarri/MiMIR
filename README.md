@@ -4,6 +4,7 @@
 # MiMIR
 
 [![R-CMD-check](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml)
+[![metacran downloads](https://cranlogs.r-pkg.org/badges/MiMIR)](https://cran.r-project.org/package=MiMIR)
 
 MiMIR (Metabolomics-based Models for Imputing Risk), is a a unique
 graphical user interface that provides an intuitive framework for ad-hoc
