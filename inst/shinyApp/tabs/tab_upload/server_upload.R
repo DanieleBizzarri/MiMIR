@@ -210,12 +210,12 @@ output$required_met <- renderText({
 output[["found_met"]] <- DT::renderDataTable({
   tryCatch({
     req(metabo_measures())
-    found_met<-data.frame(met=MiMIR::metabolites_subsets$MET62, presence=(MiMIR::metabolites_subsets$MET62 %in% colnames(metabo_measures())))
+    found_met<-data.frame(met=MiMIR::metabolites_subsets$MET56, presence=(MiMIR::metabolites_subsets$MET56 %in% colnames(metabo_measures())))
     found_met<-found_met[order(found_met$presence, decreasing = F),]
-    if(found_met[which(found_met$met=="faw6_faw3"),"presence"]==F){
-      found_met[which(found_met$met=="faw6_faw3"),"presence"]<-NA
-      
-    }
+    # if(found_met[which(found_met$met=="faw6_faw3"),"presence"]==F){
+    #   found_met[which(found_met$met=="faw6_faw3"),"presence"]<-NA
+    #   
+    # }
     
     DT::datatable(found_met, rownames = F, options = list(pageLength = 10, scrollX = TRUE)) %>% 
                     formatStyle("presence",target = 'row',backgroundColor = styleEqual(c(T, F, NA), c("#B3DE69", "#FB8072",  "#FDB462"))
