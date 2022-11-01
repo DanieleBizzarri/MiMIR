@@ -19,8 +19,7 @@ shiny::observeEvent(
                               restrictions = system.file(package = "base"))
       
     fileinfo <- shinyFiles::parseSavePath(roots = volumes, selection = input$download_pred)
-      
-      if (nrow(fileinfo) > 0){
+      if (nrow(fileinfo) != 0){
         #if(input$downloadCSV2$filetype == ".csv"){
           write.table(predictors(), fileinfo$datapath, row.names = TRUE, col.names = NA, sep = ",")
       }
