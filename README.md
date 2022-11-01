@@ -4,7 +4,8 @@
 # MiMIR
 
 [![R-CMD-check](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DanieleBizzarri/MiMIR/actions/workflows/R-CMD-check.yaml)
-[![metacran downloads](https://cranlogs.r-pkg.org/badges/MiMIR)](https://cran.r-project.org/package=MiMIR)
+[![metacran
+downloads](https://cranlogs.r-pkg.org/badges/MiMIR)](https://cran.r-project.org/package=MiMIR)
 
 MiMIR (Metabolomics-based Models for Imputing Risk), is a a unique
 graphical user interface that provides an intuitive framework for ad-hoc
@@ -57,7 +58,7 @@ cohorts’, Circulation, vol. 131, no. 9, pp. 774–785, Mar. 2015, doi:
 <!-- -->
 
     library("devtools")
-    devtools::install_github("DanieleBizzarri/MiMIR")
+    devtools::install_github("DanieleBizzarri/MetaboRiSc")
 
 3.  Launch the application:
 
@@ -92,30 +93,30 @@ R version: 3.6+
 If you have problems in installing the applicationn, you can try
 installing these packages manually:
 
-  ## Shiny environment
-  if (!require("shiny")) install.packages("shiny")
-  if (!require("shinydashboard")) install.packages("shinydashboard")
-  if (!require("shinyWidgets")) install.packages("shinyWidgets")
-  if (!require("shinycssloaders")) install.packages("shinycssloaders")
-  if (!require("shinyjs")) install.packages("shinyjs")
-  if (!require("shinyFiles")) install.packages("shinyFiles")
-  
-  #Statistics libraries
-  if (!require("DT")) install.packages("DT")
-  if (!require("foreach")) install.packages("foreach")
-  if (!require("matrixStats")) install.packages("matrixStats")
-  if (!require("dplyr")) install.packages("dplyr")
-  if (!require("plyr")) install.packages("plyr")
-  if (!require("stats")) install.packages("stats")
-  if (!require("caret")) install.packages("caret")
-  if (!require("purrr")) install.packages("purrr")
-  if (!require("rmarkdown")) install.packages("rmarkdown")
-  
-  #Imaging libraries
-  if (!require("pROC")) install.packages("pROC")
-  if (!require("plotly")) install.packages("plotly")
-  if (!require("heatmaply")) install.packages("heatmaply")
-  if (!require("ggplot2")) install.packages("ggplot2")
-  if (!require("ggfortify")) install.packages("ggfortify")
-  if (!require("survival")) install.packages("survival")
-  if (!require("survminer")) install.packages("survminer")
+    ## Shiny environment
+    if (!require("shiny")) install.packages("shiny")
+    if (!require("shinydashboard")) install.packages("shinydashboard")
+    if (!require("shinyWidgets")) install.packages("shinyWidgets")
+    if (!require("shinycssloaders")) install.packages("shinycssloaders")
+    if (!require("shinyjs")) install.packages("shinyjs")
+    if (!require("shinyFiles")) install.packages("shinyFiles")
+
+    #Statistics libraries
+    if (!require("DT")) install.packages("DT")
+    if (!require("foreach")) install.packages("foreach")
+    if (!require("matrixStats")) install.packages("matrixStats")
+    if (!require("dplyr")) install.packages("dplyr")
+    if (!require("plyr")) install.packages("plyr")
+    if (!require("stats")) install.packages("stats")
+    if (!require("caret")) install.packages("caret")
+    if (!require("purrr")) install.packages("purrr")
+    if (!require("rmarkdown")) install.packages("rmarkdown")
+
+    #Imaging libraries
+    if (!require("pROC")) install.packages("pROC")
+    if (!require("plotly")) install.packages("plotly")
+    if (!require("heatmaply")) install.packages("heatmaply")
+    if (!require("ggplot2")) install.packages("ggplot2")
+    if (!require("ggfortify")) install.packages("ggfortify")
+    if (!require("survival")) install.packages("survival")
+    if (!require("survminer")) install.packages("survminer")
