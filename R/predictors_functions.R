@@ -436,9 +436,9 @@ comp_covid_score <- function(dat, betas=MiMIR::covid_betas ,quiet=FALSE){
       miss_phen<-names(which(colSums(is.na(prepped_data[,betas$Abbreviation])) == dim(prepped_data)[1]))
       return(paste("It was not possible to calculate the score because all the values of", paste(miss_phen, collapse=", "), "are missing"))
     }else{
-      covidScore<-as.data.frame(as.matrix(prepped_dat[,betas$Abbreviation]) %*% betas$Beta_value)
+      covidScore<-as.data.frame(as.matrix(prepped_data[,betas$Abbreviation]) %*% betas$Beta_value)
       colnames(covidScore)<-"covidScore"
-      rownames(covidScore)<-rownames(prepped_dat)
+      rownames(covidScore)<-rownames(prepped_data)
       
       if(!quiet){
         cat("Done!\n\n")
