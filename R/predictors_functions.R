@@ -443,7 +443,7 @@ comp_covid_score <- function(dat, betas=MiMIR::covid_betas ,quiet=FALSE){
       if(!quiet){
         cat("Done!\n\n")
       }
-      return(CVD_score)
+      return(covidScore)
     }
   } else{
     i<-colnames(prepped_data)[which(colnames(prepped_data) %in% betas$Abbreviation)] 
